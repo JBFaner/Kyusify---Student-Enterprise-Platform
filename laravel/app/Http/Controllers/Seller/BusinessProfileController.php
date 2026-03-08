@@ -1,0 +1,56 @@
+<?php
+
+namespace App\Http\Controllers\Seller;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+class BusinessProfileController extends Controller
+{
+    public function edit()
+    {
+        $enterprise = auth()->user()->enterprise;
+        
+        if (!$enterprise) {
+            abort(404, 'Business profile not found.');
+        }
+
+        return view('seller.profile.edit', compact('enterprise'));
+    }
+
+    public function update(Request $request)
+    {
+        $enterprise = auth()->user()->enterprise;
+
+        $validated = $request->validate([
+            'description' => 'nullable|string|max:1000',
+            'contact_email' => 'nullable|email|max:255',
+            'contact_phone' => 'nullable|string|max:20',
+            'logo' => 'nullable|image|max:2048', // Max 2MB
+            'document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120', // Max 5MB
+        ]);
+
+        if ($request->hasFile('logo')) {
+            if ($enterprise->logo_path) {
+                Storage::disk('public')->delete($enterprise->logo_path);
+            }
+            $validated['logo_path'] = $request->file('logo')->store('enterprises/logos', 'public');
+        }
+
+        if ($request->hasFile('document')) {
+            if ($enterprise->document_path) {
+                Storage::disk('public')->delete($enterprise->document_path);
+            }
+            $validated['document_path'] = $request->file('document')->store('enterprises/documents', 'public');
+        }
+
+        // Remove file helper keys before updating database
+        unset($validated['logo']);
+        unset($validated['document']);
+
+        $enterprise->update($validated);
+
+        return redirect()->route('seller.dashboard')->with('success', 'Business profile updated successfully.');
+    }
+}
