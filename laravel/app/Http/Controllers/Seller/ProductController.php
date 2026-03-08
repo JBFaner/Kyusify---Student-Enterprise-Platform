@@ -52,10 +52,10 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'image' => 'nullable|image|max:2048',
-            'status' => 'required|in:active,inactive',
         ]);
 
         $data = $request->except('image');
+        $data['status'] = 'pending';
         
         if ($request->hasFile('image')) {
             $data['image_path'] = $request->file('image')->store('products', 'public');

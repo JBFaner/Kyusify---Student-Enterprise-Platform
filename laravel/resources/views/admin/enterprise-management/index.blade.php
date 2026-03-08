@@ -19,9 +19,9 @@
             <form action="{{ route('admin.enterprises.index') }}" method="GET" class="flex items-center space-x-3 w-full sm:w-auto">
                 <select name="status" onchange="this.form.submit()" class="pl-3 pr-10 py-2.5 border border-gray-200 dark:border-gray-800 rounded-xl bg-white dark:bg-[#13111C] text-gray-700 dark:text-gray-300 text-sm focus:ring-2 focus:ring-violet-500 focus:border-violet-500 shadow-sm transition-all appearance-none cursor-pointer hover:border-gray-300 dark:hover:border-gray-700">
                     <option value="">All Statuses</option>
-                    <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                    <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Approved</option>
                     <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                    <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Rejected</option>
                 </select>
             </form>
             <div class="h-8 w-[1px] bg-gray-200 dark:bg-gray-800 hidden sm:block"></div>

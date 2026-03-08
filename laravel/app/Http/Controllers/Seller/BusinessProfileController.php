@@ -8,6 +8,19 @@ use Illuminate\Support\Facades\Storage;
 
 class BusinessProfileController extends Controller
 {
+    public function index()
+    {
+        $enterprise = auth()->user()->enterprise;
+        
+        if (!$enterprise) {
+            // Provide a base template object if they literally haven't been created yet,
+            // but the registration flow creates it.
+            abort(404, 'Business profile not found.');
+        }
+
+        return view('seller.profile.index', compact('enterprise'));
+    }
+
     public function edit()
     {
         $enterprise = auth()->user()->enterprise;
@@ -24,9 +37,9 @@ class BusinessProfileController extends Controller
         $enterprise = auth()->user()->enterprise;
 
         $validated = $request->validate([
-            'description' => 'nullable|string|max:1000',
-            'contact_email' => 'nullable|email|max:255',
-            'contact_phone' => 'nullable|string|max:20',
+            'description' => 'required|string|max:1000',
+            'contact_email' => 'required|email|max:255',
+            'contact_phone' => 'required|string|max:20',
             'logo' => 'nullable|image|max:2048', // Max 2MB
             'document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120', // Max 5MB
         ]);
@@ -51,6 +64,6 @@ class BusinessProfileController extends Controller
 
         $enterprise->update($validated);
 
-        return redirect()->route('seller.dashboard')->with('success', 'Business profile updated successfully.');
+        return redirect()->route('seller.profile.index')->with('success', 'Business profile updated successfully.');
     }
 }

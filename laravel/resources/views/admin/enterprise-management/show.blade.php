@@ -31,7 +31,9 @@
                 @method('PUT')
                 <input type="hidden" name="name" value="{{ $enterprise->name }}">
                 <input type="hidden" name="status" value="approved">
-                <input type="hidden" name="is_student_verified" value="{{ $enterprise->is_student_verified ? '1' : '' }}">
+                @if($enterprise->is_student_verified)
+                <input type="hidden" name="is_student_verified" value="1">
+                @endif
                 <button type="submit" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-xl shadow-lg shadow-green-500/30 transition-all text-sm font-semibold flex items-center shrink-0">
                     <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -139,14 +141,64 @@
 
                         <div>
                             <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Proof of Student Identity (QCU ID/COR)</h4>
-                            <div class="border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl p-6 text-center">
-                                <!-- Placeholder for document viewing logic -->
-                                <svg class="mx-auto h-12 w-12 text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                                <p class="text-sm font-medium text-gray-900 dark:text-white">Document viewing relies on file storage.</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Pending implementation of file uploads.</p>
-                            </div>
+                            @if($enterprise->document_path)
+                                <div class="mt-4 flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 rounded-xl border border-violet-100 dark:border-violet-800/50 gap-4">
+                                    <div class="flex items-center min-w-0">
+                                        <svg class="w-6 h-6 mr-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                        </svg>
+                                        <div class="text-sm font-semibold truncate">
+                                            Student ID / COR Document
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2 shrink-0">
+                                        <a href="{{ Storage::url($enterprise->document_path) }}" target="_blank" class="text-xs font-bold uppercase tracking-wider text-violet-700 hover:text-violet-900 dark:text-violet-300 dark:hover:text-white transition-colors bg-white/60 dark:bg-black/40 hover:bg-white dark:hover:bg-black/60 px-4 py-2 rounded-lg border border-violet-200 dark:border-violet-700/50 flex items-center shadow-sm">
+                                            View
+                                        </a>
+                                        <form action="{{ route('admin.enterprises.update', $enterprise) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="name" value="{{ $enterprise->name }}">
+                                            <input type="hidden" name="status" value="{{ $enterprise->status }}">
+                                            @if($enterprise->is_student_verified)
+                                                <button type="submit" class="text-xs font-bold uppercase tracking-wider text-red-600 hover:text-red-700 dark:text-red-400 transition-colors bg-red-50 dark:bg-red-900/20 hover:bg-red-100 px-4 py-2 rounded-lg border border-red-200 dark:border-red-800/50 flex items-center shadow-sm">
+                                                    Revoke
+                                                </button>
+                                            @else
+                                                <input type="hidden" name="is_student_verified" value="1">
+                                                <button type="submit" class="text-xs font-bold uppercase tracking-wider text-green-700 hover:text-green-800 dark:text-green-400 transition-colors bg-green-50 dark:bg-green-900/20 hover:bg-green-100 px-4 py-2 rounded-lg border border-green-200 dark:border-green-800/50 flex items-center shadow-sm">
+                                                    Verify
+                                                </button>
+                                            @endif
+                                        </form>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl p-6 text-center">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white">No document uploaded.</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 mb-4">The student has not yet provided verification documents.</p>
+                                    
+                                    <form action="{{ route('admin.enterprises.update', $enterprise) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="name" value="{{ $enterprise->name }}">
+                                        <input type="hidden" name="status" value="{{ $enterprise->status }}">
+                                        @if($enterprise->is_student_verified)
+                                            <button type="submit" class="text-xs font-bold uppercase tracking-wider text-red-600 hover:text-red-700 dark:text-red-400 transition-colors bg-red-50 dark:bg-red-900/20 hover:bg-red-100 px-4 py-2 rounded-lg border border-red-200 dark:border-red-800/50 inline-flex items-center shadow-sm">
+                                                Revoke Manual Verification
+                                            </button>
+                                        @else
+                                            <input type="hidden" name="is_student_verified" value="1">
+                                            <button type="submit" class="text-xs font-bold uppercase tracking-wider text-green-700 hover:text-green-800 dark:text-green-400 transition-colors bg-green-50 dark:bg-green-900/20 hover:bg-green-100 px-4 py-2 rounded-lg border border-green-200 dark:border-green-800/50 inline-flex items-center shadow-sm">
+                                                Verify Manually
+                                            </button>
+                                        @endif
+                                    </form>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -158,33 +210,44 @@
                      <h3 class="text-base font-bold text-gray-900 dark:text-white flex items-center">Admin Review Decision</h3>
                 </div>
                 <div class="p-8">
-                     <form action="{{ route('admin.enterprises.update', $enterprise) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="name" value="{{ $enterprise->name }}">
-                        <!-- Passing along required fields safely -->
-                        
-                        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-[#13111C] rounded-xl border border-gray-100 dark:border-gray-800/60 mb-6">
-                            <label class="flex items-center cursor-pointer">
-                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300 mr-4">Mark Student Identity as Verified</span>
-                                <div class="relative">
-                                    <input type="checkbox" name="is_student_verified" class="sr-only peer" {{ $enterprise->is_student_verified ? 'checked' : '' }}>
-                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-violet-300 dark:peer-focus:ring-violet-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-violet-600"></div>
-                                </div>
-                            </label>
-                        </div>
-                        
-                        <div class="flex flex-wrap gap-4 pt-2">
-                             <button type="submit" name="status" value="approved" class="px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl shadow-lg shadow-green-500/30 transition-all font-semibold flex items-center justify-center flex-1">
-                                 <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                 Approve Enterprise
-                             </button>
-                             <button type="submit" name="status" value="rejected" class="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl shadow-lg shadow-red-500/30 transition-all font-semibold flex items-center justify-center flex-1">
-                                 <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                 Reject Enterprise
-                             </button>
-                        </div>
-                     </form>
+                     @if($enterprise->status === 'pending')
+                         <form action="{{ route('admin.enterprises.update', $enterprise) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="name" value="{{ $enterprise->name }}">
+                            @if($enterprise->is_student_verified)
+                                <input type="hidden" name="is_student_verified" value="1">
+                            @endif
+                            <!-- Passing along required fields safely -->
+                            
+                            <div class="flex flex-wrap gap-4 pt-2">
+                                 <button type="submit" name="status" value="approved" class="px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl shadow-lg shadow-green-500/30 transition-all font-semibold flex items-center justify-center flex-1">
+                                     <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                     Approve Enterprise
+                                 </button>
+                                 <button type="submit" name="status" value="rejected" class="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl shadow-lg shadow-red-500/30 transition-all font-semibold flex items-center justify-center flex-1">
+                                     <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                     Reject Enterprise
+                                 </button>
+                            </div>
+                         </form>
+                     @else
+                         <div class="text-center py-4">
+                             @if($enterprise->status === 'approved')
+                                 <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 text-green-500 mb-4">
+                                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                 </div>
+                                 <h4 class="text-lg font-bold text-gray-900 dark:text-white">Enterprise Approved</h4>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">This enterprise has been approved and is active on the storefront.</p>
+                             @elseif($enterprise->status === 'rejected')
+                                 <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 text-red-500 mb-4">
+                                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                 </div>
+                                 <h4 class="text-lg font-bold text-gray-900 dark:text-white">Enterprise Rejected</h4>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">This enterprise application was rejected.</p>
+                             @endif
+                         </div>
+                     @endif
                 </div>
             </div>
         </div>

@@ -109,48 +109,16 @@
                     @enderror
                 </div>
 
-                <!-- Visibility Status -->
-                <div class="bg-white dark:bg-[#13111C] p-6 sm:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] border border-gray-100 dark:border-gray-800/60">
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">Publishing Status</h3>
-                    
-                    <div class="space-y-4">
-                        <label class="relative flex cursor-pointer rounded-lg border bg-white dark:bg-[#0B0A0F] p-4 shadow-sm focus:outline-none 
-                            has-[:checked]:border-violet-500 has-[:checked]:ring-1 has-[:checked]:ring-violet-500
-                            border-gray-200 dark:border-gray-800">
-                            <input type="radio" name="status" value="active" class="sr-only" {{ old('status', 'active') === 'active' ? 'checked' : '' }}>
-                            <span class="flex flex-1">
-                                <span class="flex flex-col">
-                                    <span class="block text-sm font-medium text-gray-900 dark:text-white flex items-center">
-                                        <span class="h-2 w-2 rounded-full bg-green-500 mr-2"></span> Active
-                                    </span>
-                                    <span class="mt-1 flex items-center text-xs text-gray-500 dark:text-gray-400">Available to customers</span>
-                                </span>
-                            </span>
-                            <svg class="h-5 w-5 text-violet-600 dark:text-violet-400 hidden has-[:checked]:block" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
-                            </svg>
-                        </label>
-
-                        <label class="relative flex cursor-pointer rounded-lg border bg-white dark:bg-[#0B0A0F] p-4 shadow-sm focus:outline-none 
-                            has-[:checked]:border-violet-500 has-[:checked]:ring-1 has-[:checked]:ring-violet-500
-                            border-gray-200 dark:border-gray-800">
-                            <input type="radio" name="status" value="inactive" class="sr-only" {{ old('status') === 'inactive' ? 'checked' : '' }}>
-                            <span class="flex flex-1">
-                                <span class="flex flex-col">
-                                    <span class="block text-sm font-medium text-gray-900 dark:text-white flex items-center">
-                                        <span class="h-2 w-2 rounded-full bg-gray-400 mr-2"></span> Inactive 
-                                        <span class="ml-2 px-2 py-0.5 rounded text-[10px] font-bold bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 uppercase">Draft</span>
-                                    </span>
-                                    <span class="mt-1 flex items-center text-xs text-gray-500 dark:text-gray-400">Hidden from the storefront</span>
-                                </span>
-                            </span>
-                            <svg class="h-5 w-5 text-violet-600 dark:text-violet-400 hidden has-[:checked]:block" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
-                            </svg>
-                        </label>
-                        @error('status')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
+                <!-- Moderation Notice -->
+                <div class="bg-violet-50 dark:bg-violet-900/20 p-6 sm:p-8 rounded-2xl border border-violet-100 dark:border-violet-800/50">
+                    <div class="flex">
+                        <svg class="h-6 w-6 text-violet-600 dark:text-violet-400 mt-0.5 mr-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <h3 class="text-sm font-bold text-violet-900 dark:text-violet-100">Pending Review Process</h3>
+                            <p class="mt-1 text-sm text-violet-700 dark:text-violet-300 leading-relaxed">By publishing this product, it will be placed in a <strong>Pending</strong> state. Kyusify administrators will review your listing before it becomes visible to students on the storefront. You can track its status in your Product Catalog.</p>
+                        </div>
                     </div>
                 </div>
 

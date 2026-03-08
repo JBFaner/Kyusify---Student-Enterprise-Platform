@@ -41,7 +41,8 @@ Route::middleware(['auth'])->prefix('seller')->name('seller.')->group(function (
     })->name('dashboard');
 
     // Business Profile Management
-    Route::get('/profile', [BusinessProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [BusinessProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/edit', [BusinessProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [BusinessProfileController::class, 'update'])->name('profile.update');
 
     // Product Management
