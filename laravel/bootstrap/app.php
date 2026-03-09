@@ -12,6 +12,17 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->redirectGuestsTo(fn () => route('seller.login'));
+        $middleware->redirectUsersTo(function () {
+            if (auth()->check()) {
+                if (auth()->user()->role === 'admin') {
+                    return route('admin.dashboard');
+                }
+                if (auth()->user()->role === 'seller') {
+                    return route('seller.dashboard');
+                }
+            }
+            return '/';
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

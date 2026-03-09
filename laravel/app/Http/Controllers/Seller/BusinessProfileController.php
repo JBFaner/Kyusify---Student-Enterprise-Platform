@@ -42,6 +42,7 @@ class BusinessProfileController extends Controller
             'contact_phone' => 'required|string|max:20',
             'logo' => 'nullable|image|max:2048', // Max 2MB
             'document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120', // Max 5MB
+            'store_branding' => 'nullable|image|max:5120', // Max 5MB for branding
         ]);
 
         if ($request->hasFile('logo')) {
@@ -56,6 +57,13 @@ class BusinessProfileController extends Controller
                 Storage::disk('public')->delete($enterprise->document_path);
             }
             $validated['document_path'] = $request->file('document')->store('enterprises/documents', 'public');
+        }
+
+        if ($request->hasFile('store_branding')) {
+            if ($enterprise->store_branding) {
+                Storage::disk('public')->delete($enterprise->store_branding);
+            }
+            $validated['store_branding'] = $request->file('store_branding')->store('enterprises/branding', 'public');
         }
 
         // Remove file helper keys before updating database

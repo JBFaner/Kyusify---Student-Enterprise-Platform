@@ -2,9 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Http\Controllers\LandingPageController;
+
+Route::get('/', [LandingPageController::class, 'index'])->name('landing');
+Route::get('/discover', [LandingPageController::class, 'discover'])->name('discover');
 
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\EnterpriseController;
@@ -13,14 +14,9 @@ use App\Http\Controllers\Auth\SellerAuthController;
 use App\Http\Controllers\Seller\BusinessProfileController;
 
 /*
-|--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 // Seller Authentication Routes
 Route::middleware('guest')->group(function () {
@@ -68,9 +64,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('admin.inquiry-feedback.index');
     })->name('inquiries.index');
 
-    Route::get('/content', function () {
-        return view('admin.content-management.index');
-    })->name('content.index');
+    Route::get('/content', [\App\Http\Controllers\Admin\AdminContentController::class, 'index'])->name('content.index');
+    Route::put('/content', [\App\Http\Controllers\Admin\AdminContentController::class, 'update'])->name('content.update');
 
     Route::get('/reports', function () {
         return view('admin.reports-logs.index');

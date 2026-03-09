@@ -26,8 +26,8 @@
                 
                 <div class="relative z-10 hidden md:block">
                     <div class="flex items-center space-x-2 mb-8">
-                        <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg">
-                            <span class="text-violet-700 font-bold text-xl tracking-tighter">K</span>
+                        <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg overflow-hidden p-0.5">
+                            <img src="{{ asset('images/kyusify-logo.png') }}" alt="Kyusify Logo" class="w-full h-full object-contain">
                         </div>
                         <span class="text-2xl font-bold tracking-tight">Kyusify</span>
                     </div>
@@ -52,8 +52,8 @@
             <div class="md:w-7/12 p-8 md:p-12 relative">
                 <!-- Mobile Branding (visible only on small screens) -->
                 <div class="md:hidden flex items-center justify-center space-x-2 mb-8">
-                    <div class="w-10 h-10 bg-gradient-to-br from-violet-600 to-violet-500 rounded-xl flex items-center justify-center shadow-lg">
-                        <span class="text-white font-bold text-xl tracking-tighter">K</span>
+                    <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg overflow-hidden p-0.5 border border-gray-100">
+                        <img src="{{ asset('images/kyusify-logo.png') }}" alt="Kyusify Logo" class="w-full h-full object-contain">
                     </div>
                     <span class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Kyusify</span>
                 </div>

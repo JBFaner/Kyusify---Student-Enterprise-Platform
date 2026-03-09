@@ -11,6 +11,7 @@ class Enterprise extends Model
         'name',
         'description',
         'logo_path',
+        'store_branding',
         'status',
         'is_student_verified',
         'contact_email',

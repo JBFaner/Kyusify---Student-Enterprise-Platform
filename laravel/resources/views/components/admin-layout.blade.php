@@ -27,20 +27,20 @@
 <body class="font-sans antialiased bg-gray-50 dark:bg-[#0B0A0F] text-gray-900 dark:text-gray-100 transition-colors duration-300" x-data="{ sidebarOpen: true }">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar Navigation -->
-        <aside :class="sidebarOpen ? 'w-64' : 'w-[80px]'" class="flex-shrink-0 bg-white dark:bg-[#13111C] border-r border-gray-100 dark:border-gray-800 transition-all duration-300 ease-in-out z-20 flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.02)] dark:shadow-[4px_0_24px_rgba(0,0,0,0.2)]">
+        <aside :class="sidebarOpen ? 'w-64' : 'w-[80px]'" class="flex-shrink-0 bg-violet-950 border-r border-violet-900 transition-all duration-300 ease-in-out z-20 flex flex-col shadow-2xl">
             <!-- Sidebar Header -->
-            <div class="h-20 flex items-center justify-between px-5 border-b border-gray-100 dark:border-gray-800/60 transition-all duration-300">
+            <div class="h-20 flex items-center justify-between px-5 border-b border-violet-900/50 transition-all duration-300">
                 <div class="flex items-center space-x-3 overflow-hidden" x-show="sidebarOpen" x-transition:enter="transition ease-out duration-300 delay-100" x-transition:enter-start="opacity-0 translate-x-[-20px]" x-transition:enter-end="opacity-100 translate-x-0">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-violet-900 flex items-center justify-center shadow-lg shadow-violet-500/30 shrink-0">
-                        <span class="text-white font-bold text-lg leading-none">K</span>
+                    <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-lg shadow-violet-500/30 shrink-0 overflow-hidden p-0.5">
+                        <img src="{{ asset('images/kyusify-logo.png') }}" alt="Kyusify Logo" class="w-full h-full object-contain">
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 tracking-tight">Kyusify</h1>
-                        <p class="text-[10px] font-semibold tracking-widest uppercase text-violet-600 dark:text-violet-400">Admin Portal</p>
+                        <h1 class="text-xl font-bold text-white tracking-tight">Kyusify</h1>
+                        <p class="text-[10px] font-semibold tracking-widest uppercase text-violet-300">Admin Portal</p>
                     </div>
                 </div>
                 <!-- Toggle Button -->
-                <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-xl text-gray-400 hover:text-violet-600 hover:bg-violet-50 dark:hover:text-violet-400 dark:hover:bg-violet-500/10 focus:outline-none transition-all duration-200" :class="!sidebarOpen ? 'mx-auto' : ''">
+                <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-xl text-violet-400 hover:text-white hover:bg-violet-800/50 focus:outline-none transition-all duration-200" :class="!sidebarOpen ? 'mx-auto' : ''">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" x-show="!sidebarOpen" style="display: none;" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" x-show="sidebarOpen" />
@@ -51,73 +51,73 @@
             <!-- Sidebar Links -->
             <nav class="flex-1 overflow-y-auto overflow-x-hidden py-6 px-3 space-y-2">
                 
-                <p x-show="sidebarOpen" x-transition.opacity class="px-4 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 mt-4 first:mt-0">Menu</p>
+                <p x-show="sidebarOpen" x-transition.opacity class="px-4 text-xs font-semibold text-violet-300/70 uppercase tracking-wider mb-2 mt-4 first:mt-0">Menu</p>
 
                 <!-- Dashboard -->
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('admin.dashboard') ? 'bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/25' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white' }}">
-                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-gray-400 group-hover:text-violet-500 dark:text-gray-500 dark:group-hover:text-violet-400 transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('admin.dashboard') ? 'bg-white text-violet-950 shadow-lg font-bold' : 'text-violet-200 hover:bg-white/10 hover:text-white' }}">
+                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('admin.dashboard') ? 'text-violet-900' : 'text-violet-400 group-hover:text-white transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
                     </svg>
                     <span class="ml-3 font-medium whitespace-nowrap" x-show="sidebarOpen" x-transition.opacity.duration.200ms>Dashboard</span>
                     <!-- Tooltip -->
-                    <div x-show="!sidebarOpen" class="absolute left-14 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Dashboard</div>
+                    <div x-show="!sidebarOpen" class="absolute left-14 bg-white text-violet-950 font-semibold shadow-xl border border-violet-100 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Dashboard</div>
                 </a>
 
                 <!-- User Management -->
-                <a href="{{ route('admin.users.index') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('admin.users.*') ? 'bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/25' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white' }}">
-                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('admin.users.*') ? 'text-white' : 'text-gray-400 group-hover:text-violet-500 dark:text-gray-500 dark:group-hover:text-violet-400 transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <a href="{{ route('admin.users.index') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('admin.users.*') ? 'bg-white text-violet-950 shadow-lg font-bold' : 'text-violet-200 hover:bg-white/10 hover:text-white' }}">
+                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('admin.users.*') ? 'text-violet-900' : 'text-violet-400 group-hover:text-white transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                     <span class="ml-3 font-medium whitespace-nowrap" x-show="sidebarOpen" x-transition.opacity.duration.200ms>Users</span>
-                    <div x-show="!sidebarOpen" class="absolute left-14 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Users</div>
+                    <div x-show="!sidebarOpen" class="absolute left-14 bg-white text-violet-950 font-semibold shadow-xl border border-violet-100 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Users</div>
                 </a>
 
                 <!-- Enterprise Management -->
-                <a href="{{ route('admin.enterprises.index') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('admin.enterprises.*') ? 'bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/25' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white' }}">
-                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('admin.enterprises.*') ? 'text-white' : 'text-gray-400 group-hover:text-violet-500 dark:text-gray-500 dark:group-hover:text-violet-400 transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <a href="{{ route('admin.enterprises.index') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('admin.enterprises.*') ? 'bg-white text-violet-950 shadow-lg font-bold' : 'text-violet-200 hover:bg-white/10 hover:text-white' }}">
+                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('admin.enterprises.*') ? 'text-violet-900' : 'text-violet-400 group-hover:text-white transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                     <span class="ml-3 font-medium whitespace-nowrap" x-show="sidebarOpen" x-transition.opacity.duration.200ms>Enterprises</span>
-                    <div x-show="!sidebarOpen" class="absolute left-14 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Enterprises</div>
+                    <div x-show="!sidebarOpen" class="absolute left-14 bg-white text-violet-950 font-semibold shadow-xl border border-violet-100 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Enterprises</div>
                 </a>
 
                 <!-- Product Management -->
-                <a href="{{ route('admin.products.index') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('admin.products.*') ? 'bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/25' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white' }}">
-                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('admin.products.*') ? 'text-white' : 'text-gray-400 group-hover:text-violet-500 dark:text-gray-500 dark:group-hover:text-violet-400 transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <a href="{{ route('admin.products.index') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('admin.products.*') ? 'bg-white text-violet-950 shadow-lg font-bold' : 'text-violet-200 hover:bg-white/10 hover:text-white' }}">
+                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('admin.products.*') ? 'text-violet-900' : 'text-violet-400 group-hover:text-white transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                     </svg>
                     <span class="ml-3 font-medium whitespace-nowrap" x-show="sidebarOpen" x-transition.opacity.duration.200ms>Products</span>
-                    <div x-show="!sidebarOpen" class="absolute left-14 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Products</div>
+                    <div x-show="!sidebarOpen" class="absolute left-14 bg-white text-violet-950 font-semibold shadow-xl border border-violet-100 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Products</div>
                 </a>
 
-                <p x-show="sidebarOpen" x-transition.opacity class="px-4 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 mt-6">System</p>
+                <p x-show="sidebarOpen" x-transition.opacity class="px-4 text-xs font-semibold text-violet-300/70 uppercase tracking-wider mb-2 mt-6">System</p>
 
                 <!-- Inquiry & Feedback -->
-                <a href="{{ route('admin.inquiries.index') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('admin.inquiries.*') ? 'bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/25' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white' }}">
-                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('admin.inquiries.*') ? 'text-white' : 'text-gray-400 group-hover:text-violet-500 dark:text-gray-500 dark:group-hover:text-violet-400 transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <a href="{{ route('admin.inquiries.index') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('admin.inquiries.*') ? 'bg-white text-violet-950 shadow-lg font-bold' : 'text-violet-200 hover:bg-white/10 hover:text-white' }}">
+                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('admin.inquiries.*') ? 'text-violet-900' : 'text-violet-400 group-hover:text-white transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                     <span class="ml-3 font-medium whitespace-nowrap" x-show="sidebarOpen" x-transition.opacity.duration.200ms>Inquiries</span>
-                    <div x-show="!sidebarOpen" class="absolute left-14 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Inquiries</div>
+                    <div x-show="!sidebarOpen" class="absolute left-14 bg-white text-violet-950 font-semibold shadow-xl border border-violet-100 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Inquiries</div>
                 </a>
 
                 <!-- Content / Platform -->
-                <a href="{{ route('admin.content.index') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('admin.content.*') ? 'bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/25' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white' }}">
-                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('admin.content.*') ? 'text-white' : 'text-gray-400 group-hover:text-violet-500 dark:text-gray-500 dark:group-hover:text-violet-400 transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <a href="{{ route('admin.content.index') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('admin.content.*') ? 'bg-white text-violet-950 shadow-lg font-bold' : 'text-violet-200 hover:bg-white/10 hover:text-white' }}">
+                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('admin.content.*') ? 'text-violet-900' : 'text-violet-400 group-hover:text-white transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
                     </svg>
                     <span class="ml-3 font-medium whitespace-nowrap" x-show="sidebarOpen" x-transition.opacity.duration.200ms>Content</span>
-                    <div x-show="!sidebarOpen" class="absolute left-14 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Content</div>
+                    <div x-show="!sidebarOpen" class="absolute left-14 bg-white text-violet-950 font-semibold shadow-xl border border-violet-100 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Content</div>
                 </a>
 
                 <!-- Reports & Logs -->
-                <a href="{{ route('admin.reports.index') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('admin.reports.*') ? 'bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/25' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white' }}">
-                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('admin.reports.*') ? 'text-white' : 'text-gray-400 group-hover:text-violet-500 dark:text-gray-500 dark:group-hover:text-violet-400 transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <a href="{{ route('admin.reports.index') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('admin.reports.*') ? 'bg-white text-violet-950 shadow-lg font-bold' : 'text-violet-200 hover:bg-white/10 hover:text-white' }}">
+                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('admin.reports.*') ? 'text-violet-900' : 'text-violet-400 group-hover:text-white transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                     <span class="ml-3 font-medium whitespace-nowrap" x-show="sidebarOpen" x-transition.opacity.duration.200ms>Reports</span>
-                    <div x-show="!sidebarOpen" class="absolute left-14 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Reports</div>
+                    <div x-show="!sidebarOpen" class="absolute left-14 bg-white text-violet-950 font-semibold shadow-xl border border-violet-100 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Reports</div>
                 </a>
             </nav>
         </aside>

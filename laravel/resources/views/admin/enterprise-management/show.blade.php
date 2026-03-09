@@ -121,6 +121,15 @@
 
         <!-- Description & Review Panel -->
         <div class="lg:col-span-2 space-y-6">
+            @if($enterprise->store_branding)
+            <div class="border border-gray-100 dark:border-gray-800 rounded-2xl bg-white dark:bg-[#0B0A0F] shadow-sm overflow-hidden h-48 sm:h-64 relative">
+                <img src="{{ Storage::url($enterprise->store_branding) }}" alt="Store Branding" class="w-full h-full object-cover">
+                <div class="absolute inset-x-0 bottom-0 py-2 px-4 bg-gradient-to-t from-black/60 to-transparent">
+                    <span class="text-white text-xs font-semibold tracking-wider uppercase drop-shadow-md">Store Branding Banner</span>
+                </div>
+            </div>
+            @endif
+            
             <div class="border border-gray-100 dark:border-gray-800 rounded-2xl bg-white dark:bg-[#0B0A0F] shadow-sm overflow-hidden">
                 <div class="px-8 py-5 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-[#13111C]/50">
                     <h3 class="text-base font-bold text-gray-900 dark:text-white flex items-center">

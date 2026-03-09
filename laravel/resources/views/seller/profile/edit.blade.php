@@ -77,6 +77,34 @@
                             <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
+                <!-- Store Branding (Cover Photo) -->
+                <div class="bg-white dark:bg-[#13111C] p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] border border-gray-100 dark:border-gray-800/60 mt-6 mb-6">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">Store Branding (Cover)</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">A banner image for your storefront.</p>
+                    
+                    <div class="flex flex-col items-center">
+                        <div class="relative group cursor-pointer w-full h-32 mb-4 rounded-xl overflow-hidden">
+                            @if($enterprise->store_branding)
+                                <img src="{{ Storage::url($enterprise->store_branding) }}" alt="Store Branding" class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full bg-violet-50 dark:bg-violet-900/20 flex flex-col items-center justify-center border-2 border-dashed border-violet-200 dark:border-violet-800/50 text-violet-500 group-hover:bg-violet-100 dark:group-hover:bg-violet-900/40 transition-colors">
+                                    <svg class="h-8 w-8 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                    </svg>
+                                    <span class="text-[10px] font-bold tracking-wider uppercase">Upload Banner</span>
+                                </div>
+                            @endif
+                            <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span class="text-white text-xs font-semibold">Change Cover</span>
+                            </div>
+                            <input type="file" name="store_branding" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10" accept="image/jpeg,image/png,image/jpg">
+                        </div>
+                        <p class="text-xs text-gray-400 text-center uppercase font-semibold tracking-wider">Suggested: 1200x400px <br> max 5MB</p>
+                        @error('store_branding')
+                            <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
                 </div>
 
                 <!-- Admin Verification Status -->
