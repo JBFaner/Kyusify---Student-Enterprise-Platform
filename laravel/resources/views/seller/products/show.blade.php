@@ -44,12 +44,14 @@
                 
                 <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2 text-center">{{ $product->name }}</h2>
                 <div class="flex space-x-2 mb-4">
-                    @if ($product->status === 'active')
+                    @if ($product->status === 'approved')
                         <span class="px-3 py-1 text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">Active</span>
                     @elseif ($product->status === 'pending')
                         <span class="px-3 py-1 text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">Pending Review</span>
-                    @else
-                        <span class="px-3 py-1 text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300">Inactive</span>
+                    @elseif ($product->status === 'hidden')
+                        <span class="px-3 py-1 text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300">Hidden</span>
+                    @elseif ($product->status === 'rejected')
+                        <span class="px-3 py-1 text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300">Rejected</span>
                     @endif
                 </div>
 
@@ -88,7 +90,7 @@
                 </div>
                 <div class="p-8">
                      <div class="text-center py-4">
-                         @if($product->status === 'active')
+                         @if($product->status === 'approved')
                              <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 text-green-500 mb-4">
                                  <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                              </div>
@@ -100,12 +102,18 @@
                              </div>
                              <h4 class="text-lg font-bold text-gray-900 dark:text-white">Pending Administrative Review</h4>
                              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">This product is undergoing review before it appears in your storefront.</p>
-                         @elseif($product->status === 'inactive')
+                         @elseif($product->status === 'hidden')
                              <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 mb-4">
-                                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" /></svg>
+                                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
                              </div>
-                             <h4 class="text-lg font-bold text-gray-900 dark:text-white">Listing Inactive</h4>
-                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">This product has been hidden and is inactive.</p>
+                             <h4 class="text-lg font-bold text-gray-900 dark:text-white">Listing Hidden</h4>
+                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">This product has been hidden by you or a moderator.</p>
+                         @elseif($product->status === 'rejected')
+                             <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 text-red-500 mb-4">
+                                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                             </div>
+                             <h4 class="text-lg font-bold text-gray-900 dark:text-white">Listing Rejected</h4>
+                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">This product has been rejected by moderation and is disabled.</p>
                          @endif
                      </div>
                 </div>

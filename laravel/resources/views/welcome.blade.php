@@ -134,11 +134,11 @@
     </nav>
 
     <!-- Hero Section -->
-    <div class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+    <div class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-violet-950">
         <div class="absolute inset-0 hero-pattern z-0 opacity-40"></div>
         <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-3/4 max-w-3xl h-64 bg-violet-600/30 blur-[120px] rounded-full point-events-none z-0"></div>
 
-        <div class="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
+        <div class="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-center animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 ease-out">
             <h1 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[1.1] mb-6">
                 {{ $settings['hero_title'] ?? 'Go from student to store owner.' }}
             </h1>
@@ -161,87 +161,89 @@
     </div>
 
     <!-- Platform Preview Intro -->
-    <section class="py-20 bg-black border-y border-white/5">
+    <section class="py-20 bg-black border-y border-white/5 animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 ease-out">
         <div class="max-w-4xl mx-auto px-6 text-center">
             <h2 class="text-2xl md:text-4xl font-bold mb-4">See how easy it is to manage your student business.</h2>
             <p class="text-gray-400 text-lg mb-12">Create your store, list your products, and start accepting orders in minutes. It's everything you need, all in one place.</p>
             
             <!-- Interactive mockup of the seller dashboard -->
-            <div x-data="{ tab: 'dashboard' }" class="relative mx-auto rounded-xl border border-[#333] bg-[#111] shadow-2xl overflow-hidden aspect-[4/3] md:aspect-video text-left flex flex-col">
+            <div x-data="{ tab: 'dashboard' }" class="relative mx-auto rounded-xl border border-gray-200 bg-[#FAFAFA] shadow-2xl overflow-hidden aspect-[4/3] md:aspect-video text-left flex flex-col">
                 <!-- Topbar -->
-                <div class="h-10 md:h-12 border-b border-[#333] flex items-center justify-between px-3 md:px-4 bg-[#1a1a1a]">
+                <div class="h-10 md:h-12 border-b border-gray-200 flex items-center justify-between px-3 md:px-4 bg-white/80 backdrop-blur-md">
                     <div class="flex gap-1.5 leading-none">
                         <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
                         <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
                         <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-6 h-6 rounded-full bg-violet-600 flex items-center justify-center text-[10px] font-bold text-white">JD</div>
-                        <span class="text-xs text-gray-400 hidden sm:inline-block">Juan Dela Cruz</span>
+                    <div class="flex items-center gap-3">
+                        <div class="w-6 h-6 rounded-full bg-gradient-to-tr from-violet-600 to-indigo-600 p-[1.5px] shadow-sm">
+                            <div class="w-full h-full rounded-full bg-white flex items-center justify-center text-[9px] font-bold text-violet-700">JD</div>
+                        </div>
+                        <span class="text-xs font-semibold text-gray-700 hidden sm:inline-block">Juan Dela Cruz</span>
                     </div>
                 </div>
                 <!-- Body -->
                 <div class="flex flex-1 overflow-hidden">
                     <!-- Sidebar -->
-                    <div class="w-16 sm:w-1/4 md:w-1/5 bg-violet-950 border-r border-[#333] py-4 flex flex-col">
+                    <div class="w-16 sm:w-1/4 md:w-1/5 bg-violet-950 border-r border-violet-900 py-4 flex flex-col z-10 shadow-lg">
                         <div class="px-2 sm:px-4 mb-6 flex items-center justify-center sm:justify-start gap-2">
-                            <div class="w-8 h-8 md:w-6 md:h-6 bg-white rounded flex items-center justify-center shrink-0">
-                                <span class="text-violet-900 font-black text-sm md:text-[10px]">K</span>
+                            <div class="w-8 h-8 md:w-6 md:h-6 bg-white rounded flex items-center justify-center shrink-0 p-[2px]">
+                                <img src="{{ asset('images/kyusify-logo.png') }}" alt="Kyusify Logo" class="w-full h-full object-contain">
                             </div>
                             <span class="text-white font-bold text-sm hidden sm:block">Kyusify Seller</span>
                         </div>
                         <nav class="flex-1 space-y-1 px-2">
-                            <button @click="tab = 'dashboard'" :class="tab === 'dashboard' ? 'bg-white text-violet-900 font-bold shadow-lg' : 'text-violet-200 hover:bg-white/10 hover:text-white'" class="w-full text-left px-3 py-3 md:py-2.5 rounded-lg text-xs md:text-sm transition-all duration-200 flex items-center justify-center sm:justify-start gap-3">
-                                <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" /></svg>
+                            <button @click="tab = 'dashboard'" :class="tab === 'dashboard' ? 'bg-white text-violet-950 font-bold shadow-lg' : 'text-violet-200 hover:bg-white/10 hover:text-white'" class="w-full text-left px-3 py-3 md:py-2.5 rounded-lg text-xs md:text-sm transition-all duration-200 flex items-center justify-center sm:justify-start gap-3">
+                                <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" /></svg>
                                 <span class="hidden sm:block">Dashboard</span>
                             </button>
-                            <button @click="tab = 'products'" :class="tab === 'products' ? 'bg-white text-violet-900 font-bold shadow-lg' : 'text-violet-200 hover:bg-white/10 hover:text-white'" class="w-full text-left px-3 py-3 md:py-2.5 rounded-lg text-xs md:text-sm transition-all duration-200 flex items-center justify-center sm:justify-start gap-3">
+                            <button @click="tab = 'products'" :class="tab === 'products' ? 'bg-white text-violet-950 font-bold shadow-lg' : 'text-violet-200 hover:bg-white/10 hover:text-white'" class="w-full text-left px-3 py-3 md:py-2.5 rounded-lg text-xs md:text-sm transition-all duration-200 flex items-center justify-center sm:justify-start gap-3">
                                 <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
                                 <span class="hidden sm:block">Products</span>
                             </button>
-                            <button @click="tab = 'orders'" :class="tab === 'orders' ? 'bg-white text-violet-900 font-bold shadow-lg' : 'text-violet-200 hover:bg-white/10 hover:text-white'" class="w-full text-left px-3 py-3 md:py-2.5 rounded-lg text-xs md:text-sm transition-all duration-200 flex items-center justify-center sm:justify-start gap-3">
+                            <button @click="tab = 'orders'" :class="tab === 'orders' ? 'bg-white text-violet-950 font-bold shadow-lg' : 'text-violet-200 hover:bg-white/10 hover:text-white'" class="w-full text-left px-3 py-3 md:py-2.5 rounded-lg text-xs md:text-sm transition-all duration-200 flex items-center justify-center sm:justify-start gap-3">
                                 <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
                                 <span class="hidden sm:block">Orders</span>
                             </button>
                         </nav>
                     </div>
                     <!-- Main Content Area -->
-                    <div class="flex-1 bg-[#0a0a0a] overflow-y-auto p-4 md:p-8 custom-scrollbar">
+                    <div class="flex-1 bg-[#FAFAFA] overflow-y-auto p-4 md:p-8 custom-scrollbar">
                         <!-- Dashboard View -->
                         <div x-show="tab === 'dashboard'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
-                            <h3 class="text-white font-bold text-xl md:text-2xl mb-6">Overview</h3>
+                            <h3 class="text-gray-900 font-bold text-xl md:text-2xl mb-6">Overview</h3>
                             <div class="grid grid-cols-2 gap-4 mb-8">
-                                <div class="bg-[#1a1a1a] border border-[#333] rounded-xl p-4 md:p-5 hover:border-violet-500/50 transition-colors">
-                                    <div class="text-gray-400 text-xs font-bold tracking-wider mb-2">TOTAL REVENUE</div>
-                                    <div class="text-white font-black text-2xl md:text-3xl">₱4,250.00</div>
-                                    <div class="text-emerald-400 text-xs font-bold mt-2 bg-emerald-400/10 inline-block px-2 py-0.5 rounded">+15% this week</div>
+                                <div class="bg-white border border-gray-200 rounded-xl p-4 md:p-5 hover:border-violet-300 transition-colors shadow-sm">
+                                    <div class="text-gray-500 text-xs font-bold tracking-wider mb-2">TOTAL REVENUE</div>
+                                    <div class="text-gray-900 font-black text-2xl md:text-3xl">₱4,250.00</div>
+                                    <div class="text-emerald-700 text-xs font-bold mt-2 bg-emerald-50 inline-block px-2 py-0.5 rounded border border-emerald-100">+15% this week</div>
                                 </div>
-                                <div class="bg-[#1a1a1a] border border-[#333] rounded-xl p-4 md:p-5 hover:border-violet-500/50 transition-colors">
-                                    <div class="text-gray-400 text-xs font-bold tracking-wider mb-2">PENDING ORDERS</div>
-                                    <div class="text-white font-black text-2xl md:text-3xl">5</div>
-                                    <div class="text-yellow-400 text-xs font-bold mt-2 bg-yellow-400/10 inline-block px-2 py-0.5 rounded">Requires action</div>
+                                <div class="bg-white border border-gray-200 rounded-xl p-4 md:p-5 hover:border-violet-300 transition-colors shadow-sm">
+                                    <div class="text-gray-500 text-xs font-bold tracking-wider mb-2">PENDING ORDERS</div>
+                                    <div class="text-gray-900 font-black text-2xl md:text-3xl">5</div>
+                                    <div class="text-amber-700 text-xs font-bold mt-2 bg-amber-50 inline-block px-2 py-0.5 rounded border border-amber-100">Requires action</div>
                                 </div>
                             </div>
-                            <h4 class="text-white font-bold text-lg mb-4">Recent Sales</h4>
-                            <div class="bg-[#1a1a1a] border border-[#333] rounded-xl overflow-hidden">
-                                <div class="flex flex-col md:flex-row md:items-center justify-between p-4 border-b border-[#333] hover:bg-white/5 transition-colors">
+                            <h4 class="text-gray-900 font-bold text-lg mb-4">Recent Sales</h4>
+                            <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+                                <div class="flex flex-col md:flex-row md:items-center justify-between p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors">
                                     <div class="mb-2 md:mb-0">
-                                        <div class="text-white font-bold text-sm">QCU Lanyard (Maroon) x2</div>
+                                        <div class="text-gray-900 font-bold text-sm">QCU Lanyard (Maroon) x2</div>
                                         <div class="text-gray-500 text-xs">Today, 10:42 AM</div>
                                     </div>
                                     <div class="flex items-center gap-3">
-                                        <span class="text-white font-bold text-sm">₱100.00</span>
-                                        <span class="text-yellow-400 text-xs font-bold bg-yellow-400/10 px-2.5 py-1 rounded border border-yellow-400/20">Processing</span>
+                                        <span class="text-gray-900 font-bold text-sm">₱100.00</span>
+                                        <span class="text-amber-700 text-xs font-bold bg-amber-50 px-2.5 py-1 rounded border border-amber-200">Processing</span>
                                     </div>
                                 </div>
-                                <div class="flex flex-col md:flex-row md:items-center justify-between p-4 hover:bg-white/5 transition-colors">
+                                <div class="flex flex-col md:flex-row md:items-center justify-between p-4 hover:bg-gray-50 transition-colors">
                                     <div class="mb-2 md:mb-0">
-                                        <div class="text-white font-bold text-sm">Digital IT Reviewer 2026</div>
+                                        <div class="text-gray-900 font-bold text-sm">Digital IT Reviewer 2026</div>
                                         <div class="text-gray-500 text-xs">Yesterday, 4:15 PM</div>
                                     </div>
                                     <div class="flex items-center gap-3">
-                                        <span class="text-white font-bold text-sm">₱50.00</span>
-                                        <span class="text-emerald-400 text-xs font-bold bg-emerald-400/10 px-2.5 py-1 rounded border border-emerald-400/20">Fulfilled</span>
+                                        <span class="text-gray-900 font-bold text-sm">₱50.00</span>
+                                        <span class="text-emerald-700 text-xs font-bold bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200">Fulfilled</span>
                                     </div>
                                 </div>
                             </div>
@@ -250,30 +252,30 @@
                         <!-- Products View -->
                         <div x-show="tab === 'products'" style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
                             <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
-                                <h3 class="text-white font-bold text-xl md:text-2xl">Products</h3>
-                                <button onclick="alert('This is an interactive preview. Sign up to add products!')" class="bg-violet-600 hover:bg-violet-500 text-white font-bold text-sm px-4 py-2 rounded-lg transition-colors inline-block w-max">
+                                <h3 class="text-gray-900 font-bold text-xl md:text-2xl">Products</h3>
+                                <button onclick="alert('This is an interactive preview. Sign up to add products!')" class="bg-violet-600 hover:bg-violet-700 text-white font-bold text-sm px-4 py-2 rounded-lg transition-colors inline-block w-max shadow-sm shadow-violet-500/30">
                                     + Add Product
                                 </button>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="bg-[#1a1a1a] border border-[#333] rounded-xl p-4 flex gap-4 hover:border-violet-500/50 transition-colors">
-                                    <div class="w-16 h-16 md:w-20 md:h-20 bg-[#222] border border-[#333] rounded-lg flex items-center justify-center shrink-0 text-gray-600">
+                                <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-4 flex gap-4 hover:border-violet-300 transition-colors">
+                                    <div class="w-16 h-16 md:w-20 md:h-20 bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center shrink-0 text-gray-400">
                                         <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                     </div>
                                     <div class="flex flex-col justify-center">
-                                        <div class="text-white text-base font-bold mb-1">QCU Polo Shirt</div>
-                                        <div class="text-gray-400 text-xs font-medium mb-2">Apparel • 12 in stock</div>
-                                        <div class="text-violet-400 text-sm font-bold">₱450.00</div>
+                                        <div class="text-gray-900 text-base font-bold mb-1">QCU Polo Shirt</div>
+                                        <div class="text-gray-500 text-xs font-medium mb-2">Apparel • 12 in stock</div>
+                                        <div class="text-violet-600 text-sm font-bold">₱450.00</div>
                                     </div>
                                 </div>
-                                <div class="bg-[#1a1a1a] border border-[#333] rounded-xl p-4 flex gap-4 hover:border-violet-500/50 transition-colors">
-                                    <div class="w-16 h-16 md:w-20 md:h-20 bg-[#222] border border-[#333] rounded-lg flex items-center justify-center shrink-0 text-gray-600">
+                                <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-4 flex gap-4 hover:border-violet-300 transition-colors">
+                                    <div class="w-16 h-16 md:w-20 md:h-20 bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center shrink-0 text-gray-400">
                                         <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                     </div>
                                     <div class="flex flex-col justify-center">
-                                        <div class="text-white text-base font-bold mb-1">BSIT Reviewer</div>
-                                        <div class="text-gray-400 text-xs font-medium mb-2">Digital • Unlimited</div>
-                                        <div class="text-violet-400 text-sm font-bold">₱50.00</div>
+                                        <div class="text-gray-900 text-base font-bold mb-1">BSIT Reviewer</div>
+                                        <div class="text-gray-500 text-xs font-medium mb-2">Digital • Unlimited</div>
+                                        <div class="text-violet-600 text-sm font-bold">₱50.00</div>
                                     </div>
                                 </div>
                             </div>
@@ -281,10 +283,10 @@
 
                         <!-- Orders View -->
                         <div x-show="tab === 'orders'" style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
-                            <h3 class="text-white font-bold text-xl md:text-2xl mb-6">Orders</h3>
-                            <div class="bg-[#1a1a1a] border border-[#333] rounded-xl overflow-x-auto">
+                            <h3 class="text-gray-900 font-bold text-xl md:text-2xl mb-6">Orders</h3>
+                            <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-x-auto">
                                 <table class="w-full text-left text-sm min-w-[400px]">
-                                    <thead class="bg-[#222] text-gray-400 text-xs uppercase tracking-wider">
+                                    <thead class="bg-gray-50 border-b border-gray-100 text-gray-500 text-xs uppercase tracking-wider">
                                         <tr>
                                             <th class="p-4 font-bold">Order ID</th>
                                             <th class="p-4 font-bold">Customer</th>
@@ -292,24 +294,24 @@
                                             <th class="p-4 font-bold">Status</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y divide-[#333] text-gray-300">
-                                        <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="p-4 font-mono text-xs text-violet-400">#ORD-991</td>
-                                            <td class="p-4 font-medium text-white">Maria S.</td>
-                                            <td class="p-4">₱500.00</td>
-                                            <td class="p-4"><span class="text-yellow-400 text-xs font-bold bg-yellow-400/10 px-2.5 py-1 rounded border border-yellow-400/20 whitespace-nowrap">Pending</span></td>
+                                    <tbody class="divide-y divide-gray-100 text-gray-700">
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="p-4 font-mono text-xs text-violet-600">#ORD-991</td>
+                                            <td class="p-4 font-semibold text-gray-900">Maria S.</td>
+                                            <td class="p-4 font-medium">₱500.00</td>
+                                            <td class="p-4"><span class="text-amber-700 text-xs font-bold bg-amber-50 px-2.5 py-1 rounded border border-amber-200 whitespace-nowrap">Pending</span></td>
                                         </tr>
-                                        <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="p-4 font-mono text-xs text-violet-400">#ORD-990</td>
-                                            <td class="p-4 font-medium text-white">Mark J.</td>
-                                            <td class="p-4">₱100.00</td>
-                                            <td class="p-4"><span class="text-blue-400 text-xs font-bold bg-blue-400/10 px-2.5 py-1 rounded border border-blue-400/20 whitespace-nowrap">Processing</span></td>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="p-4 font-mono text-xs text-violet-600">#ORD-990</td>
+                                            <td class="p-4 font-semibold text-gray-900">Mark J.</td>
+                                            <td class="p-4 font-medium">₱100.00</td>
+                                            <td class="p-4"><span class="text-blue-700 text-xs font-bold bg-blue-50 px-2.5 py-1 rounded border border-blue-200 whitespace-nowrap">Processing</span></td>
                                         </tr>
-                                        <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="p-4 font-mono text-xs text-violet-400">#ORD-989</td>
-                                            <td class="p-4 font-medium text-white">Sarah C.</td>
-                                            <td class="p-4">₱450.00</td>
-                                            <td class="p-4"><span class="text-emerald-400 text-xs font-bold bg-emerald-400/10 px-2.5 py-1 rounded border border-emerald-400/20 whitespace-nowrap">Completed</span></td>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="p-4 font-mono text-xs text-violet-600">#ORD-989</td>
+                                            <td class="p-4 font-semibold text-gray-900">Sarah C.</td>
+                                            <td class="p-4 font-medium">₱450.00</td>
+                                            <td class="p-4"><span class="text-emerald-700 text-xs font-bold bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200 whitespace-nowrap">Completed</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -323,7 +325,7 @@
     </section>
 
     <!-- Features Section -->
-    <section id="about" class="py-24 bg-[#0a0a0a]">
+    <section id="about" class="py-24 bg-[#0a0a0a] animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 ease-out">
         <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
                 <!-- Feature 1 -->
@@ -366,7 +368,7 @@
     </section>
 
     <!-- Motivational Section -->
-    <section class="py-24 bg-violet-950 relative overflow-hidden">
+    <section class="py-24 bg-violet-950 relative overflow-hidden animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 ease-out">
         <div class="absolute inset-0 hero-pattern z-0 opacity-20"></div>
         <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
             <h2 class="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-8">Don't just study business.<br>Build one.</h2>
@@ -375,7 +377,7 @@
     </section>
 
     <!-- Final Call to Action -->
-    <section class="py-24 bg-[#0a0a0a] border-t border-[#222]">
+    <section class="py-24 bg-[#0a0a0a] border-t border-[#222] animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 ease-out">
         <div class="max-w-3xl mx-auto px-6 text-center">
             <h2 class="text-4xl md:text-5xl font-black tracking-tight mb-6">Turn your student ideas into a real business.</h2>
             <p class="text-lg text-gray-400 mb-10">Join hundreds of other QCU creators who are already selling on Kyusify. It takes less than five minutes to open your store.</p>
@@ -402,5 +404,22 @@
         </div>
     </footer>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.remove('opacity-0', 'translate-y-8');
+                        entry.target.classList.add('opacity-100', 'translate-y-0');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.animate-on-scroll').forEach((el) => {
+                observer.observe(el);
+            });
+        });
+    </script>
 </body>
 </html>

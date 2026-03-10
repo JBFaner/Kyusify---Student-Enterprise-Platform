@@ -64,8 +64,30 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('admin.inquiry-feedback.index');
     })->name('inquiries.index');
 
-    Route::get('/content', [\App\Http\Controllers\Admin\AdminContentController::class, 'index'])->name('content.index');
-    Route::put('/content', [\App\Http\Controllers\Admin\AdminContentController::class, 'update'])->name('content.update');
+    Route::prefix('content')->name('content.')->group(function () {
+        // Categories
+        Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
+        Route::post('categories/reorder', [\App\Http\Controllers\Admin\CategoryController::class, 'reorder'])->name('categories.reorder');
+        
+        // Featured Products
+        Route::get('featured', [\App\Http\Controllers\Admin\FeaturedProductController::class, 'index'])->name('featured.index');
+        Route::post('featured/{product}', [\App\Http\Controllers\Admin\FeaturedProductController::class, 'store'])->name('featured.store');
+        Route::delete('featured/{product}', [\App\Http\Controllers\Admin\FeaturedProductController::class, 'destroy'])->name('featured.destroy');
+        Route::post('featured/reorder', [\App\Http\Controllers\Admin\FeaturedProductController::class, 'reorder'])->name('featured.reorder');
+
+        // Product Discovery Settings
+        Route::get('discovery', [\App\Http\Controllers\Admin\AdminContentController::class, 'discoverySettings'])->name('discovery');
+        Route::put('discovery', [\App\Http\Controllers\Admin\AdminContentController::class, 'updateDiscoverySettings'])->name('discovery.update');
+
+        // Product Moderation
+        Route::get('moderation', [\App\Http\Controllers\Admin\ProductModerationController::class, 'index'])->name('moderation.index');
+        Route::patch('moderation/{product}', [\App\Http\Controllers\Admin\ProductModerationController::class, 'update'])->name('moderation.update');
+
+        // Homepage Content
+        Route::get('/', [\App\Http\Controllers\Admin\AdminContentController::class, 'index'])->name('index');
+        Route::put('/', [\App\Http\Controllers\Admin\AdminContentController::class, 'update'])->name('update');
+        Route::delete('banner', [\App\Http\Controllers\Admin\AdminContentController::class, 'removeBanner'])->name('banner.destroy');
+    });
 
     Route::get('/reports', function () {
         return view('admin.reports-logs.index');

@@ -41,7 +41,8 @@ class ProductController extends Controller
         if (!auth()->user()->enterprise) {
             return redirect()->route('seller.dashboard')->with('error', 'Please complete your business profile first.');
         }
-        return view('seller.products.create');
+        $categories = \App\Models\Category::where('status', true)->orderBy('display_order')->get();
+        return view('seller.products.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -51,6 +52,7 @@ class ProductController extends Controller
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
+            'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|max:2048',
         ]);
 
@@ -79,7 +81,8 @@ class ProductController extends Controller
         if ($product->enterprise_id !== auth()->user()->enterprise->id) {
             abort(403);
         }
-        return view('seller.products.edit', compact('product'));
+        $categories = \App\Models\Category::where('status', true)->orderBy('display_order')->get();
+        return view('seller.products.edit', compact('product', 'categories'));
     }
 
     public function update(Request $request, Product $product)
@@ -93,12 +96,22 @@ class ProductController extends Controller
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
+            'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|max:2048',
-            'status' => 'required|in:active,inactive',
         ]);
 
-        $data = $request->except('image');
+        $data = $request->except(['image', 'status']);
         
+        // If the seller toggles the status, we map 'active' to either keep it approved (if it was) or make it pending.
+        // If they toggle it off, we set it to 'hidden'.
+        if ($request->has('status')) {
+            if ($request->status == 'active') {
+                $data['status'] = $product->status === 'approved' ? 'approved' : 'pending';
+            } else {
+                $data['status'] = 'hidden';
+            }
+        }
+
         if ($request->hasFile('image')) {
             if ($product->image_path) {
                 Storage::disk('public')->delete($product->image_path);

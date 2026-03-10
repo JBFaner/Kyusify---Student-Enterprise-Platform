@@ -35,8 +35,10 @@
             <div class="sm:w-48">
                 <select name="status" onchange="this.form.submit()" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-[#0B0A0F] border border-gray-200 dark:border-gray-800 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 text-gray-900 dark:text-white transition-shadow text-sm appearance-none cursor-pointer">
                     <option value="">All Statuses</option>
-                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
-                    <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                    <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="hidden" {{ request('status') == 'hidden' ? 'selected' : '' }}>Hidden</option>
+                    <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
                 </select>
             </div>
         </form>
@@ -98,13 +100,21 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                @if($product->status === 'active')
+                                @if($product->status === 'approved')
                                     <span class="flex items-center text-xs font-semibold text-green-600 dark:text-green-400">
-                                        <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span> Active
+                                        <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span> Approved
+                                    </span>
+                                @elseif($product->status === 'pending')
+                                    <span class="flex items-center text-xs font-semibold text-yellow-600 dark:text-yellow-400">
+                                        <span class="w-2 h-2 rounded-full bg-yellow-500 mr-2"></span> Pending
+                                    </span>
+                                @elseif($product->status === 'hidden')
+                                    <span class="flex items-center text-xs font-semibold text-gray-500 dark:text-gray-400">
+                                        <span class="w-2 h-2 rounded-full bg-gray-400 mr-2"></span> Hidden
                                     </span>
                                 @else
-                                    <span class="flex items-center text-xs font-semibold text-gray-500 dark:text-gray-400">
-                                        <span class="w-2 h-2 rounded-full bg-gray-400 mr-2"></span> Inactive
+                                    <span class="flex items-center text-xs font-semibold text-red-600 dark:text-red-400">
+                                        <span class="w-2 h-2 rounded-full bg-red-500 mr-2"></span> Rejected
                                     </span>
                                 @endif
                             </td>

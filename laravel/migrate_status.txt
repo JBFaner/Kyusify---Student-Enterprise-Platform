@@ -1,0 +1,19 @@
+
+Warning: Module "openssl" is already loaded in Unknown on line 0
+
+  Migration name .... Batch / Status  
+  0001_01_01_000000_create_users_table  [1] Ran  
+  0001_01_01_000001_create_cache_table  [1] Ran  
+  0001_01_01_000002_create_jobs_table  [1] Ran  
+  2026_03_08_140347_add_role_and_status_to_users_table  [1] Ran  
+  2026_03_08_143410_create_enterprises_table  [1] Ran  
+  2026_03_08_144535_create_products_table  [1] Ran  
+  2026_03_08_151513_add_contact_and_document_to_enterprises_table  [1] Ran  
+  2026_03_08_154954_create_orders_table  [1] Ran  
+  2026_03_08_154955_create_order_items_table  [1] Ran  
+  2026_03_08_214150_update_status_enum_in_products_table  [1] Ran  
+  2026_03_09_144705_add_store_branding_to_enterprises_table  [2] Ran  
+  2026_03_09_144850_create_settings_table  [3] Ran  
+  2026_03_10_090540_add_featured_fields_to_products_table  Pending  
+  2026_03_10_091637_create_categories_table  Pending  
+

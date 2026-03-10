@@ -11,6 +11,9 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=outfit:300,400,500,600,700&display=swap" rel="stylesheet" />
 
+    <!-- FontAwesome (For Category Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
@@ -31,9 +34,7 @@
             <!-- Sidebar Header -->
             <div class="h-20 flex items-center justify-between px-5 border-b border-violet-900/50 transition-all duration-300">
                 <div class="flex items-center space-x-3 overflow-hidden" x-show="sidebarOpen" x-transition:enter="transition ease-out duration-300 delay-100" x-transition:enter-start="opacity-0 translate-x-[-20px]" x-transition:enter-end="opacity-100 translate-x-0">
-                    <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-lg shadow-violet-500/30 shrink-0 overflow-hidden p-0.5">
-                        <img src="{{ asset('images/kyusify-logo.png') }}" alt="Kyusify Logo" class="w-full h-full object-contain">
-                    </div>
+                    <img src="{{ asset('images/kyusify-logo.png') }}" class="h-8 w-8 object-contain drop-shadow-sm shrink-0" alt="Kyusify Logo">
                     <div>
                         <h1 class="text-xl font-bold text-white tracking-tight">Kyusify</h1>
                         <p class="text-[10px] font-semibold tracking-widest uppercase text-violet-300">Admin Portal</p>
@@ -211,5 +212,8 @@
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
+
+    <!-- Modals Stack -->
+    @stack('modals')
 </body>
 </html>

@@ -48,7 +48,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'status' => 'required|in:active,pending,suspended',
+            'status' => 'required|in:approved,pending,rejected,hidden',
         ]);
 
         $product->update($validated);

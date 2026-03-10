@@ -12,14 +12,21 @@ class Product extends Model
         'description',
         'price',
         'stock',
-        'category',
+        'category_id',
         'image_path',
         'status',
+        'is_featured',
+        'featured_order',
     ];
 
     public function enterprise()
     {
         return $this->belongsTo(Enterprise::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function orderItems()

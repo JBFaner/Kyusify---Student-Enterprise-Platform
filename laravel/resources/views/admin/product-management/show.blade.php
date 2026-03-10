@@ -17,29 +17,12 @@
         </div>
 
         <div class="flex space-x-3">
-            <a href="{{ route('admin.products.edit', $product) }}" class="px-4 py-2 bg-white dark:bg-[#13111C] border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-violet-600 dark:hover:text-violet-400 transition-all font-medium text-sm flex items-center shadow-sm">
+            <a href="{{ route('admin.content.moderation.index', ['query' => $product->name]) }}" class="px-5 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl shadow-lg shadow-violet-500/30 transition-all font-semibold flex items-center shrink-0">
                 <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Edit Product
+                Go to Moderation Center
             </a>
-            
-            @if($product->status !== 'active')
-            <form action="{{ route('admin.products.update', $product) }}" method="POST" class="inline">
-                @csrf
-                @method('PUT')
-                <input type="hidden" name="name" value="{{ $product->name }}">
-                <input type="hidden" name="price" value="{{ $product->price }}">
-                <input type="hidden" name="stock" value="{{ $product->stock }}">
-                <input type="hidden" name="status" value="active">
-                <button type="submit" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-xl shadow-lg shadow-green-500/30 transition-all text-sm font-semibold flex items-center shrink-0">
-                    <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    Direct Approve
-                </button>
-            </form>
-            @endif
         </div>
     </div>
 
@@ -61,12 +44,14 @@
                 
                 <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2 text-center">{{ $product->name }}</h2>
                 <div class="flex space-x-2 mb-4">
-                    @if ($product->status === 'active')
-                        <span class="px-3 py-1 text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">Active</span>
+                    @if ($product->status === 'approved')
+                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">Approved</span>
                     @elseif ($product->status === 'pending')
-                        <span class="px-3 py-1 text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">Pending Review</span>
+                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">Pending Review</span>
+                    @elseif ($product->status === 'hidden')
+                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400">Hidden</span>
                     @else
-                        <span class="px-3 py-1 text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300">Suspended</span>
+                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300">Rejected</span>
                     @endif
                 </div>
 
@@ -136,44 +121,38 @@
                 </div>
                 <div class="p-8">
                      @if($product->status === 'pending')
-                         <form action="{{ route('admin.products.update', $product) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" name="name" value="{{ $product->name }}">
-                            <input type="hidden" name="price" value="{{ $product->price }}">
-                            <input type="hidden" name="stock" value="{{ $product->stock }}">
-                            
-                            <div class="flex flex-wrap gap-4 pt-2">
-                                 <button type="submit" name="status" value="active" class="px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl shadow-lg shadow-green-500/30 transition-all font-semibold flex items-center justify-center flex-1">
-                                     <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                     Approve Listing
-                                 </button>
-                                 <button type="submit" name="status" value="suspended" class="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl shadow-lg shadow-red-500/30 transition-all font-semibold flex items-center justify-center flex-1" onclick="return confirm('Suspend this product? It will be hidden from the storefront.');">
-                                     <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                                     Suspend Listing
-                                 </button>
-                            </div>
-                         </form>
+                         <div class="text-center py-4">
+                             <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-yellow-500 mb-4">
+                                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                             </div>
+                             <h4 class="text-lg font-bold text-gray-900 dark:text-white">Review Required</h4>
+                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-6">This product is pending and needs to be reviewed.</p>
+                             
+                             <a href="{{ route('admin.content.moderation.index', ['query' => $product->name]) }}" class="inline-flex items-center px-6 py-3 bg-violet-600 hover:bg-violet-700 text-white rounded-xl shadow-lg shadow-violet-500/30 transition-all font-semibold">
+                                 <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                 Go to Moderation Center
+                             </a>
+                         </div>
                      @else
                          <div class="text-center py-4">
-                             @if($product->status === 'active')
+                             @if($product->status === 'approved')
                                  <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 text-green-500 mb-4">
                                      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                  </div>
                                  <h4 class="text-lg font-bold text-gray-900 dark:text-white">Listing Approved</h4>
                                  <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">This product has been approved and is currently active on the storefront.</p>
-                             @elseif($product->status === 'suspended')
+                             @elseif($product->status === 'hidden')
+                                 <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 mb-4">
+                                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
+                                 </div>
+                                 <h4 class="text-lg font-bold text-gray-900 dark:text-white">Listing Hidden</h4>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">This product has been hidden and removed from the storefront by moderators.</p>
+                             @elseif($product->status === 'rejected')
                                  <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 text-red-500 mb-4">
                                      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                                  </div>
-                                 <h4 class="text-lg font-bold text-gray-900 dark:text-white">Listing Suspended</h4>
-                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">This product has been suspended and hidden from the storefront.</p>
-                             @elseif($product->status === 'inactive')
-                                 <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 mb-4">
-                                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" /></svg>
-                                 </div>
-                                 <h4 class="text-lg font-bold text-gray-900 dark:text-white">Listing Inactive</h4>
-                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">This product has been hidden by the seller.</p>
+                                 <h4 class="text-lg font-bold text-gray-900 dark:text-white">Listing Rejected</h4>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">This product has been rejected by moderation and is disabled.</p>
                              @endif
                          </div>
                      @endif

@@ -15,13 +15,21 @@
                 </a>
                 <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white mb-2 line-clamp-1 flex items-center gap-3">
                     {{ $product->name }}
-                    @if($product->status === 'active')
+                    @if($product->status === 'approved')
                         <span class="px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs font-bold uppercase tracking-wider flex items-center">
                             <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5"></span> Live
                         </span>
-                    @else
+                    @elseif($product->status === 'pending')
+                        <span class="px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 text-xs font-bold uppercase tracking-wider flex items-center">
+                            <span class="w-1.5 h-1.5 rounded-full bg-yellow-500 mr-1.5"></span> Pending
+                        </span>
+                    @elseif($product->status === 'hidden')
                         <span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400 text-xs font-bold uppercase tracking-wider flex items-center">
-                            <span class="w-1.5 h-1.5 rounded-full bg-gray-500 mr-1.5"></span> Draft
+                            <span class="w-1.5 h-1.5 rounded-full bg-gray-500 mr-1.5"></span> Hidden
+                        </span>
+                    @else
+                        <span class="px-2 py-0.5 rounded-full bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 text-xs font-bold uppercase tracking-wider flex items-center">
+                            <span class="w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5"></span> Rejected
                         </span>
                     @endif
                 </h1>
@@ -57,6 +65,21 @@
                             <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Product Name <span class="text-red-500">*</span></label>
                             <input type="text" id="name" name="name" value="{{ old('name', $product->name) }}" placeholder="e.g. QCU IT Dept Lanyard" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-[#0B0A0F] border border-gray-200 dark:border-gray-800 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 text-gray-900 dark:text-white transition-shadow @error('name') border-red-500 @enderror" required>
                             @error('name')
+                                <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="category_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category <span class="text-red-500">*</span></label>
+                            <select id="category_id" name="category_id" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-[#0B0A0F] border border-gray-200 dark:border-gray-800 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 text-gray-900 dark:text-white transition-shadow @error('category_id') border-red-500 @enderror" required>
+                                <option value="" disabled selected>Select a category...</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('category_id')
                                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                             @enderror
                         </div>
@@ -155,13 +178,13 @@
                         <label class="relative flex cursor-pointer rounded-lg border bg-white dark:bg-[#0B0A0F] p-4 shadow-sm focus:outline-none 
                             has-[:checked]:border-violet-500 has-[:checked]:ring-1 has-[:checked]:ring-violet-500
                             border-gray-200 dark:border-gray-800">
-                            <input type="radio" name="status" value="active" class="sr-only" {{ old('status', $product->status) === 'active' ? 'checked' : '' }}>
+                            <input type="radio" name="status" value="active" class="sr-only" {{ in_array(old('status', $product->status), ['approved', 'pending']) ? 'checked' : '' }}>
                             <span class="flex flex-1">
                                 <span class="flex flex-col">
                                     <span class="block text-sm font-medium text-gray-900 dark:text-white flex items-center">
-                                        <span class="h-2 w-2 rounded-full bg-green-500 mr-2"></span> Active
+                                        <span class="h-2 w-2 rounded-full {{ in_array($product->status, ['approved', 'pending']) ? 'bg-green-500' : 'bg-gray-300' }} mr-2"></span> Visible
                                     </span>
-                                    <span class="mt-1 flex items-center text-xs text-gray-500 dark:text-gray-400">Available to customers</span>
+                                    <span class="mt-1 flex items-center text-xs text-gray-500 dark:text-gray-400">Available to customers (upon approval)</span>
                                 </span>
                             </span>
                             <svg class="h-5 w-5 text-violet-600 dark:text-violet-400 hidden has-[:checked]:block" viewBox="0 0 20 20" fill="currentColor">
@@ -172,11 +195,11 @@
                         <label class="relative flex cursor-pointer rounded-lg border bg-white dark:bg-[#0B0A0F] p-4 shadow-sm focus:outline-none 
                             has-[:checked]:border-violet-500 has-[:checked]:ring-1 has-[:checked]:ring-violet-500
                             border-gray-200 dark:border-gray-800">
-                            <input type="radio" name="status" value="inactive" class="sr-only" {{ old('status', $product->status) === 'inactive' ? 'checked' : '' }}>
+                            <input type="radio" name="status" value="inactive" class="sr-only" {{ old('status', $product->status) === 'hidden' ? 'checked' : '' }}>
                             <span class="flex flex-1">
                                 <span class="flex flex-col">
                                     <span class="block text-sm font-medium text-gray-900 dark:text-white flex items-center">
-                                        <span class="h-2 w-2 rounded-full bg-gray-400 mr-2"></span> Inactive 
+                                        <span class="h-2 w-2 rounded-full bg-gray-400 mr-2"></span> Hidden 
                                         <span class="ml-2 px-2 py-0.5 rounded text-[10px] font-bold bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 uppercase">Draft</span>
                                     </span>
                                     <span class="mt-1 flex items-center text-xs text-gray-500 dark:text-gray-400">Hidden from the storefront</span>
