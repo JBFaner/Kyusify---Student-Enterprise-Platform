@@ -34,6 +34,10 @@ Route::middleware('auth')->group(function () {
     Route::put('/cart/{cartItem}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');
 
+    // Checkout Routes
+    Route::get('/checkout', [\App\Http\Controllers\Customer\CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [\App\Http\Controllers\Customer\CheckoutController::class, 'store'])->name('checkout.store');
+
     // Product Reviews
     Route::post('/product/{product}/review', [\App\Http\Controllers\PublicReviewController::class, 'store'])->name('review.store');
     Route::put('/product/review/{review}', [\App\Http\Controllers\PublicReviewController::class, 'update'])->name('review.update');
@@ -64,11 +68,7 @@ Route::middleware('auth')->post('/seller/upgrade', [SellerAuthController::class,
 
 // Seller Portal Routes (Protected)
 Route::middleware(['auth'])->prefix('seller')->name('seller.')->group(function () {
-    Route::get('/dashboard', function () {
-        // We will restrict to 'seller' role eventually, but standard auth is first barrier
-        if(auth()->user()->role !== 'seller') abort(403, 'Unauthorized action.');
-        return view('seller.dashboard.index');
-    })->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\Seller\DashboardController::class, 'index'])->name('dashboard');
 
     // Business Profile Management
     Route::get('/profile', [BusinessProfileController::class, 'index'])->name('profile.index');

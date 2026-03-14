@@ -44,7 +44,7 @@
                 </div>
                 <span class="text-xs font-semibold px-2 py-1 bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 rounded-full">+12%</span>
             </div>
-            <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-1 tracking-tight">0</h3>
+            <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-1 tracking-tight">{{ $listedProducts }}</h3>
             <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Listed Products</p>
         </div>
 
@@ -57,7 +57,7 @@
                 </div>
                 <span class="text-xs font-semibold px-2 py-1 bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 rounded-full">New!</span>
             </div>
-            <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-1 tracking-tight">0</h3>
+            <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-1 tracking-tight">{{ $pendingOrders }}</h3>
             <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Pending Orders</p>
         </div>
 
@@ -70,7 +70,7 @@
                 </div>
                 <span class="text-xs font-semibold px-2 py-1 bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 rounded-full">+₱0 This Week</span>
             </div>
-            <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-1 tracking-tight">₱0.00</h3>
+            <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-1 tracking-tight">₱{{ number_format($totalRevenue, 2) }}</h3>
             <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Total Revenue</p>
         </div>
 
@@ -83,7 +83,7 @@
                 </div>
                 <span class="text-xs font-semibold px-2 py-1 bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 rounded-full">0 Unread</span>
             </div>
-            <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-1 tracking-tight">0</h3>
+            <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-1 tracking-tight">{{ $customerInquiries }}</h3>
             <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Customer Inquiries</p>
         </div>
     </div>
@@ -100,23 +100,73 @@
                     </svg>
                     Recent Customer Orders
                 </h3>
-                <a href="#" class="text-sm font-semibold text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300 transition-colors">View All</a>
+                <a href="{{ route('seller.orders.index') }}" class="text-sm font-semibold text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300 transition-colors">View All</a>
             </div>
-            <div class="flex-1 p-8 flex flex-col items-center justify-center text-center">
-                <div class="w-16 h-16 bg-gray-50 dark:bg-gray-800/50 rounded-full flex items-center justify-center mb-4 border border-gray-100 dark:border-gray-800">
-                    <svg class="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
+            @if($recentOrders->count() > 0)
+                <div class="flex-1 w-full flex flex-col">
+                    <div class="overflow-x-auto w-full">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50/50 dark:bg-gray-800/30 text-gray-500 dark:text-gray-400 text-xs uppercase font-bold tracking-wider">
+                                    <th class="px-6 py-4 border-b border-gray-100 dark:border-gray-800">Order ID</th>
+                                    <th class="px-6 py-4 border-b border-gray-100 dark:border-gray-800">Customer</th>
+                                    <th class="px-6 py-4 border-b border-gray-100 dark:border-gray-800">Items</th>
+                                    <th class="px-6 py-4 border-b border-gray-100 dark:border-gray-800">Total</th>
+                                    <th class="px-6 py-4 border-b border-gray-100 dark:border-gray-800">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100 dark:divide-gray-800 text-sm">
+                                @foreach($recentOrders as $order)
+                                    <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/20 transition-colors cursor-pointer" onclick="window.location='{{ route('seller.orders.show', $order) }}'">
+                                        <td class="px-6 py-4 font-mono font-medium text-gray-900 dark:text-white">#{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</td>
+                                        <td class="px-6 py-4">
+                                            <div class="font-bold text-gray-900 dark:text-white">{{ $order->user->name }}</div>
+                                            <div class="text-xs text-gray-500">{{ $order->created_at->diffForHumans() }}</div>
+                                        </td>
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400">{{ $order->items->sum('quantity') }} items</td>
+                                        <td class="px-6 py-4 font-mono font-bold text-gray-900 dark:text-white">₱{{ number_format($order->total_amount, 2) }}</td>
+                                        <td class="px-6 py-4">
+                                            @if($order->status === 'pending')
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">
+                                                    Pending
+                                                </span>
+                                            @elseif($order->status === 'processing')
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+                                                    Processing
+                                                </span>
+                                            @elseif($order->status === 'completed')
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                                    Completed
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
+                                                    {{ ucfirst($order->status) }}
+                                                </span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <h3 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white mb-2">No active orders yet</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 max-w-sm mb-6">List your first products to start generating interest and taking orders from fellow QCU students.</p>
-                <a href="#" class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-500 hover:to-violet-400 text-white rounded-xl text-sm font-bold shadow-lg shadow-violet-500/30 transition-all duration-300">
-                    <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    Add a New Product
-                </a>
-            </div>
+            @else
+                <div class="flex-1 p-8 flex flex-col items-center justify-center text-center">
+                    <div class="w-16 h-16 bg-gray-50 dark:bg-gray-800/50 rounded-full flex items-center justify-center mb-4 border border-gray-100 dark:border-gray-800">
+                        <svg class="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white mb-2">No active orders yet</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 max-w-sm mb-6">List your first products to start generating interest and taking orders from fellow QCU students.</p>
+                    <a href="{{ route('seller.products.create') }}" class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-500 hover:to-violet-400 text-white rounded-xl text-sm font-bold shadow-lg shadow-violet-500/30 transition-all duration-300">
+                        <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Add a New Product
+                    </a>
+                </div>
+            @endif
         </div>
 
         <!-- Quick Actions & Notifications -->
@@ -157,17 +207,27 @@
                 <div class="relative z-10">
                     <h3 class="text-sm font-bold tracking-wider uppercase text-violet-200 mb-1">Store Rating</h3>
                     <div class="flex items-end space-x-2">
-                        <span class="text-4xl font-bold tracking-tighter">0.0</span>
+                        <span class="text-4xl font-bold tracking-tighter">{{ number_format($averageRating, 1) }}</span>
                         <span class="text-lg text-violet-300 pb-1">/ 5</span>
                     </div>
                     <div class="flex mt-3 space-x-1">
-                        @for($i = 0; $i < 5; $i++)
-                        <svg class="w-5 h-5 text-violet-400/50" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
+                        @for($i = 1; $i <= 5; $i++)
+                            @if($i <= floor($averageRating))
+                            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            @else
+                            <svg class="w-5 h-5 text-violet-400/50" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            @endif
                         @endfor
                     </div>
+                    @if($averageRating > 0)
+                    <p class="mt-4 text-xs font-medium text-violet-100">Keep up the great work!</p>
+                    @else
                     <p class="mt-4 text-xs font-medium text-violet-100 italic">"No ratings yet. Deliver great service to get your first review!"</p>
+                    @endif
                 </div>
             </div>
         </div>

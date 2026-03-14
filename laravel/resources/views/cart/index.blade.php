@@ -173,15 +173,19 @@
                         </div>
                     </div>
 
-                    <button type="button" 
-                            class="w-full bg-black dark:bg-white text-white dark:text-black font-bold py-4 rounded-xl shadow-lg transition-all hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                            x-bind:disabled="selectedCount === 0"
-                            >
-                        Proceed to Checkout
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </button>
+                    <form id="checkout-form" action="{{ route('checkout.index') }}" method="GET">
+                        <!-- We will dynamically append hidden inputs here before submit -->
+                        <button type="button" 
+                                @click="proceedToCheckout"
+                                class="w-full bg-black dark:bg-white text-white dark:text-black font-bold py-4 rounded-xl shadow-lg transition-all hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                x-bind:disabled="selectedCount === 0"
+                                >
+                            Proceed to Checkout
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </button>
+                    </form>
                 </div>
             </div>
         </main>
@@ -248,6 +252,25 @@
                                 console.error('Failed to update cart quantity', e);
                             }
                         }
+                    },
+
+                    proceedToCheckout() {
+                        const form = document.getElementById('checkout-form');
+                        // Remove existing hidden inputs to avoid duplicates
+                        form.querySelectorAll('input[name="items[]"]').forEach(el => el.remove());
+                        
+                        document.querySelectorAll('.item-checkbox').forEach(box => {
+                            const id = box.dataset.id;
+                            if (this.checkedItems[id]) {
+                                const input = document.createElement('input');
+                                input.type = 'hidden';
+                                input.name = 'items[]';
+                                input.value = id;
+                                form.appendChild(input);
+                            }
+                        });
+
+                        form.submit();
                     }
                 }))
             })
