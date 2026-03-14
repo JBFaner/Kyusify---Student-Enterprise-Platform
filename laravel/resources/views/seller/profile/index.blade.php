@@ -1,12 +1,12 @@
 <x-seller-layout>
     <x-slot name="header">
-        Business Profile
+        Store Profile
     </x-slot>
 
     <!-- Page Header & Status Banner -->
     <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white mb-2">Business Profile</h1>
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white mb-2">Store Profile</h1>
             <p class="text-gray-500 dark:text-gray-400 text-sm max-w-2xl">View your storefront details, contact information, and verification status.</p>
         </div>
         <div class="flex space-x-3">
@@ -44,7 +44,7 @@
                 </div>
                 <div class="ml-3">
                     <h3 class="text-sm font-semibold text-green-800 dark:text-green-400">Account Active</h3>
-                    <p class="text-sm text-green-700 dark:text-green-500 mt-1">Your business profile is approved and active. Updates here will reflect immediately on your public storefront.</p>
+                    <p class="text-sm text-green-700 dark:text-green-500 mt-1">Your store profile is approved and active. Updates here will reflect immediately on your public storefront.</p>
                 </div>
             </div>
         </div>
@@ -119,7 +119,7 @@
         <div class="lg:col-span-2 space-y-6">
             <!-- Basic Info Card -->
             <div class="bg-white dark:bg-[#13111C] p-6 sm:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] border border-gray-100 dark:border-gray-800/60">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">Business Details</h3>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">Store Details</h3>
                 
                 <div class="space-y-6">
                     <div>
@@ -128,13 +128,13 @@
                     </div>
 
                     <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Business Description</p>
-                        <div class="p-4 bg-gray-50 dark:bg-[#13111C] border border-gray-200 dark:border-gray-800 rounded-xl text-gray-800 dark:text-gray-200 min-h-[100px] whitespace-pre-wrap">{{ $enterprise->description ?? 'No business description provided.' }}</div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Store Description</p>
+                        <div class="p-4 bg-gray-50 dark:bg-[#13111C] border border-gray-200 dark:border-gray-800 rounded-xl text-gray-800 dark:text-gray-200 min-h-[100px] whitespace-pre-wrap">{{ $enterprise->description ?? 'No store description provided.' }}</div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100 dark:border-gray-800/60">
                         <div>
-                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Business Support Email</p>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Store Support Email</p>
                             <div class="flex items-center text-gray-900 dark:text-white font-medium">
                                 <svg class="h-5 w-5 text-violet-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />

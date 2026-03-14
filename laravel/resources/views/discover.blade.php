@@ -125,13 +125,53 @@
                 </div>
 
                 <!-- Right Actions -->
-                <div class="flex flex-shrink-0 items-center gap-2 sm:gap-4">
-                    <button class="p-2.5 text-gray-300 hover:text-violet-400 hover:bg-violet-900/20 rounded-xl transition-colors relative">
+                <div class="flex flex-shrink-0 items-center justify-end gap-2 sm:gap-4 flex-wrap">
+                    @guest
+                        <a href="{{ route('login') }}" class="hidden md:block text-gray-300 hover:text-white font-medium px-2 py-2 transition-colors whitespace-nowrap">Log in</a>
+                    @endguest
+
+                    <a href="{{ route('seller.register') }}" class="btn-gumroad-violet-nav px-4 sm:px-6 py-2 sm:py-2.5 text-sm sm:text-base whitespace-nowrap hidden min-[400px]:block">Start Selling</a>
+
+                    <a href="{{ route('cart.index') }}" id="nav-cart-btn" class="p-2.5 text-gray-300 hover:text-violet-400 hover:bg-violet-900/20 rounded-xl transition-colors relative block">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-                        <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-violet-600 border-2 border-black rounded-full"></span>
-                    </button>
-                    <a href="{{ route('seller.login') }}" class="hidden md:block text-gray-300 hover:text-white font-medium px-2 py-2 transition-colors">Log in</a>
-                    <a href="{{ route('seller.register') }}" class="btn-gumroad-violet-nav px-4 sm:px-6 py-2 sm:py-2.5 text-sm sm:text-base whitespace-nowrap">Start Selling</a>
+                        @auth
+                            @if(auth()->user()->cartItems()->count() > 0)
+                                <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-violet-600 border-2 border-black rounded-full" id="nav-cart-badge"></span>
+                            @endif
+                        @endauth
+                    </a>
+                    
+                    @auth
+                        <!-- Profile Dropdown -->
+                        <div x-data="{ openProfile: false }" class="relative z-50">
+                            <button @click="openProfile = !openProfile" @click.outside="openProfile = false" class="flex items-center gap-2 bg-[#181622] hover:bg-[#222] border border-gray-800 rounded-full py-1.5 px-1.5 pr-4 transition-colors">
+                                <div class="w-8 h-8 rounded-full bg-violet-600 flex flex-shrink-0 items-center justify-center text-white font-bold text-sm">
+                                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                </div>
+                                <span class="text-white text-sm font-medium hidden sm:block truncate max-w-[100px]">{{ auth()->user()->name }}</span>
+                                <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                            </button>
+                            
+                            <div x-show="openProfile" 
+                                 x-transition:enter="transition ease-out duration-100" 
+                                 x-transition:enter-start="transform opacity-0 scale-95" 
+                                 x-transition:enter-end="transform opacity-100 scale-100" 
+                                 x-transition:leave="transition ease-in duration-75" 
+                                 x-transition:leave-start="transform opacity-100 scale-100" 
+                                 x-transition:leave-end="transform opacity-0 scale-95" 
+                                 class="absolute right-0 mt-2 w-48 bg-[#181622] rounded-xl shadow-lg border border-gray-800 py-1 z-50 text-left" style="display: none;">
+                                @if(auth()->user()->role === 'seller')
+                                    <a href="{{ route('seller.dashboard') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#2a2833] hover:text-white transition-colors">Seller Dashboard</a>
+                                @endif
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="w-full text-left block px-4 py-2 text-sm text-red-400 hover:bg-[#2a2833] hover:text-red-300 transition-colors">
+                                        Log out
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @endauth
                 </div>
             </div>
         </div>
@@ -232,7 +272,7 @@
                         @foreach($featuredProducts as $product)
                             <!-- Featured Product Horizontal Card -->
                             <div class="snap-start w-full xl:w-[calc(50%-1rem)] flex-shrink-0">
-                                <a href="#" class="card-gumroad overflow-hidden flex flex-row group h-full block h-56 md:h-64 lg:h-72">
+                                <a href="{{ route('product.show', $product->id) }}" class="card-gumroad overflow-hidden flex flex-row group h-full block h-56 md:h-64 lg:h-72">
                                     <div class="w-1/2 lg:w-3/5 h-full bg-gray-100 dark:bg-[#0B0A0F] border-r border-gray-200 dark:border-gray-800 relative overflow-hidden flex-shrink-0">
                                         @if($product->image_path)
                                             <img src="{{ Storage::url($product->image_path) }}" alt="{{ $product->name }}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -251,7 +291,7 @@
                                                         <img src="{{ Storage::url($product->enterprise->logo_path) }}" class="w-full h-full object-cover">
                                                     @endif
                                                 </div>
-                                                <span class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate hover:text-gray-900 hover:underline cursor-pointer">{{ $product->enterprise->name ?? 'Store' }}</span>
+                                                <object><a href="{{ route('store.show', $product->enterprise->id) }}" class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate hover:text-violet-600 hover:underline cursor-pointer">{{ $product->enterprise->name ?? 'Store' }}</a></object>
                                             </div>
                                         </div>
                                         
@@ -294,7 +334,7 @@
             @if($products->count() > 0)
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
                     @foreach($products as $product)
-                        <a href="#" class="card-gumroad overflow-hidden flex flex-col group h-full block">
+                        <a href="{{ route('product.show', $product->id) }}" class="card-gumroad overflow-hidden flex flex-col group h-full block">
                             <div class="w-full h-56 bg-gray-100 dark:bg-[#0B0A0F] border-b border-gray-200 dark:border-gray-800 relative overflow-hidden">
                                 @if($product->image_path)
                                     <img src="{{ Storage::url($product->image_path) }}" alt="{{ $product->name }}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -315,7 +355,7 @@
                                             <img src="{{ Storage::url($product->enterprise->logo_path) }}" class="w-full h-full object-cover">
                                         @endif
                                     </div>
-                                    <span class="text-xs font-medium text-gray-500 dark:text-gray-400 truncate">{{ $product->enterprise->name ?? 'Store' }}</span>
+                                    <object><a href="{{ route('store.show', $product->enterprise->id) }}" class="text-xs font-medium text-gray-500 dark:text-gray-400 truncate hover:text-violet-600 hover:underline">{{ $product->enterprise->name ?? 'Store' }}</a></object>
                                 </div>
                                 <div class="mt-auto pt-4 flex items-center justify-between border-t border-gray-100 dark:border-gray-800/60">
                                     <span class="font-black text-lg text-gray-900 dark:text-white">₱{{ number_format($product->price, 2) }}</span>

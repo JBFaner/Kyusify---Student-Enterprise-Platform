@@ -84,4 +84,29 @@ class SellerAuthController extends Controller
 
         return redirect('/'); // Redirect home or to login
     }
+
+    public function upgradeToSeller(Request $request)
+    {
+        $user = Auth::user();
+        if ($user->role === 'seller') {
+            return redirect()->route('seller.dashboard');
+        }
+
+        $validated = $request->validate([
+            'business_name' => 'required|string|max:255',
+        ]);
+
+        $user->update([
+            'role' => 'seller'
+        ]);
+
+        Enterprise::create([
+            'user_id' => $user->id,
+            'name' => $validated['business_name'],
+            'status' => 'pending', 
+            'is_student_verified' => false,
+        ]);
+
+        return redirect()->route('seller.dashboard')->with('success', 'You have successfully upgraded to a Seller Account!');
+    }
 }

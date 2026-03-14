@@ -72,6 +72,6 @@ class BusinessProfileController extends Controller
 
         $enterprise->update($validated);
 
-        return redirect()->route('seller.profile.index')->with('success', 'Business profile updated successfully.');
+        return redirect()->route('seller.profile.index')->with('success', 'Store profile updated successfully.');
     }
 }

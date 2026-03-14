@@ -1,11 +1,10 @@
-<x-seller-layout>
     <x-slot name="header">
-        Business Profile
+        Store Profile
     </x-slot>
 
     <!-- Page Header & Status Banner -->
     <div class="mb-8">
-        <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white mb-2">Manage Business Profile</h1>
+        <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white mb-2">Manage Store Profile</h1>
         <p class="text-gray-500 dark:text-gray-400 text-sm max-w-2xl">Update your storefront details, contact information, and ensure your QCU student verification represents your enterprise accurately.</p>
     </div>
 
@@ -34,7 +33,7 @@
                 </div>
                 <div class="ml-3">
                     <h3 class="text-sm font-semibold text-green-800 dark:text-green-400">Account Active</h3>
-                    <p class="text-sm text-green-700 dark:text-green-500 mt-1">Your business profile is approved and active. Updates here will reflect immediately on your public storefront.</p>
+                    <p class="text-sm text-green-700 dark:text-green-500 mt-1">Your store profile is approved and active. Updates here will reflect immediately on your public storefront.</p>
                 </div>
             </div>
         </div>
@@ -156,7 +155,7 @@
             <div class="lg:col-span-2 space-y-6">
                 <!-- Basic Info Card -->
                 <div class="bg-white dark:bg-[#13111C] p-6 sm:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] border border-gray-100 dark:border-gray-800/60">
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">Business Details</h3>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">Store Details</h3>
                     
                     <div class="space-y-6">
                         <div>
@@ -171,7 +170,7 @@
                         </div>
 
                         <div>
-                            <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Business Description <span class="text-red-500">*</span></label>
+                            <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Store Description <span class="text-red-500">*</span></label>
                             <textarea id="description" name="description" rows="4" required class="w-full px-4 py-3 bg-gray-50 dark:bg-[#13111C] border border-gray-200 dark:border-gray-800 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 text-gray-900 dark:text-white transition-shadow resize-none @error('description') border-red-500 @enderror" placeholder="Describe what your enterprise sells, your mission, and what makes your products unique to QCU students.">{{ old('description', $enterprise->description) }}</textarea>
                             @error('description')
                                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -180,7 +179,7 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                             <div>
-                                <label for="contact_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Business Support Email <span class="text-red-500">*</span></label>
+                                <label for="contact_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Store Support Email <span class="text-red-500">*</span></label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -264,7 +263,7 @@
                         <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
                         </svg>
-                        Save Business Profile
+                        Save Store Profile
                     </button>
                 </div>
             </div>

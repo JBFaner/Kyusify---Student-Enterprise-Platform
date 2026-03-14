@@ -22,7 +22,7 @@
                 <p class="text-yellow-700 dark:text-yellow-600 mt-1 mb-3 text-sm max-w-2xl">Welcome to Kyusify! To start selling to the QCU campus, an Administrator must approve your enterprise application. You may prepare and list your products now, but they will not be visible to customers until approval.</p>
                 <div class="flex space-x-3">
                     <a href="#" class="inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-600 dark:hover:bg-yellow-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
-                        Complete Business Profile
+                        Complete Store Profile
                     </a>
                     <a href="#" class="inline-flex items-center px-4 py-2 bg-white dark:bg-[#13111C] border border-yellow-200 dark:border-yellow-900/50 text-yellow-700 dark:text-yellow-500 hover:bg-yellow-50 dark:hover:bg-yellow-900/30 text-sm font-semibold rounded-lg transition-colors">
                         View Application Status

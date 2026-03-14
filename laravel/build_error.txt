@@ -1,0 +1,21 @@
+
+> build
+> vite build
+
+[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32mΓ£ô[39m 2 modules transformed.
+Γ£ù Build failed in 512ms
+error during build:
+[@tailwindcss/vite:generate:build] Invalid code point 16707002
+file: C:/Users/jbfan/OneDrive/Documents/GitHub/Kyusify---Student-Enterprise-Platform/laravel/resources/css/app.css
+    at String.fromCodePoint (<anonymous>)
+    at file:///C:/Users/jbfan/OneDrive/Documents/GitHub/Kyusify---Student-Enterprise-Platform/laravel/node_modules/tailwindcss/dist/chunk-L5IEUH3R.mjs:1:5452
+    at String.replace (<anonymous>)
+    at ge (file:///C:/Users/jbfan/OneDrive/Documents/GitHub/Kyusify---Student-Enterprise-Platform/laravel/node_modules/tailwindcss/dist/chunk-L5IEUH3R.mjs:1:5381)
+    at at.markUsedVariable (file:///C:/Users/jbfan/OneDrive/Documents/GitHub/Kyusify---Student-Enterprise-Platform/laravel/node_modules/tailwindcss/dist/chunk-L5IEUH3R.mjs:1:7619)
+    at Object.build (file:///C:/Users/jbfan/OneDrive/Documents/GitHub/Kyusify---Student-Enterprise-Platform/laravel/node_modules/tailwindcss/dist/chunk-L5IEUH3R.mjs:38:1073)
+    at Object.build (file:///C:/Users/jbfan/OneDrive/Documents/GitHub/Kyusify---Student-Enterprise-Platform/laravel/node_modules/tailwindcss/dist/chunk-L5IEUH3R.mjs:38:1457)
+    at B.generate (file:///C:/Users/jbfan/OneDrive/Documents/GitHub/Kyusify---Student-Enterprise-Platform/laravel/node_modules/@tailwindcss/vite/dist/index.mjs:1:6502)
+    at async Object.handler (file:///C:/Users/jbfan/OneDrive/Documents/GitHub/Kyusify---Student-Enterprise-Platform/laravel/node_modules/@tailwindcss/vite/dist/index.mjs:1:3768)
+    at async transform (file:///C:/Users/jbfan/OneDrive/Documents/GitHub/Kyusify---Student-Enterprise-Platform/laravel/node_modules/rollup/dist/es/shared/node-entry.js:21269:16)

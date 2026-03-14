@@ -11,12 +11,44 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\SellerAuthController;
+use App\Http\Controllers\Auth\CustomerAuthController;
 use App\Http\Controllers\Seller\BusinessProfileController;
+use App\Http\Controllers\Seller\FeedbackController;
+use App\Http\Controllers\PublicStoreController;
+use App\Http\Controllers\PublicProductController;
 
 /*
 | Web Routes
 |--------------------------------------------------------------------------
 */
+
+Route::get('/store/{id}', [PublicStoreController::class, 'show'])->name('store.show');
+Route::get('/product/{id}', [PublicProductController::class, 'show'])->name('product.show');
+
+use App\Http\Controllers\Customer\CartController;
+
+// Cart & Review Routes
+Route::middleware('auth')->group(function () {
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add/{product}', [CartController::class, 'store'])->name('cart.add');
+    Route::put('/cart/{cartItem}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');
+
+    // Product Reviews
+    Route::post('/product/{product}/review', [\App\Http\Controllers\PublicReviewController::class, 'store'])->name('review.store');
+    Route::put('/product/review/{review}', [\App\Http\Controllers\PublicReviewController::class, 'update'])->name('review.update');
+    Route::post('/product/review/{review}/report', [\App\Http\Controllers\PublicReviewController::class, 'report'])->name('review.report');
+});
+
+// Standard Customer Authentication Routes
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [CustomerAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [CustomerAuthController::class, 'login']);
+    Route::get('/register', [CustomerAuthController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [CustomerAuthController::class, 'register']);
+});
+Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('logout');
+Route::get('/logout', [CustomerAuthController::class, 'logout']); // Fallback to prevent 419 on manual links
 
 // Seller Authentication Routes
 Route::middleware('guest')->group(function () {
@@ -27,6 +59,8 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::post('/seller/logout', [SellerAuthController::class, 'logout'])->name('seller.logout');
+Route::get('/seller/logout', [SellerAuthController::class, 'logout']); // Fallback to prevent 419 on manual links
+Route::middleware('auth')->post('/seller/upgrade', [SellerAuthController::class, 'upgradeToSeller'])->name('seller.upgrade');
 
 // Seller Portal Routes (Protected)
 Route::middleware(['auth'])->prefix('seller')->name('seller.')->group(function () {
@@ -46,6 +80,11 @@ Route::middleware(['auth'])->prefix('seller')->name('seller.')->group(function (
 
     // Order Management
     Route::resource('orders', App\Http\Controllers\Seller\OrderController::class)->only(['index', 'show', 'update']);
+
+    // Feedback & Ratings
+    Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
+    Route::post('/feedback/{review}/reply', [FeedbackController::class, 'reply'])->name('feedback.reply');
+    Route::post('/feedback/{review}/report', [FeedbackController::class, 'report'])->name('feedback.report');
 });
 
 // Admin Routes

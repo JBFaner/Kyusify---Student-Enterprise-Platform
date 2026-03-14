@@ -87,7 +87,7 @@
                 </div>
 
                 <!-- Desktop Menu -->
-                <div class="hidden md:flex items-center space-x-8">
+                <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
                     <a href="{{ route('discover') }}" class="text-gray-300 hover:text-white font-medium transition-colors">Discover</a>
                     
                     @if(request()->routeIs('landing'))
@@ -97,8 +97,54 @@
                     @endif
 
                     <button onclick="alert('Pricing plans will be implemented in a future update!')" class="text-gray-300 hover:text-white font-medium transition-colors">Pricing</button>
-                    <a href="{{ route('seller.login') }}" class="text-gray-300 hover:text-white font-medium transition-colors">Log in</a>
+                    
+                    @guest
+                        <a href="{{ route('login') }}" class="text-gray-300 hover:text-white font-medium transition-colors">Log in</a>
+                    @endguest
+
                     <a href="{{ route('seller.register') }}" class="btn-gumroad-violet px-6 py-2.5">Start Selling</a>
+
+                    <a href="{{ route('cart.index') }}" class="text-gray-300 hover:text-violet-400 font-medium transition-colors flex items-center gap-1.5 relative">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                        Bag
+                        @auth
+                            @if(auth()->user()->cartItems()->count() > 0)
+                                <span class="absolute top-0 -right-1.5 w-2 h-2 bg-violet-500 rounded-full"></span>
+                            @endif
+                        @endauth
+                    </a>
+
+                    @auth
+                        <!-- Profile Dropdown -->
+                        <div x-data="{ openProfile: false }" class="relative z-50">
+                            <button @click="openProfile = !openProfile" @click.outside="openProfile = false" class="flex items-center gap-2 bg-[#181622] hover:bg-[#222] border border-gray-800 rounded-full py-1.5 px-1.5 pr-4 transition-colors">
+                                <div class="w-8 h-8 rounded-full bg-violet-600 flex flex-shrink-0 items-center justify-center text-white font-bold text-sm">
+                                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                </div>
+                                <span class="text-white text-sm font-medium hidden lg:block truncate max-w-[100px]">{{ auth()->user()->name }}</span>
+                                <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                            </button>
+                            
+                            <div x-show="openProfile" 
+                                 x-transition:enter="transition ease-out duration-100" 
+                                 x-transition:enter-start="transform opacity-0 scale-95" 
+                                 x-transition:enter-end="transform opacity-100 scale-100" 
+                                 x-transition:leave="transition ease-in duration-75" 
+                                 x-transition:leave-start="transform opacity-100 scale-100" 
+                                 x-transition:leave-end="transform opacity-0 scale-95" 
+                                 class="absolute right-0 mt-2 w-48 bg-[#181622] rounded-xl shadow-lg border border-gray-800 py-1 z-50 text-left" style="display: none;">
+                                @if(auth()->user()->role === 'seller')
+                                    <a href="{{ route('seller.dashboard') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#2a2833] hover:text-white transition-colors">Seller Dashboard</a>
+                                @endif
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="w-full text-left block px-4 py-2 text-sm text-red-400 hover:bg-[#2a2833] hover:text-red-300 transition-colors">
+                                        Log out
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @endauth
                 </div>
 
                 <!-- Mobile Menu Button -->
@@ -126,7 +172,27 @@
                 
                 <button @click="alert('Pricing plans will be implemented in a future update!'); mobileMenuOpen = false" class="block text-gray-300 hover:text-white font-medium text-lg text-left w-full">Pricing</button>
                 <div class="pt-4 border-t border-white/10 flex flex-col gap-3">
-                    <a href="{{ route('seller.login') }}" class="block text-center text-gray-300 hover:text-white font-medium py-2">Log in</a>
+                    @auth
+                        <div class="flex items-center gap-3 px-2 mb-2">
+                            <div class="w-10 h-10 rounded-full bg-violet-600 flex items-center justify-center text-white font-bold text-lg">
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            </div>
+                            <span class="text-white font-medium">{{ auth()->user()->name }}</span>
+                        </div>
+                        <a href="{{ route('cart.index') }}" class="block text-gray-300 hover:text-white font-medium py-2 px-2 flex-1">Bag</a>
+                        @if(auth()->user()->role === 'seller')
+                            <a href="{{ route('seller.dashboard') }}" class="block text-gray-300 hover:text-white font-medium py-2 px-2">Seller Dashboard</a>
+                        @endif
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="w-full text-left block text-red-400 hover:text-red-300 font-medium py-2 px-2">
+                                Log out
+                            </button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="block text-center text-gray-300 hover:text-white font-medium py-2">Log in</a>
+                    @endauth
+                    
                     <a href="{{ route('seller.register') }}" class="btn-gumroad-violet px-6 py-3 text-center block w-full">Start Selling</a>
                 </div>
             </div>

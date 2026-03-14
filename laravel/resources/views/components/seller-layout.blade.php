@@ -64,13 +64,13 @@
                     <div x-show="!sidebarOpen" class="absolute left-14 bg-white text-violet-950 font-semibold shadow-xl border border-violet-100 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Dashboard</div>
                 </a>
 
-                <!-- Business Profile -->
+                <!-- Store Profile -->
                 <a href="{{ route('seller.profile.index') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('seller.profile.*') ? 'bg-white text-violet-950 shadow-lg font-bold' : 'text-violet-200 hover:bg-white/10 hover:text-white' }}">
-                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('seller.profile.*') ? 'text-violet-900' : 'text-violet-400 group-hover:text-white transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('seller.profile.*') ? 'text-violet-900' : 'text-violet-400 group-hover:text-white transition-colors duration-200' }}" fill="none" viewBox="0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
-                    <span class="ml-3 font-medium whitespace-nowrap" x-show="sidebarOpen" x-transition.opacity.duration.200ms>Business Profile</span>
-                    <div x-show="!sidebarOpen" class="absolute left-14 bg-white text-violet-950 font-semibold shadow-xl border border-violet-100 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Business Profile</div>
+                    <span class="ml-3 font-medium whitespace-nowrap" x-show="sidebarOpen" x-transition.opacity.duration.200ms>Store Profile</span>
+                    <div x-show="!sidebarOpen" class="absolute left-14 bg-white text-violet-950 font-semibold shadow-xl border border-violet-100 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Store Profile</div>
                 </a>
 
                 <!-- Products -->
@@ -103,8 +103,8 @@
                 </a>
 
                 <!-- Feedback -->
-                <a href="{{ route('seller.dashboard') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative text-violet-200 hover:bg-white/10 hover:text-white">
-                    <svg class="w-5 h-5 flex-shrink-0 text-violet-400 group-hover:text-white transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <a href="{{ route('seller.feedback.index') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('seller.feedback.*') ? 'bg-white text-violet-950 shadow-lg font-bold' : 'text-violet-200 hover:bg-white/10 hover:text-white' }}">
+                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('seller.feedback.*') ? 'text-violet-900' : 'text-violet-400 group-hover:text-white transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                     </svg>
                     <span class="ml-3 font-medium whitespace-nowrap" x-show="sidebarOpen" x-transition.opacity.duration.200ms>Feedback</span>
