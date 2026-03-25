@@ -16,6 +16,8 @@ class Order extends Model
         'total_amount',
         'payment_method',
         'notes',
+        'social_facebook',
+        'social_messenger',
     ];
 
     public function user()

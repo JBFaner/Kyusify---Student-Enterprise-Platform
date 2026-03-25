@@ -7,6 +7,8 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -22,14 +24,16 @@ class DashboardController extends Controller
         $listedProducts = Product::where('enterprise_id', $enterprise->id)->count();
         $pendingOrders = Order::where('enterprise_id', $enterprise->id)->where('status', 'pending')->count();
         $totalRevenue = Order::where('enterprise_id', $enterprise->id)->whereIn('status', ['completed'])->sum('total_amount');
-        
-        // Unread/Inquiries could be mapped to messages later, leaving as 0 for now
-        $customerInquiries = 0; 
-        
+        $customerInquiries = 0;
+
         // Store Rating
         $averageRating = Review::whereHas('product', function($q) use ($enterprise) {
             $q->where('enterprise_id', $enterprise->id);
         })->avg('rating') ?? 0;
+
+        $totalReviews = Review::whereHas('product', function($q) use ($enterprise) {
+            $q->where('enterprise_id', $enterprise->id);
+        })->count();
 
         // Recent Orders
         $recentOrders = Order::where('enterprise_id', $enterprise->id)
@@ -38,13 +42,43 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        // ── Chart: Orders Over Time (last 6 months) ──────────────────
+        $ordersOverTime = collect();
+        for ($i = 5; $i >= 0; $i--) {
+            $month = Carbon::now()->subMonths($i);
+            $count = Order::where('enterprise_id', $enterprise->id)
+                          ->whereYear('created_at', $month->year)
+                          ->whereMonth('created_at', $month->month)
+                          ->count();
+            $revenue = Order::where('enterprise_id', $enterprise->id)
+                            ->whereYear('created_at', $month->year)
+                            ->whereMonth('created_at', $month->month)
+                            ->where('status', 'completed')
+                            ->sum('total_amount');
+            $ordersOverTime->push([
+                'label'   => $month->format('M Y'),
+                'orders'  => $count,
+                'revenue' => (float) $revenue,
+            ]);
+        }
+
+        // ── Chart: Order Status Breakdown ────────────────────────────
+        $orderStatuses = Order::where('enterprise_id', $enterprise->id)
+            ->select('status', DB::raw('count(*) as count'))
+            ->groupBy('status')
+            ->pluck('count', 'status')
+            ->toArray();
+
         return view('seller.dashboard.index', compact(
             'listedProducts', 
             'pendingOrders', 
             'totalRevenue', 
             'customerInquiries', 
-            'averageRating', 
-            'recentOrders'
+            'averageRating',
+            'totalReviews',
+            'recentOrders',
+            'ordersOverTime',
+            'orderStatuses'
         ));
     }
 }

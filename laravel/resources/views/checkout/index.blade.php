@@ -20,17 +20,17 @@
 </head>
 <body class="font-sans text-gray-900 dark:text-gray-100 antialiased min-h-screen flex flex-col">
 
+    <!-- Navbar -->
     <div class="fixed top-0 left-0 right-0 z-50 bg-[#0B0A0F] border-b border-gray-800">
-        <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
-            <a href="{{ route('landing') }}" class="flex items-center space-x-2">
-                <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg p-0.5">
-                    <img src="{{ asset('images/kyusify-logo.png') }}" alt="Kyusify Logo" class="w-full h-full object-contain">
-                </div>
-                <span class="text-2xl font-bold tracking-tight text-white hover:text-gray-200 transition-colors">Kyusify</span>
+        <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-3 flex items-center justify-between">
+            <a href="{{ route('landing') }}" class="flex items-center gap-3">
+                <img src="{{ asset('images/kyusify-logo.png') }}" alt="Kyusify Logo" class="w-8 h-8 object-contain rounded-lg">
+                <span class="text-xl font-extrabold tracking-tight text-white hover:text-violet-300 transition-colors">Kyusify</span>
             </a>
-            
             <div class="flex items-center space-x-6">
-                <a href="{{ route('cart.index') }}" class="text-gray-300 hover:text-white font-medium px-2 py-2 transition-colors">Back to Cart</a>
+                <a href="{{ route('cart.index') }}" class="text-gray-300 hover:text-white font-medium px-2 py-2 transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left text-sm"></i> Back to Cart
+                </a>
             </div>
         </div>
     </div>
@@ -93,35 +93,69 @@
                     </div>
                 </div>
 
-                <!-- Payment Details Box -->
+                <!-- My Socials Box -->
                 <div class="bg-white dark:bg-[#0B0A0F] border border-gray-200 dark:border-gray-800 rounded-2xl p-6 md:p-8 shadow-sm">
-                    <h2 class="text-xl font-bold mb-6 pb-4 border-b border-gray-100 dark:border-gray-800 text-gray-900 dark:text-white flex items-center gap-2">
-                        <i class="fa-solid fa-wallet text-violet-500"></i> Payment Method
+                    <h2 class="text-xl font-bold mb-2 text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-share-nodes text-violet-500"></i> My Socials
                     </h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">
+                        Share your socials so the seller can reach you easily about your order. Enter the full link (URL) to your profile.
+                    </p>
 
-                    <div class="space-y-3">
-                        <label class="relative flex cursor-pointer rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#13111C] p-4 shadow-sm focus-within:ring-2 focus-within:ring-violet-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                            <input type="radio" name="payment_method" value="cash_on_delivery" checked class="sr-only" aria-labelledby="payment-cod">
-                            <div class="flex items-center h-5 mt-0.5">
-                                <div class="w-5 h-5 rounded-full border border-gray-300 dark:border-gray-600 bg-white flex items-center justify-center shrink-0">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-violet-600 block"></div>
-                                </div>
+                    <div class="space-y-5">
+                        <!-- Facebook -->
+                        <div class="space-y-2">
+                            <label for="social_facebook" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                <i class="fa-brands fa-facebook text-blue-500 mr-1"></i> Facebook Profile Link *
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500">
+                                    <i class="fa-brands fa-facebook text-lg"></i>
+                                </span>
+                                <input
+                                    type="url"
+                                    id="social_facebook"
+                                    name="social_facebook"
+                                    value="{{ old('social_facebook') }}"
+                                    required
+                                    placeholder="https://facebook.com/yourname"
+                                    class="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-[#13111C] border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-shadow @error('social_facebook') border-red-500 @enderror"
+                                >
                             </div>
-                            <div class="ml-4 flex flex-col">
-                                <span id="payment-cod" class="font-bold text-gray-900 dark:text-white">Cash on Delivery (COD)</span>
-                                <span class="text-sm text-gray-500 dark:text-gray-400">Pay directly when the item is handed over to you on campus.</span>
-                            </div>
-                        </label>
+                            @error('social_facebook')
+                                <p class="text-xs text-red-500 mt-1"><i class="fa-solid fa-circle-exclamation mr-1"></i>{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                        <!-- Stubs for future payment methods -->
-                        <div class="opacity-50 relative flex rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#13111C] p-4">
-                            <div class="flex items-center h-5 mt-0.5">
-                                <div class="w-5 h-5 rounded-full border border-gray-300 dark:border-gray-600 bg-white shrink-0"></div>
+                        <!-- Messenger -->
+                        <div class="space-y-2">
+                            <label for="social_messenger" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                <i class="fa-brands fa-facebook-messenger text-violet-500 mr-1"></i> Messenger Link *
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-violet-500">
+                                    <i class="fa-brands fa-facebook-messenger text-lg"></i>
+                                </span>
+                                <input
+                                    type="url"
+                                    id="social_messenger"
+                                    name="social_messenger"
+                                    value="{{ old('social_messenger') }}"
+                                    required
+                                    placeholder="https://m.me/yourname"
+                                    class="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-[#13111C] border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-shadow @error('social_messenger') border-red-500 @enderror"
+                                >
                             </div>
-                            <div class="ml-4 flex flex-col">
-                                <span class="font-bold text-gray-900 dark:text-white items-center flex gap-2">GCash <span class="text-[10px] bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-300 px-2 py-0.5 rounded font-bold uppercase tracking-wider">Coming Soon</span></span>
-                                <span class="text-sm text-gray-500 dark:text-gray-400">Not supported yet by the selected store(s).</span>
-                            </div>
+                            @error('social_messenger')
+                                <p class="text-xs text-red-500 mt-1"><i class="fa-solid fa-circle-exclamation mr-1"></i>{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="flex items-start gap-2 mt-2 p-3 bg-violet-50 dark:bg-violet-900/20 rounded-xl border border-violet-100 dark:border-violet-800/40">
+                            <i class="fa-solid fa-circle-info text-violet-500 mt-0.5 shrink-0"></i>
+                            <p class="text-xs text-violet-700 dark:text-violet-300 leading-relaxed">
+                                Your social links will only be shared with the seller you're ordering from, so they can coordinate delivery with you.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -182,7 +216,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" onclick="this.innerHTML='<i class=\'fa-solid fa-circle-notch fa-spin\'></i> Processing...'; setTimeout(() => { this.disabled=true; }, 50)" class="w-full bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:ring-violet-500/20 text-white font-bold py-4 rounded-xl shadow-[0_8px_30px_rgb(139,92,246,0.3)] hover:shadow-[0_8px_30px_rgb(139,92,246,0.5)] transition-all hover:-translate-y-1 flex items-center justify-center gap-3">
+                    <button id="checkout-submit-btn" type="submit" class="w-full bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:ring-violet-500/20 text-white font-bold py-4 rounded-xl shadow-[0_8px_30px_rgb(139,92,246,0.3)] hover:shadow-[0_8px_30px_rgb(139,92,246,0.5)] transition-all hover:-translate-y-1 flex items-center justify-center gap-3">
                         Confirm Purchase <i class="fa-solid fa-arrow-right"></i>
                     </button>
                     <p class="text-center text-xs text-gray-400 dark:text-gray-500 mt-4 leading-relaxed">
@@ -192,6 +226,16 @@
             </div>
             
         </form>
+
+    <script>
+        // Only show "Processing..." AFTER the form passes all validation (submit event fires post-validation)
+        document.getElementById('checkout-form').addEventListener('submit', function(e) {
+            var btn = document.getElementById('checkout-submit-btn');
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...';
+            btn.disabled = true;
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+        });
+    </script>
     </main>
 </body>
 </html>

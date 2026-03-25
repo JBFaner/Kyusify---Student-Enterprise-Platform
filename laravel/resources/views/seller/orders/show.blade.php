@@ -132,6 +132,37 @@
                 @endif
             </div>
 
+            <!-- Buyer Socials Card -->
+            @if($order->social_facebook || $order->social_messenger)
+            <div class="bg-white dark:bg-[#13111C] shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] rounded-2xl border border-gray-100 dark:border-gray-800/60 p-6">
+                <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-share-nodes text-violet-500"></i>
+                    Contact Buyer Via Socials
+                </h3>
+                <div class="space-y-3">
+                    @if($order->social_facebook)
+                    <a href="{{ $order->social_facebook }}" target="_blank" rel="noopener noreferrer"
+                       class="flex items-center gap-3 w-full px-4 py-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/40 rounded-xl text-blue-700 dark:text-blue-300 text-sm font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+                        <i class="fa-brands fa-facebook text-xl text-blue-500"></i>
+                        <span>Open Facebook Profile</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-auto opacity-60"></i>
+                    </a>
+                    @endif
+                    @if($order->social_messenger)
+                    <a href="{{ $order->social_messenger }}" target="_blank" rel="noopener noreferrer"
+                       class="flex items-center gap-3 w-full px-4 py-3 bg-violet-50 dark:bg-violet-900/20 border border-violet-100 dark:border-violet-800/40 rounded-xl text-violet-700 dark:text-violet-300 text-sm font-semibold hover:bg-violet-100 dark:hover:bg-violet-900/30 transition-colors">
+                        <i class="fa-brands fa-facebook-messenger text-xl text-violet-500"></i>
+                        <span>Open Messenger Chat</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-auto opacity-60"></i>
+                    </a>
+                    @endif
+                </div>
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-3 leading-relaxed">
+                    <i class="fa-solid fa-circle-info mr-1"></i> Reach out to coordinate delivery or confirm order details.
+                </p>
+            </div>
+            @endif
+
         </div>
 
     </div>

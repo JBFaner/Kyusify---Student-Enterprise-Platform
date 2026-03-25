@@ -24,11 +24,9 @@
             </div>
             
             <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
-                <a href="{{ route('landing') }}" class="flex items-center space-x-2">
-                    <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg p-0.5">
-                        <img src="{{ asset('images/kyusify-logo.png') }}" alt="Kyusify Logo" class="w-full h-full object-contain">
-                    </div>
-                    <span class="text-2xl font-bold tracking-tight text-white hover:text-gray-200 transition-colors">Kyusify</span>
+                <a href="{{ route('landing') }}" class="flex items-center gap-3">
+                    <img src="{{ asset('images/kyusify-logo.png') }}" alt="Kyusify Logo" class="w-8 h-8 object-contain rounded-lg">
+                    <span class="text-xl font-extrabold tracking-tight text-white hover:text-violet-300 transition-colors">Kyusify</span>
                 </a>
                
                 <div class="flex items-center space-x-6">
@@ -39,6 +37,12 @@
                         </svg>
                         Bag
                     </a>
+                    @auth
+                    <a href="{{ route('purchases.index') }}" class="text-gray-300 hover:text-violet-400 font-medium px-2 py-2 transition-colors flex items-center gap-1.5">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                        My Purchases
+                    </a>
+                    @endauth
                 </div>
             </div>
         </div>

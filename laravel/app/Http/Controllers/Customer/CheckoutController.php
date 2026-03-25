@@ -34,7 +34,7 @@ class CheckoutController extends Controller
             return $item->quantity * $item->product->price;
         });
 
-        $total = $subtotal; // Add shipping/tax logic here if needed
+        $total = $subtotal;
 
         return view('checkout.index', compact('cartItems', 'subtotal', 'total'));
     }
@@ -42,12 +42,18 @@ class CheckoutController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'items' => 'required|array',
-            'items.*' => 'exists:cart_items,id',
-            'shipping_name' => 'required|string|max:255',
+            'items'            => 'required|array',
+            'items.*'          => 'exists:cart_items,id',
+            'shipping_name'    => 'required|string|max:255',
             'shipping_address' => 'required|string',
-            'contact_number' => 'required|string|max:50',
-            'payment_method' => 'required|string',
+            'contact_number'   => 'required|string|max:50',
+            'social_facebook'  => 'required|url|max:500',
+            'social_messenger' => 'required|url|max:500',
+        ], [
+            'social_facebook.required'  => 'Please enter your Facebook profile link.',
+            'social_facebook.url'       => 'Facebook must be a valid URL (e.g. https://facebook.com/yourname).',
+            'social_messenger.required' => 'Please enter your Messenger link.',
+            'social_messenger.url'      => 'Messenger must be a valid URL (e.g. https://m.me/yourname).',
         ]);
 
         $cartItems = CartItem::where('user_id', auth()->id())
@@ -60,7 +66,7 @@ class CheckoutController extends Controller
         }
 
         // Group items by enterprise
-        $groupedItems = $cartItems->groupBy(function($item) {
+        $groupedItems = $cartItems->groupBy(function ($item) {
             return $item->product->enterprise_id;
         });
 
@@ -68,41 +74,39 @@ class CheckoutController extends Controller
 
         try {
             foreach ($groupedItems as $enterpriseId => $items) {
-                // Calculate enterprise order total
                 $enterpriseTotal = $items->sum(function ($item) {
                     return $item->quantity * $item->product->price;
                 });
 
-                // Create Order
                 $order = Order::create([
-                    'user_id' => auth()->id(),
-                    'enterprise_id' => $enterpriseId,
-                    'status' => 'pending',
-                    'shipping_name' => $validated['shipping_name'],
+                    'user_id'          => auth()->id(),
+                    'enterprise_id'    => $enterpriseId,
+                    'status'           => 'pending',
+                    'shipping_name'    => $validated['shipping_name'],
                     'shipping_address' => $validated['shipping_address'],
-                    'contact_number' => $validated['contact_number'],
-                    'payment_method' => $validated['payment_method'],
-                    'total_amount' => $enterpriseTotal,
+                    'contact_number'   => $validated['contact_number'],
+                    'payment_method'   => 'cash_on_delivery',
+                    'total_amount'     => $enterpriseTotal,
+                    'social_facebook'  => $validated['social_facebook'],
+                    'social_messenger' => $validated['social_messenger'],
                 ]);
 
-                // Create Order Items
                 foreach ($items as $item) {
                     OrderItem::create([
-                        'order_id' => $order->id,
+                        'order_id'   => $order->id,
                         'product_id' => $item->product_id,
-                        'quantity' => $item->quantity,
+                        'quantity'   => $item->quantity,
                         'unit_price' => $item->product->price,
-                        'subtotal' => $item->quantity * $item->product->price,
+                        'subtotal'   => $item->quantity * $item->product->price,
                     ]);
-                    
-                    // Delete cart item after processing
+
                     $item->delete();
                 }
             }
 
             DB::commit();
 
-            return redirect()->route('cart.index')->with('success', 'Your order was successfully placed! Transaction complete.');
+            return redirect()->route('cart.index')->with('success', 'Your order was successfully placed! The seller will contact you via your socials.');
 
         } catch (\Exception $e) {
             DB::rollBack();

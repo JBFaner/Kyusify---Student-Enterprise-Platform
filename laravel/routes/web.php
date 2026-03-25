@@ -26,6 +26,7 @@ Route::get('/store/{id}', [PublicStoreController::class, 'show'])->name('store.s
 Route::get('/product/{id}', [PublicProductController::class, 'show'])->name('product.show');
 
 use App\Http\Controllers\Customer\CartController;
+use App\Http\Controllers\Customer\CustomerOrderController;
 
 // Cart & Review Routes
 Route::middleware('auth')->group(function () {
@@ -37,6 +38,15 @@ Route::middleware('auth')->group(function () {
     // Checkout Routes
     Route::get('/checkout', [\App\Http\Controllers\Customer\CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [\App\Http\Controllers\Customer\CheckoutController::class, 'store'])->name('checkout.store');
+
+    // My Purchases
+    Route::get('/purchases', [CustomerOrderController::class, 'index'])->name('purchases.index');
+
+    // Customer Inquiries (chatbox AJAX)
+    Route::post('/inquiry/{enterpriseId}/start', [\App\Http\Controllers\Customer\InquiryController::class, 'startOrGet'])->name('inquiry.start');
+    Route::post('/inquiry/{conversationId}/send', [\App\Http\Controllers\Customer\InquiryController::class, 'send'])->name('inquiry.send');
+    Route::post('/inquiry/{conversationId}/auto-reply', [\App\Http\Controllers\Customer\InquiryController::class, 'autoReply'])->name('inquiry.auto-reply');
+    Route::get('/inquiry/{conversationId}/poll', [\App\Http\Controllers\Customer\InquiryController::class, 'poll'])->name('inquiry.poll');
 
     // Product Reviews
     Route::post('/product/{product}/review', [\App\Http\Controllers\PublicReviewController::class, 'store'])->name('review.store');
@@ -85,13 +95,24 @@ Route::middleware(['auth'])->prefix('seller')->name('seller.')->group(function (
     Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
     Route::post('/feedback/{review}/reply', [FeedbackController::class, 'reply'])->name('feedback.reply');
     Route::post('/feedback/{review}/report', [FeedbackController::class, 'report'])->name('feedback.report');
+
+    // Inquiries
+    Route::get('/inquiries', [\App\Http\Controllers\Seller\InquiryController::class, 'index'])->name('inquiries.index');
+    Route::get('/inquiries/{id}/messages', [\App\Http\Controllers\Seller\InquiryController::class, 'messages'])->name('inquiries.messages');
+    Route::post('/inquiries/{id}/reply', [\App\Http\Controllers\Seller\InquiryController::class, 'reply'])->name('inquiries.reply');
+    Route::patch('/inquiries/{id}/close', [\App\Http\Controllers\Seller\InquiryController::class, 'close'])->name('inquiries.close');
+
+    // Quick Replies
+    Route::get('/quick-replies', [\App\Http\Controllers\Seller\QuickReplyController::class, 'index'])->name('quick-replies.index');
+    Route::post('/quick-replies', [\App\Http\Controllers\Seller\QuickReplyController::class, 'store'])->name('quick-replies.store');
+    Route::put('/quick-replies/{id}', [\App\Http\Controllers\Seller\QuickReplyController::class, 'update'])->name('quick-replies.update');
+    Route::delete('/quick-replies/{id}', [\App\Http\Controllers\Seller\QuickReplyController::class, 'destroy'])->name('quick-replies.destroy');
+    Route::post('/quick-replies/reorder', [\App\Http\Controllers\Seller\QuickReplyController::class, 'reorder'])->name('quick-replies.reorder');
 });
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard.index');
-    })->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('users', UserController::class);
 
@@ -99,9 +120,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::resource('products', ProductController::class);
 
-    Route::get('/inquiries', function () {
-        return view('admin.inquiry-feedback.index');
-    })->name('inquiries.index');
+    Route::get('/inquiries', [\App\Http\Controllers\Admin\AdminInquiryController::class, 'index'])->name('inquiries.index');
+    Route::patch('/inquiries/{id}/close', [\App\Http\Controllers\Admin\AdminInquiryController::class, 'close'])->name('inquiries.close');
+    Route::patch('/inquiries/{id}/reopen', [\App\Http\Controllers\Admin\AdminInquiryController::class, 'reopen'])->name('inquiries.reopen');
+    Route::delete('/inquiries/messages/{id}', [\App\Http\Controllers\Admin\AdminInquiryController::class, 'deleteMessage'])->name('inquiries.message.delete');
 
     Route::prefix('content')->name('content.')->group(function () {
         // Categories
