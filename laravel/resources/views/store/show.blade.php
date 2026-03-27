@@ -285,7 +285,7 @@
             <div class="flex gap-6 md:gap-8 font-medium text-gray-400">
                 <a href="{{ route('discover') }}" class="hover:text-white transition-colors">Discover</a>
                 <a href="{{ route('landing') }}#about" class="hover:text-white transition-colors">About</a>
-                <a href="javascript:alert('Pricing info not yet available')" class="hover:text-white transition-colors">Pricing</a>
+                <button type="button" onclick="alert('Pricing info not yet available')" class="hover:text-white transition-colors bg-transparent border-0 p-0 cursor-pointer">Pricing</button>
             </div>
 
             <p class="text-gray-500 text-sm text-center md:text-right">

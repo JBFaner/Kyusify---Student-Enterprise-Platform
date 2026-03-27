@@ -208,7 +208,7 @@
 
                                         @if(!$review->is_reported)
                                             <!-- Report Form -->
-                                            <form action="{{ route('seller.feedback.report', $review->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to report this review to the admins?');">
+                                            <form action="{{ route('seller.feedback.report', $review->id) }}" method="POST" onsubmit="return window.confirm('Are you sure you want to report this review to the admins?');">
                                                 @csrf
                                                 <button type="submit" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors" title="Report Inappropriate">
                                                     <i class="fa-solid fa-flag"></i>

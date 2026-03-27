@@ -95,7 +95,7 @@
 
     <style>
         /* ── Print: hide everything except .print-table scope ── */
-        @media print {
+        @@media print {
             body > * { display: none !important; }
             .kyusify-print-zone { display: block !important; }
         }

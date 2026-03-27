@@ -291,7 +291,7 @@
                                                         <img src="{{ Storage::url($product->enterprise->logo_path) }}" class="w-full h-full object-cover">
                                                     @endif
                                                 </div>
-                                                <object><a href="{{ route('store.show', $product->enterprise->id) }}" class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate hover:text-violet-600 hover:underline cursor-pointer">{{ $product->enterprise->name ?? 'Store' }}</a></object>
+                                                <a href="{{ route('store.show', $product->enterprise->id) }}" class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate hover:text-violet-600 hover:underline cursor-pointer" onclick="event.stopPropagation()">{{ $product->enterprise->name ?? 'Store' }}</a>
                                             </div>
                                         </div>
                                         
@@ -355,7 +355,7 @@
                                             <img src="{{ Storage::url($product->enterprise->logo_path) }}" class="w-full h-full object-cover">
                                         @endif
                                     </div>
-                                    <object><a href="{{ route('store.show', $product->enterprise->id) }}" class="text-xs font-medium text-gray-500 dark:text-gray-400 truncate hover:text-violet-600 hover:underline">{{ $product->enterprise->name ?? 'Store' }}</a></object>
+                                    <a href="{{ route('store.show', $product->enterprise->id) }}" class="text-xs font-medium text-gray-500 dark:text-gray-400 truncate hover:text-violet-600 hover:underline" onclick="event.stopPropagation()">{{ $product->enterprise->name ?? 'Store' }}</a>
                                 </div>
                                 <div class="mt-auto pt-4 flex items-center justify-between border-t border-gray-100 dark:border-gray-800/60">
                                     <span class="font-black text-lg text-gray-900 dark:text-white">₱{{ number_format($product->price, 2) }}</span>
@@ -399,7 +399,7 @@
             <div class="flex gap-6 md:gap-8 font-medium text-gray-400">
                 <a href="{{ route('discover') }}" class="hover:text-white transition-colors">Discover</a>
                 <a href="{{ route('landing') }}#about" class="hover:text-white transition-colors">About</a>
-                <a href="javascript:alert('Pricing info not yet available')" class="hover:text-white transition-colors">Pricing</a>
+                <button type="button" onclick="alert('Pricing info not yet available')" class="hover:text-white transition-colors bg-transparent border-0 p-0 cursor-pointer">Pricing</button>
             </div>
 
             <p class="text-gray-500 text-sm text-center md:text-right">

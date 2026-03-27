@@ -96,7 +96,7 @@
                         <a href="{{ url('/#about') }}" class="text-gray-300 hover:text-white font-medium transition-colors">About</a>
                     @endif
 
-                    <button onclick="alert('Pricing plans will be implemented in a future update!')" class="text-gray-300 hover:text-white font-medium transition-colors">Pricing</button>
+                    <button type="button" onclick="alert('Pricing plans will be implemented in a future update!')" class="text-gray-300 hover:text-white font-medium transition-colors cursor-pointer bg-transparent border-0 p-0">Pricing</button>
                     
                     @guest
                         <a href="{{ route('login') }}" class="text-gray-300 hover:text-white font-medium transition-colors">Log in</a>
@@ -170,7 +170,7 @@
                     <a href="{{ url('/#about') }}" @click="mobileMenuOpen = false" class="block text-gray-300 hover:text-white font-medium text-lg">About</a>
                 @endif
                 
-                <button @click="alert('Pricing plans will be implemented in a future update!'); mobileMenuOpen = false" class="block text-gray-300 hover:text-white font-medium text-lg text-left w-full">Pricing</button>
+                <button type="button" @click="alert('Pricing plans will be implemented in a future update!'); mobileMenuOpen = false" class="block text-gray-300 hover:text-white font-medium text-lg text-left w-full bg-transparent border-0 p-0 cursor-pointer">Pricing</button>
                 <div class="pt-4 border-t border-white/10 flex flex-col gap-3">
                     @auth
                         <div class="flex items-center gap-3 px-2 mb-2">
@@ -319,7 +319,7 @@
                         <div x-show="tab === 'products'" style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
                             <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
                                 <h3 class="text-gray-900 font-bold text-xl md:text-2xl">Products</h3>
-                                <button onclick="alert('This is an interactive preview. Sign up to add products!')" class="bg-violet-600 hover:bg-violet-700 text-white font-bold text-sm px-4 py-2 rounded-lg transition-colors inline-block w-max shadow-sm shadow-violet-500/30">
+                                <button type="button" onclick="alert('This is an interactive preview. Sign up to add products!')" class="bg-violet-600 hover:bg-violet-700 text-white font-bold text-sm px-4 py-2 rounded-lg transition-colors inline-block w-max shadow-sm shadow-violet-500/30 cursor-pointer">
                                     + Add Product
                                 </button>
                             </div>
