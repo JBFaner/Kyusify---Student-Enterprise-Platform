@@ -108,6 +108,9 @@ Route::middleware(['auth'])->prefix('seller')->name('seller.')->group(function (
     Route::put('/quick-replies/{id}', [\App\Http\Controllers\Seller\QuickReplyController::class, 'update'])->name('quick-replies.update');
     Route::delete('/quick-replies/{id}', [\App\Http\Controllers\Seller\QuickReplyController::class, 'destroy'])->name('quick-replies.destroy');
     Route::post('/quick-replies/reorder', [\App\Http\Controllers\Seller\QuickReplyController::class, 'reorder'])->name('quick-replies.reorder');
+
+    // Sales Reports
+    Route::get('/reports', [\App\Http\Controllers\Seller\SellerSalesReportsController::class, 'index'])->name('reports.index');
 });
 
 // Admin Routes
@@ -150,7 +153,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('banner', [\App\Http\Controllers\Admin\AdminContentController::class, 'removeBanner'])->name('banner.destroy');
     });
 
-    Route::get('/reports', function () {
-        return view('admin.reports-logs.index');
-    })->name('reports.index');
+    Route::get('/reports', [\App\Http\Controllers\Admin\AdminReportsController::class, 'index'])->name('reports.index');
 });

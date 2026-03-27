@@ -55,7 +55,7 @@
                 
                 <div class="w-24 h-24 rounded-2xl border-4 border-white dark:border-[#0B0A0F] shadow-lg overflow-hidden relative z-10 mt-6 bg-white flex items-center justify-center">
                     @if($enterprise->logo_path)
-                        <img src="{{ asset($enterprise->logo_path) }}" alt="{{ $enterprise->name }}" class="w-full h-full object-cover">
+                        <img src="{{ Storage::url($enterprise->logo_path) }}" alt="{{ $enterprise->name }}" class="w-full h-full object-cover">
                     @else
                         <span class="text-3xl font-bold text-violet-600">{{ substr($enterprise->name, 0, 1) }}</span>
                     @endif

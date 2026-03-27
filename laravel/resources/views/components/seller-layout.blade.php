@@ -115,8 +115,8 @@
                 </a>
 
                 <!-- Sales Reports -->
-                <a href="{{ route('seller.dashboard') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative text-violet-200 hover:bg-white/10 hover:text-white">
-                    <svg class="w-5 h-5 flex-shrink-0 text-violet-400 group-hover:text-white transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <a href="{{ route('seller.reports.index') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('seller.reports.*') ? 'bg-white text-violet-950 shadow-lg font-bold' : 'text-violet-200 hover:bg-white/10 hover:text-white' }}">
+                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('seller.reports.*') ? 'text-violet-900' : 'text-violet-400 group-hover:text-white transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                     <span class="ml-3 font-medium whitespace-nowrap" x-show="sidebarOpen" x-transition.opacity.duration.200ms>Sales Reports</span>
