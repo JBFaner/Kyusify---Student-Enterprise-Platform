@@ -60,6 +60,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/notifications/read-all', [\App\Http\Controllers\NotificationsController::class, 'markAllRead'])->name('notifications.read-all');
 });
 
+use App\Http\Controllers\Auth\TwoFactorController;
+
+// 2FA Verification Routes
+Route::middleware('guest')->group(function () {
+    Route::get('/verify-2fa', [TwoFactorController::class, 'index'])->name('2fa.verify');
+    Route::post('/verify-2fa', [TwoFactorController::class, 'store'])->name('2fa.verify.store');
+});
+
 // Standard Customer Authentication Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [CustomerAuthController::class, 'showLoginForm'])->name('login');

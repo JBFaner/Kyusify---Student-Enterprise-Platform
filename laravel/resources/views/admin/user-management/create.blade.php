@@ -45,8 +45,7 @@
                             <div>
                                 <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Role <span class="text-red-500">*</span></label>
                                 <select name="role" id="role" class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 bg-gray-50 dark:bg-[#0B0A0F] text-gray-900 dark:text-white transition-shadow">
-                                    <option value="customer" @selected(old('role') == 'customer')>Customer</option>
-                                    <option value="seller" @selected(old('role') == 'seller')>Seller</option>
+                                    <option value="seller" @selected(old('role', 'seller') == 'seller')>Seller</option>
                                     <option value="admin" @selected(old('role') == 'admin')>Admin</option>
                                 </select>
                                 @error('role')
