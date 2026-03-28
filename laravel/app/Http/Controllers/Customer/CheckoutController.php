@@ -106,6 +106,20 @@ class CheckoutController extends Controller
 
             DB::commit();
 
+            foreach ($groupedItems as $enterpriseId => $items) {
+                $enterprise = \App\Models\Enterprise::find($enterpriseId);
+                if ($enterprise && $enterprise->user_id) {
+                    \App\Helpers\NotificationHelper::send(
+                        $enterprise->user_id,
+                        'new_order',
+                        'New Order Received!',
+                        "You received a new order from {$validated['shipping_name']}.",
+                        route('seller.orders.index'),
+                        'order'
+                    );
+                }
+            }
+
             return redirect()->route('cart.index')->with('success', 'Your order was successfully placed! The seller will contact you via your socials.');
 
         } catch (\Exception $e) {

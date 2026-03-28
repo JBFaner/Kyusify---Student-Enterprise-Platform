@@ -69,7 +69,7 @@
 
                 <!-- Store Profile -->
                 <a href="{{ route('seller.profile.index') }}" class="flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative {{ request()->routeIs('seller.profile.*') ? 'bg-white text-violet-950 shadow-lg font-bold' : 'text-violet-200 hover:bg-white/10 hover:text-white' }}">
-                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('seller.profile.*') ? 'text-violet-900' : 'text-violet-400 group-hover:text-white transition-colors duration-200' }}" fill="none" viewBox="0 24 24" stroke="currentColor">
+                    <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('seller.profile.*') ? 'text-violet-900' : 'text-violet-400 group-hover:text-white transition-colors duration-200' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                     <span class="ml-3 font-medium whitespace-nowrap" x-show="sidebarOpen" x-transition.opacity.duration.200ms>Store Profile</span>
@@ -151,12 +151,7 @@
                 
                 <div class="flex items-center space-x-6">
                     <!-- Notifications -->
-                    <button class="relative p-2 text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                        </svg>
-                        <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-violet-600 border-2 border-white dark:border-[#13111C] rounded-full"></span>
-                    </button>
+                    <x-notification-bell />
                     
                     <!-- Seller Profile Dropdown Dummy -->
                     <div class="flex items-center space-x-3 cursor-pointer group">

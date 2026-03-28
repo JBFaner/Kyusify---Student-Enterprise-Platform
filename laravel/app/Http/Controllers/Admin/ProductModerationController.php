@@ -40,6 +40,24 @@ class ProductModerationController extends Controller
             'status' => $request->status,
         ]);
 
+        if (in_array($request->status, ['approved', 'rejected'])) {
+            $enterprise = $product->enterprise()->with('user')->first();
+            if ($enterprise && $enterprise->user_id) {
+                $title = $request->status === 'approved' ? 'Product Approved' : 'Product Rejected';
+                $msg = "Your product '{$product->name}' has been {$request->status}.";
+                $icon = $request->status === 'approved' ? 'product' : 'bell';
+                
+                \App\Helpers\NotificationHelper::send(
+                    $enterprise->user_id,
+                    'product_status',
+                    $title,
+                    $msg,
+                    route('seller.products.index'),
+                    $icon
+                );
+            }
+        }
+
         return back()->with('success', "Product status updated to {$request->status}.");
     }
 }

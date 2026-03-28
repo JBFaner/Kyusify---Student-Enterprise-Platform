@@ -33,6 +33,18 @@ class PublicReviewController extends Controller
             'is_reported' => false
         ]);
 
+        $enterprise = $product->enterprise()->with('user')->first();
+        if ($enterprise && $enterprise->user_id) {
+            \App\Helpers\NotificationHelper::send(
+                $enterprise->user_id,
+                'new_review',
+                'New Product Review',
+                Auth::user()->name . " left a {$request->rating}-star review on your product '{$product->name}'.",
+                route('seller.feedback.index'),
+                'review'
+            );
+        }
+
         return back()->with('success', 'Review added successfully!');
     }
 

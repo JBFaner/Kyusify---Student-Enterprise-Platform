@@ -63,7 +63,15 @@ class ProductController extends Controller
             $data['image_path'] = $request->file('image')->store('products', 'public');
         }
 
-        auth()->user()->enterprise->products()->create($data);
+        $product = auth()->user()->enterprise->products()->create($data);
+
+        \App\Helpers\NotificationHelper::notifyAdmins(
+            'product_pending',
+            'New Product Pending',
+            'Enterprise "' . auth()->user()->enterprise->name . '" added a new product awaiting approval.',
+            route('admin.content.moderation.index'),
+            'product'
+        );
 
         return redirect()->route('seller.products.index')->with('success', 'Product created successfully.');
     }

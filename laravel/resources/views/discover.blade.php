@@ -291,7 +291,7 @@
                                                         <img src="{{ Storage::url($product->enterprise->logo_path) }}" class="w-full h-full object-cover">
                                                     @endif
                                                 </div>
-                                                <a href="{{ route('store.show', $product->enterprise->id) }}" class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate hover:text-violet-600 hover:underline cursor-pointer" onclick="event.stopPropagation()">{{ $product->enterprise->name ?? 'Store' }}</a>
+                                                <span role="link" tabindex="0" onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{{ route('store.show', $product->enterprise->id) }}'" class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate hover:text-violet-600 hover:underline cursor-pointer">{{ $product->enterprise->name ?? 'Store' }}</span>
                                             </div>
                                         </div>
                                         
@@ -355,7 +355,7 @@
                                             <img src="{{ Storage::url($product->enterprise->logo_path) }}" class="w-full h-full object-cover">
                                         @endif
                                     </div>
-                                    <a href="{{ route('store.show', $product->enterprise->id) }}" class="text-xs font-medium text-gray-500 dark:text-gray-400 truncate hover:text-violet-600 hover:underline" onclick="event.stopPropagation()">{{ $product->enterprise->name ?? 'Store' }}</a>
+                                    <span role="link" tabindex="0" onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{{ route('store.show', $product->enterprise->id) }}'" class="text-xs font-medium text-gray-500 dark:text-gray-400 truncate hover:text-violet-600 hover:underline cursor-pointer">{{ $product->enterprise->name ?? 'Store' }}</span>
                                 </div>
                                 <div class="mt-auto pt-4 flex items-center justify-between border-t border-gray-100 dark:border-gray-800/60">
                                     <span class="font-black text-lg text-gray-900 dark:text-white">₱{{ number_format($product->price, 2) }}</span>

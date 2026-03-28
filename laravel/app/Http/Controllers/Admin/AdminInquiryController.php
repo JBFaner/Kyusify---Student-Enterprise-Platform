@@ -22,8 +22,8 @@ class AdminInquiryController extends Controller
         $totalMessages        = Message::count();
 
         // Conversations query with filters
-        $filter = $request->input('filter', 'all');
-        $search = $request->input('search', '');
+        $filter = $request->get('filter', 'all');
+        $search = $request->get('search', '');
 
         $query = Conversation::with(['customer', 'enterprise', 'product', 'latestMessage'])
             ->orderByDesc('last_message_at');
@@ -45,7 +45,7 @@ class AdminInquiryController extends Controller
         // Active conversation
         $activeConversation = null;
         $messages = collect();
-        if ($activeId = $request->input('conversation')) {
+        if ($activeId = $request->get('conversation')) {
             $activeConversation = Conversation::with(['customer', 'enterprise.user', 'product'])->find($activeId);
             if ($activeConversation) {
                 $messages = $activeConversation->messages()->with('sender')->orderBy('created_at')->get();

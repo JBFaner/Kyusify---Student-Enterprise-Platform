@@ -102,12 +102,16 @@
                                     </form>
                                     @endif
 
-                                    <div class="relative">
-                                        <button @click="open = !open" @click.away="open = false" class="text-xs px-3 py-1.5 bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 rounded-lg transition-colors font-medium flex items-center gap-1">
+                                    <div class="relative" x-data="{ open: false }" @click.away="open = false">
+                                        <button
+                                            data-more-btn="{{ $product->id }}"
+                                            class="text-xs px-3 py-1.5 bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 rounded-lg transition-colors font-medium flex items-center gap-1">
                                             More
                                             <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                                         </button>
-                                        <div x-show="open" x-transition class="absolute right-0 mt-2 w-36 bg-white dark:bg-[#13111C] rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 z-50 py-1 overflow-hidden" style="display: none;">
+                                        <div
+                                            id="more-menu-{{ $product->id }}"
+                                            class="hidden fixed w-36 bg-white dark:bg-[#13111C] rounded-xl shadow-xl border border-gray-100 dark:border-gray-800 z-[9999] py-1">
                                             @if($product->status !== 'hidden')
                                             <form action="{{ route('admin.content.moderation.update', $product) }}" method="POST">
                                                 @csrf @method('PATCH')
@@ -119,7 +123,7 @@
                                             <form action="{{ route('admin.content.moderation.update', $product) }}" method="POST">
                                                 @csrf @method('PATCH')
                                                 <input type="hidden" name="status" value="rejected">
-                                                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:text-red-500 dark:hover:bg-red-900/20" onclick="return confirm('Refuse this product?')">Reject Product</button>
+                                                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:text-red-500 dark:hover:bg-red-900/20" onclick="return window.confirm('Reject this product?')">Reject Product</button>
                                             </form>
                                             @endif
                                         </div>
@@ -146,4 +150,50 @@
             </div>
         @endif
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Move all More menus to body so overflow:hidden can't clip them
+        document.querySelectorAll('[id^="more-menu-"]').forEach(function (menu) {
+            document.body.appendChild(menu);
+        });
+
+        let activeMenu = null;
+
+        document.querySelectorAll('[data-more-btn]').forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const productId = btn.getAttribute('data-more-btn');
+                const menu = document.getElementById('more-menu-' + productId);
+                if (!menu) return;
+
+                const isOpen = !menu.classList.contains('hidden');
+
+                // Close any currently open menu
+                if (activeMenu && activeMenu !== menu) {
+                    activeMenu.classList.add('hidden');
+                }
+
+                if (isOpen) {
+                    menu.classList.add('hidden');
+                    activeMenu = null;
+                } else {
+                    const rect = btn.getBoundingClientRect();
+                    menu.style.top  = (rect.bottom + window.scrollY + 4) + 'px';
+                    menu.style.left = (rect.right  + window.scrollX - menu.offsetWidth) + 'px';
+                    menu.classList.remove('hidden');
+                    activeMenu = menu;
+                }
+            });
+        });
+
+        // Close on outside click
+        document.addEventListener('click', function () {
+            if (activeMenu) {
+                activeMenu.classList.add('hidden');
+                activeMenu = null;
+            }
+        });
+    });
+    </script>
 </x-admin-layout>

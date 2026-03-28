@@ -41,6 +41,14 @@ class SellerAuthController extends Controller
             'is_student_verified' => false,
         ]);
 
+        \App\Helpers\NotificationHelper::notifyAdmins(
+            'new_seller',
+            'New Seller Registered',
+            "{$validated['name']} registered enterprise \"{$validated['business_name']}\" and is awaiting verification.",
+            route('admin.enterprises.index'),
+            'bell'
+        );
+
         Auth::login($user);
 
         return redirect()->route('seller.dashboard')->with('success', 'Registration successful! Welcome to Kyusify Seller Portal.');
@@ -106,6 +114,14 @@ class SellerAuthController extends Controller
             'status' => 'pending', 
             'is_student_verified' => false,
         ]);
+
+        \App\Helpers\NotificationHelper::notifyAdmins(
+            'new_seller',
+            'User Upgraded to Seller',
+            "{$user->name} upgraded their account to seller with enterprise \"{$validated['business_name']}\" and is awaiting verification.",
+            route('admin.enterprises.index'),
+            'bell'
+        );
 
         return redirect()->route('seller.dashboard')->with('success', 'You have successfully upgraded to a Seller Account!');
     }

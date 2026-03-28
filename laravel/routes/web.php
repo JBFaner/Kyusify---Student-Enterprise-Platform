@@ -48,10 +48,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/inquiry/{conversationId}/auto-reply', [\App\Http\Controllers\Customer\InquiryController::class, 'autoReply'])->name('inquiry.auto-reply');
     Route::get('/inquiry/{conversationId}/poll', [\App\Http\Controllers\Customer\InquiryController::class, 'poll'])->name('inquiry.poll');
 
+
     // Product Reviews
     Route::post('/product/{product}/review', [\App\Http\Controllers\PublicReviewController::class, 'store'])->name('review.store');
     Route::put('/product/review/{review}', [\App\Http\Controllers\PublicReviewController::class, 'update'])->name('review.update');
     Route::post('/product/review/{review}/report', [\App\Http\Controllers\PublicReviewController::class, 'report'])->name('review.report');
+
+    // Notifications (shared between seller & admin)
+    Route::get('/notifications', [\App\Http\Controllers\NotificationsController::class, 'index'])->name('notifications.index');
+    Route::patch('/notifications/{notification}/read', [\App\Http\Controllers\NotificationsController::class, 'markRead'])->name('notifications.read');
+    Route::patch('/notifications/read-all', [\App\Http\Controllers\NotificationsController::class, 'markAllRead'])->name('notifications.read-all');
 });
 
 // Standard Customer Authentication Routes
@@ -115,43 +121,54 @@ Route::middleware(['auth'])->prefix('seller')->name('seller.')->group(function (
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
-
-    Route::resource('users', UserController::class);
-
-    Route::resource('enterprises', EnterpriseController::class);
-
-    Route::resource('products', ProductController::class);
-
-    Route::get('/inquiries', [\App\Http\Controllers\Admin\AdminInquiryController::class, 'index'])->name('inquiries.index');
-    Route::patch('/inquiries/{id}/close', [\App\Http\Controllers\Admin\AdminInquiryController::class, 'close'])->name('inquiries.close');
-    Route::patch('/inquiries/{id}/reopen', [\App\Http\Controllers\Admin\AdminInquiryController::class, 'reopen'])->name('inquiries.reopen');
-    Route::delete('/inquiries/messages/{id}', [\App\Http\Controllers\Admin\AdminInquiryController::class, 'deleteMessage'])->name('inquiries.message.delete');
-
-    Route::prefix('content')->name('content.')->group(function () {
-        // Categories
-        Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
-        Route::post('categories/reorder', [\App\Http\Controllers\Admin\CategoryController::class, 'reorder'])->name('categories.reorder');
-        
-        // Featured Products
-        Route::get('featured', [\App\Http\Controllers\Admin\FeaturedProductController::class, 'index'])->name('featured.index');
-        Route::post('featured/{product}', [\App\Http\Controllers\Admin\FeaturedProductController::class, 'store'])->name('featured.store');
-        Route::delete('featured/{product}', [\App\Http\Controllers\Admin\FeaturedProductController::class, 'destroy'])->name('featured.destroy');
-        Route::post('featured/reorder', [\App\Http\Controllers\Admin\FeaturedProductController::class, 'reorder'])->name('featured.reorder');
-
-        // Product Discovery Settings
-        Route::get('discovery', [\App\Http\Controllers\Admin\AdminContentController::class, 'discoverySettings'])->name('discovery');
-        Route::put('discovery', [\App\Http\Controllers\Admin\AdminContentController::class, 'updateDiscoverySettings'])->name('discovery.update');
-
-        // Product Moderation
-        Route::get('moderation', [\App\Http\Controllers\Admin\ProductModerationController::class, 'index'])->name('moderation.index');
-        Route::patch('moderation/{product}', [\App\Http\Controllers\Admin\ProductModerationController::class, 'update'])->name('moderation.update');
-
-        // Homepage Content
-        Route::get('/', [\App\Http\Controllers\Admin\AdminContentController::class, 'index'])->name('index');
-        Route::put('/', [\App\Http\Controllers\Admin\AdminContentController::class, 'update'])->name('update');
-        Route::delete('banner', [\App\Http\Controllers\Admin\AdminContentController::class, 'removeBanner'])->name('banner.destroy');
+    // Admin Auth Routes (Guest only)
+    Route::middleware('guest')->group(function () {
+        Route::get('/login', [\App\Http\Controllers\Auth\AdminAuthController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [\App\Http\Controllers\Auth\AdminAuthController::class, 'login'])->name('login.post');
     });
 
-    Route::get('/reports', [\App\Http\Controllers\Admin\AdminReportsController::class, 'index'])->name('reports.index');
+    // Admin Protected Routes
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::post('/logout', [\App\Http\Controllers\Auth\AdminAuthController::class, 'logout'])->name('logout');
+
+        Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
+
+        Route::resource('users', UserController::class);
+
+        Route::resource('enterprises', EnterpriseController::class);
+
+        Route::resource('products', ProductController::class);
+
+        Route::get('/inquiries', [\App\Http\Controllers\Admin\AdminInquiryController::class, 'index'])->name('inquiries.index');
+        Route::patch('/inquiries/{id}/close', [\App\Http\Controllers\Admin\AdminInquiryController::class, 'close'])->name('inquiries.close');
+        Route::patch('/inquiries/{id}/reopen', [\App\Http\Controllers\Admin\AdminInquiryController::class, 'reopen'])->name('inquiries.reopen');
+        Route::delete('/inquiries/messages/{id}', [\App\Http\Controllers\Admin\AdminInquiryController::class, 'deleteMessage'])->name('inquiries.message.delete');
+
+        Route::prefix('content')->name('content.')->group(function () {
+            // Categories
+            Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
+            Route::post('categories/reorder', [\App\Http\Controllers\Admin\CategoryController::class, 'reorder'])->name('categories.reorder');
+            
+            // Featured Products
+            Route::get('featured', [\App\Http\Controllers\Admin\FeaturedProductController::class, 'index'])->name('featured.index');
+            Route::post('featured/{product}', [\App\Http\Controllers\Admin\FeaturedProductController::class, 'store'])->name('featured.store');
+            Route::delete('featured/{product}', [\App\Http\Controllers\Admin\FeaturedProductController::class, 'destroy'])->name('featured.destroy');
+            Route::post('featured/reorder', [\App\Http\Controllers\Admin\FeaturedProductController::class, 'reorder'])->name('featured.reorder');
+
+            // Product Discovery Settings
+            Route::get('discovery', [\App\Http\Controllers\Admin\AdminContentController::class, 'discoverySettings'])->name('discovery');
+            Route::put('discovery', [\App\Http\Controllers\Admin\AdminContentController::class, 'updateDiscoverySettings'])->name('discovery.update');
+
+            // Product Moderation
+            Route::get('moderation', [\App\Http\Controllers\Admin\ProductModerationController::class, 'index'])->name('moderation.index');
+            Route::patch('moderation/{product}', [\App\Http\Controllers\Admin\ProductModerationController::class, 'update'])->name('moderation.update');
+
+            // Homepage Content
+            Route::get('/', [\App\Http\Controllers\Admin\AdminContentController::class, 'index'])->name('index');
+            Route::put('/', [\App\Http\Controllers\Admin\AdminContentController::class, 'update'])->name('update');
+            Route::delete('banner', [\App\Http\Controllers\Admin\AdminContentController::class, 'removeBanner'])->name('banner.destroy');
+        });
+
+        Route::get('/reports', [\App\Http\Controllers\Admin\AdminReportsController::class, 'index'])->name('reports.index');
+    });
 });

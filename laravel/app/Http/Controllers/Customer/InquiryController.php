@@ -89,6 +89,18 @@ class InquiryController extends Controller
             'last_message_at' => now(),
         ]);
 
+        $enterprise = $conversation->enterprise()->with('user')->first();
+        if ($enterprise && $enterprise->user_id) {
+            \App\Helpers\NotificationHelper::send(
+                $enterprise->user_id,
+                'new_inquiry',
+                'New Inquiry Message',
+                'You received a new message from ' . auth()->user()->name . '.',
+                route('seller.inquiries.index'),
+                'inquiry'
+            );
+        }
+
         return response()->json([
             'id'        => $msg->id,
             'message'   => $msg->message,
