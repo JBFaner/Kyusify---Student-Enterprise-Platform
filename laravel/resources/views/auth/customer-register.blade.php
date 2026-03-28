@@ -14,12 +14,13 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 dark:text-gray-100 antialiased h-full flex items-center justify-center p-4">
+    <body class="font-sans text-gray-900 dark:text-gray-100 antialiased h-full flex items-center justify-center p-4 relative">
+        <x-auth-interactive-background />
         
-        <div class="w-full max-w-4xl bg-white dark:bg-[#0B0A0F] rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] border border-gray-100 dark:border-gray-800/60 overflow-hidden flex flex-col md:flex-row">
+        <div class="w-full max-w-4xl bg-white/80 dark:bg-[#0B0A0F]/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-white/20 dark:border-gray-800/60 overflow-hidden flex flex-col md:flex-row relative z-10">
             
             <!-- Branding Panel -->
-            <div class="md:w-5/12 bg-gradient-to-br from-violet-600 to-violet-900 p-10 text-white flex flex-col justify-between relative overflow-hidden hidden md:flex">
+            <div class="md:w-5/12 bg-violet-900/80 dark:bg-violet-950/80 backdrop-blur-md p-10 text-white flex flex-col justify-between relative overflow-hidden hidden md:flex">
                 <!-- Decorative Circle -->
                 <div class="absolute -top-24 -left-24 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
                 <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-violet-400/20 rounded-full blur-3xl"></div>

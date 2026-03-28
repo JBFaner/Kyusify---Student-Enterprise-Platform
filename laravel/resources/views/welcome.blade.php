@@ -200,7 +200,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <div class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-violet-950">
+    <div id="vanta-hero-bg" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-violet-950">
         <div class="absolute inset-0 hero-pattern z-0 opacity-40"></div>
         <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-3/4 max-w-3xl h-64 bg-violet-600/30 blur-[120px] rounded-full point-events-none z-0"></div>
 
@@ -470,6 +470,8 @@
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const observer = new IntersectionObserver((entries) => {
@@ -485,6 +487,32 @@
             document.querySelectorAll('.animate-on-scroll').forEach((el) => {
                 observer.observe(el);
             });
+
+            // Initialize Vanta Birds
+            if (typeof VANTA !== 'undefined') {
+                VANTA.BIRDS({
+                    el: "#vanta-hero-bg",
+                    mouseControls: true,
+                    touchControls: true,
+                    gyroControls: false,
+                    minHeight: 200.00,
+                    minWidth: 200.00,
+                    scale: 1.00,
+                    scaleMobile: 1.00,
+                    backgroundColor: 0x2e1065,
+                    color1: 0xe879f9, // Bright fuchsia highlight
+                    color2: 0x3b0764, // Deep purple shadow
+                    colorMode: "varianceGradient", // Creates realistic 3D shading on wings
+                    birdSize: 1.20,
+                    wingSpan: 28.00,
+                    speedLimit: 4.00,
+                    separation: 24.00,
+                    alignment: 23.00,
+                    cohesion: 20.00,
+                    quantity: 4.00,
+                    backgroundAlpha: 0.0 // True transparent so CSS bg-violet-950 works perfectly
+                })
+            }
         });
     </script>
 </body>
