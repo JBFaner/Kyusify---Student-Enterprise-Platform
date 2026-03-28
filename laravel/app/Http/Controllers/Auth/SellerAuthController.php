@@ -83,6 +83,7 @@ class SellerAuthController extends Controller
             
             // Store User ID in session
             session(['auth_2fa_user_id' => $user->id]);
+            session(['auth_2fa_email' => $user->email]);
             
             // Send Email
             \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\TwoFactorCodeMail($code));

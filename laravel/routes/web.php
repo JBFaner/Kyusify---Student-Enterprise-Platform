@@ -66,6 +66,7 @@ use App\Http\Controllers\Auth\TwoFactorController;
 Route::middleware('guest')->group(function () {
     Route::get('/verify-2fa', [TwoFactorController::class, 'index'])->name('2fa.verify');
     Route::post('/verify-2fa', [TwoFactorController::class, 'store'])->name('2fa.verify.store');
+    Route::post('/verify-2fa/resend', [TwoFactorController::class, 'resend'])->name('2fa.resend');
 });
 
 // Standard Customer Authentication Routes

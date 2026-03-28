@@ -3,12 +3,25 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\TwoFactorCodeMail;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
 
 class TwoFactorController extends Controller
 {
+    /**
+     * Mask an email for display: jbfaner8@gmail.com -> jbfa****@gmail.com
+     */
+    private function maskEmail(string $email): string
+    {
+        [$local, $domain] = explode('@', $email);
+        $masked = substr($local, 0, 4) . str_repeat('*', max(strlen($local) - 4, 4));
+        return $masked . '@' . $domain;
+    }
+
     /**
      * Display the 2FA verification view.
      */
@@ -18,7 +31,35 @@ class TwoFactorController extends Controller
             return redirect()->route('login');
         }
 
-        return view('auth.2fa-verify');
+        $email = session('auth_2fa_email', '');
+        $maskedEmail = $email ? $this->maskEmail($email) : '';
+
+        return view('auth.2fa-verify', compact('maskedEmail'));
+    }
+
+    /**
+     * Handle code resend request.
+     */
+    public function resend(Request $request)
+    {
+        $userId = session('auth_2fa_user_id');
+
+        if (!$userId) {
+            return redirect()->route('login');
+        }
+
+        $user = User::find($userId);
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        // Generate fresh code
+        $code = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+        Cache::put('2fa_code_' . $user->id, $code, now()->addMinutes(10));
+
+        Mail::to($user->email)->send(new TwoFactorCodeMail($code));
+
+        return back()->with('resent', 'A new verification code has been sent to your email.');
     }
 
     /**
@@ -44,7 +85,7 @@ class TwoFactorController extends Controller
             
             // Clean up
             Cache::forget('2fa_code_' . $userId);
-            session()->forget('auth_2fa_user_id');
+            session()->forget(['auth_2fa_user_id', 'auth_2fa_email']);
 
             // Redirect based on role
             $user = Auth::user();
