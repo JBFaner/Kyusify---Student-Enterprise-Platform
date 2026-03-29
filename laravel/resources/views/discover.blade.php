@@ -127,10 +127,14 @@
                 <!-- Right Actions -->
                 <div class="flex flex-shrink-0 items-center justify-end gap-2 sm:gap-4 flex-wrap">
                     @guest
+                        {{-- Desktop: Log in link (customer login) --}}
                         <a href="{{ route('login') }}" class="hidden md:block text-gray-300 hover:text-white font-medium px-2 py-2 transition-colors whitespace-nowrap">Log in</a>
+                        {{-- Mobile: Login button (customer login) --}}
+                        <a href="{{ route('login') }}" class="md:hidden btn-gumroad-violet-nav px-4 py-2 text-sm whitespace-nowrap">Login</a>
                     @endguest
 
-                    <a href="{{ route('seller.register') }}" class="btn-gumroad-violet-nav px-4 sm:px-6 py-2 sm:py-2.5 text-sm sm:text-base whitespace-nowrap hidden min-[400px]:block">Start Selling</a>
+                    {{-- Desktop only: Start Selling → seller login --}}
+                    <a href="{{ route('seller.login') }}" class="btn-gumroad-violet-nav px-4 sm:px-6 py-2 sm:py-2.5 text-sm sm:text-base whitespace-nowrap hidden md:block">Start Selling</a>
 
                     <a href="{{ route('cart.index') }}" id="nav-cart-btn" class="p-2.5 text-gray-300 hover:text-violet-400 hover:bg-violet-900/20 rounded-xl transition-colors relative block">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>

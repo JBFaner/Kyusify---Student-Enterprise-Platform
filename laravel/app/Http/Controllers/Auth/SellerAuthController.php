@@ -14,6 +14,10 @@ class SellerAuthController extends Controller
 {
     public function showRegistrationForm()
     {
+        // Logged-in sellers already have access; send them to dashboard
+        if (auth()->check() && auth()->user()->role === 'seller') {
+            return redirect()->route('seller.dashboard');
+        }
         return view('auth.seller-register');
     }
 

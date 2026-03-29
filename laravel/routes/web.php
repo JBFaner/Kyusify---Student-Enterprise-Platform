@@ -79,10 +79,12 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('logout');
 Route::get('/logout', [CustomerAuthController::class, 'logout']); // Fallback to prevent 419 on manual links
 
-// Seller Authentication Routes
+// Seller register — accessible to guests AND logged-in customers (upgrade flow)
+Route::get('/seller/register', [SellerAuthController::class, 'showRegistrationForm'])->name('seller.register');
+Route::post('/seller/register', [SellerAuthController::class, 'register'])->middleware('guest');
+
+// Seller login — guest only
 Route::middleware('guest')->group(function () {
-    Route::get('/seller/register', [SellerAuthController::class, 'showRegistrationForm'])->name('seller.register');
-    Route::post('/seller/register', [SellerAuthController::class, 'register']);
     Route::get('/seller/login', [SellerAuthController::class, 'showLoginForm'])->name('seller.login');
     Route::post('/seller/login', [SellerAuthController::class, 'login']);
 });

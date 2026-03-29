@@ -143,12 +143,12 @@
 
                 <div class="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
                     Don't have an account? 
-                    <a href="{{ route('register') }}" class="font-bold text-violet-600 hover:text-violet-500 dark:text-violet-400 transition-colors">Sign up</a>
+                    <a href="{{ route('register') }}" class="font-bold text-violet-600 hover:text-violet-500 dark:text-violet-400 transition-colors">Register as Customer</a>
                 </div>
                 
                 <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800 text-center text-sm text-gray-500 dark:text-gray-400">
                     Are you a seller? 
-                    <a href="{{ route('seller.login') }}" class="font-bold text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">Go to Seller Central</a>
+                    <a href="{{ route('seller.login') }}" class="font-bold text-violet-600 hover:text-violet-500 dark:text-violet-400 dark:hover:text-violet-300 transition-colors">Go to Seller Login</a>
                 </div>
             </div>
         </div>

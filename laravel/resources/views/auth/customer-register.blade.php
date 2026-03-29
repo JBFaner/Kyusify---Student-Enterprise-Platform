@@ -77,7 +77,7 @@
                     <!-- Email -->
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address <span class="text-red-500">*</span></label>
-                        <input id="email" type="email" name="email" value="{{ old('email') }}" required placeholder="student@qcu.edu.ph" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-[#13111C] border border-gray-200 dark:border-gray-800 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 text-gray-900 dark:text-white transition-shadow @error('email') border-red-500 @enderror">
+                        <input id="email" type="email" name="email" value="{{ old('email') }}" required placeholder="you@example.com" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-[#13111C] border border-gray-200 dark:border-gray-800 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 text-gray-900 dark:text-white transition-shadow @error('email') border-red-500 @enderror">
                         @error('email')
                             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                         @enderror
@@ -140,6 +140,11 @@
                         </div>
                     </div>
                 </form>
+
+                <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-800 text-center text-sm text-gray-500 dark:text-gray-400">
+                    Are you a seller? 
+                    <a href="{{ route('seller.login') }}" class="font-bold text-violet-600 hover:text-violet-500 dark:text-violet-400 transition-colors">Go to Seller Login</a>
+                </div>
             </div>
         </div>
 
