@@ -150,6 +150,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('users/{user}/verify-update', [UserController::class, 'showVerifyUpdate'])->name('users.verify-update');
         Route::post('users/{user}/verify-update', [UserController::class, 'confirmUpdate'])->name('users.confirm-update');
+        
+        Route::get('users/{user}/verify-delete', [UserController::class, 'showVerifyDelete'])->name('users.verify-delete');
+        Route::post('users/{user}/verify-delete', [UserController::class, 'confirmDelete'])->name('users.confirm-delete');
+        
         Route::resource('users', UserController::class);
 
         Route::resource('enterprises', EnterpriseController::class);
