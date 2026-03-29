@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-# Generate app key if not set
-php artisan key:generate --no-interaction --force
 
 # Run migrations
 php artisan migrate --force --no-interaction
