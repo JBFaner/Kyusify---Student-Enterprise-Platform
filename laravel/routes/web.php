@@ -148,6 +148,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
 
+        Route::get('users/{user}/verify-update', [UserController::class, 'showVerifyUpdate'])->name('users.verify-update');
+        Route::post('users/{user}/verify-update', [UserController::class, 'confirmUpdate'])->name('users.confirm-update');
         Route::resource('users', UserController::class);
 
         Route::resource('enterprises', EnterpriseController::class);

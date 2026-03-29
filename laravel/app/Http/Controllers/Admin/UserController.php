@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AdminUpdateVerificationMail;
 
 class UserController extends Controller
 {
@@ -99,6 +102,31 @@ class UserController extends Controller
             'status' => ['required', Rule::in(['active', 'inactive', 'pending'])],
         ]);
 
+        $passwordUpdate = null;
+        if ($request->filled('password')) {
+            $request->validate([
+                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            ]);
+            $passwordUpdate = Hash::make($request->password);
+        }
+
+        // Intercept updates directed at Administrator accounts
+        if ($user->role === 'admin') {
+            $code = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+            Cache::put('admin_update_2fa_' . $user->id, $code, now()->addMinutes(10));
+            
+            session(['admin_update_data_' . $user->id => [
+                'validated' => $validated,
+                'password' => $passwordUpdate,
+            ]]);
+
+            Mail::to($user->email)->send(new AdminUpdateVerificationMail($code, auth()->user()->name));
+
+            return redirect()->route('admin.users.verify-update', $user->id)
+                ->with('info', 'A verification code has been sent to ' . $user->email . '. Entering the code is required to apply the updates.');
+        }
+
+        // Direct update for non-admin accounts
         $user->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -106,16 +134,70 @@ class UserController extends Controller
             'status' => $validated['status'],
         ]);
 
-        if ($request->filled('password')) {
-            $request->validate([
-                'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            ]);
+        if ($passwordUpdate) {
             $user->update([
-                'password' => Hash::make($request->password),
+                'password' => $passwordUpdate,
             ]);
         }
 
-        return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
+        return redirect()->route('admin.users.show', $user->id)->with('success', 'User updated successfully.');
+    }
+
+    /**
+     * Show the verification form to finalize an Admin update
+     */
+    public function showVerifyUpdate(User $user)
+    {
+        // Only allow access if an update session exists
+        if (!session()->has('admin_update_data_' . $user->id)) {
+            return redirect()->route('admin.users.index')->with('error', 'No pending update found for this user.');
+        }
+
+        return view('admin.user-management.verify-update', compact('user'));
+    }
+
+    /**
+     * Confirm the verification code and apply the Admin update
+     */
+    public function confirmUpdate(Request $request, User $user)
+    {
+        $request->validate([
+            'code' => ['required', 'string', 'size:6'],
+        ]);
+
+        $cachedCode = Cache::get('admin_update_2fa_' . $user->id);
+
+        if (!$cachedCode || $cachedCode !== $request->code) {
+            return back()->withErrors(['code' => 'The verification code is invalid or has expired. Please request a new one by making the update again.']);
+        }
+
+        $sessionData = session('admin_update_data_' . $user->id);
+        
+        if (!$sessionData) {
+            return redirect()->route('admin.users.index')->with('error', 'Session expired. Please start the update again.');
+        }
+
+        $validated = $sessionData['validated'];
+        $passwordUpdate = $sessionData['password'];
+
+        $user->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'role' => $validated['role'],
+            'status' => $validated['status'],
+        ]);
+
+        if ($passwordUpdate) {
+            $user->update([
+                'password' => $passwordUpdate,
+            ]);
+        }
+
+        // Clear verification data
+        Cache::forget('admin_update_2fa_' . $user->id);
+        session()->forget('admin_update_data_' . $user->id);
+
+        return redirect()->route('admin.users.show', $user->id)->with('success', 'User updated successfully.');
     }
 
     /**
