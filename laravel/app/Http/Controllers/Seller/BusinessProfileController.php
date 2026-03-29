@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Seller;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Helpers\NotificationHelper;
 
 class BusinessProfileController extends Controller
 {
@@ -57,6 +58,15 @@ class BusinessProfileController extends Controller
                 Storage::disk('public')->delete($enterprise->document_path);
             }
             $validated['document_path'] = $request->file('document')->store('enterprises/documents', 'public');
+            
+            // Notify admins that a new verification document was uploaded
+            NotificationHelper::notifyAdmins(
+                'document_upload',
+                'Student Verification Uploaded',
+                "{$enterprise->name} has uploaded a new student verification document.",
+                route('admin.enterprises.show', $enterprise->id),
+                'user'
+            );
         }
 
         if ($request->hasFile('store_branding')) {
