@@ -35,7 +35,8 @@
             const table = document.getElementById(tableId);
             const now   = new Date().toLocaleString('en-PH', { dateStyle:'long', timeStyle:'short' });
             const win = window.open('', '_blank');
-            win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+            win.document.write(`<!DOCTYPE html><html><head>
+    <link rel="icon" href="{{ asset('images/kyusify-logo.ico') }}" type="image/x-icon"><meta charset="UTF-8">
             <title>${reportTitle}</title>
             <style>
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="icon" href="{{ asset('images/kyusify-logo.ico') }}" type="image/x-icon">
     <title>Verification Code</title>
 </head>
 <body style="font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f3f4f6; text-align: center; padding: 40px 20px;">
