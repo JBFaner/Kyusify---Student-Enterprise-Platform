@@ -233,7 +233,23 @@
         }
     </style>
 
-    <!-- Modals Stack -->
+    {{-- Global fallback for old images wiped from local storage before Cloudinary migration --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('img').forEach(function (img) {
+                img.addEventListener('error', function () {
+                    if (!this.dataset.fallback) {
+                        this.dataset.fallback = '1';
+                        this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f0ff'/%3E%3Ctext x='50' y='54' text-anchor='middle' font-size='28' fill='%237c3aed'%3E📦%3C/text%3E%3C/svg%3E";
+                        this.style.objectFit = 'contain';
+                        this.style.padding = '4px';
+                    }
+                });
+            });
+        });
+    </script>
+
+    {{-- Modals Stack --}}
     @stack('modals')
 </body>
 </html>
