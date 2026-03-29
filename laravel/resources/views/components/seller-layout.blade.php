@@ -179,8 +179,8 @@
     </div>
 
     <!-- Toast Notification System -->
-    @if (session()->has('success') || session()->has('error'))
-        <div x-data="{ show: true, type: '{{ session()->has('success') ? 'success' : 'error' }}', message: '{{ session('success') ?? session('error') }}' }"
+    @if (session()->has('success') || session()->has('error') || $errors->any())
+        <div x-data="{ show: true, type: '{{ session()->has('success') ? 'success' : 'error' }}', message: '{{ session('success') ?? (session('error') ?? $errors->first()) }}' }"
              x-show="show"
              x-init="setTimeout(() => show = false, 5000)"
              x-transition:enter="transition ease-out duration-300 transform"
