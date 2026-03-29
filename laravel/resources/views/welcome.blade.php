@@ -72,7 +72,7 @@
         ::-webkit-scrollbar-thumb:hover { background: #8b5cf6; }
     </style>
 </head>
-<body class="antialiased selection:bg-violet-500 selection:text-white" x-data="{ mobileMenuOpen: false }">
+<body class="antialiased selection:bg-violet-500 selection:text-white" x-data="{ mobileMenuOpen: false, showPricingToast: false }">
 
     <!-- Navbar -->
     <nav class="fixed w-full z-50 top-0 transition-all duration-300 bg-black/80 backdrop-blur-md border-b border-white/10">
@@ -96,7 +96,7 @@
                         <a href="{{ url('/#about') }}" class="text-gray-300 hover:text-white font-medium transition-colors">About</a>
                     @endif
 
-                    <button type="button" onclick="alert('Pricing plans will be implemented in a future update!')" class="text-gray-300 hover:text-white font-medium transition-colors cursor-pointer bg-transparent border-0 p-0">Pricing</button>
+                    <button type="button" @click="showPricingToast = true; setTimeout(() => showPricingToast = false, 4000)" class="text-gray-300 hover:text-white font-medium transition-colors cursor-pointer bg-transparent border-0 p-0">Pricing</button>
                     
                     @guest
                         <a href="{{ route('login') }}" class="text-gray-300 hover:text-white font-medium transition-colors">Log in</a>
@@ -170,7 +170,7 @@
                     <a href="{{ url('/#about') }}" @click="mobileMenuOpen = false" class="block text-gray-300 hover:text-white font-medium text-lg">About</a>
                 @endif
                 
-                <button type="button" @click="alert('Pricing plans will be implemented in a future update!'); mobileMenuOpen = false" class="block text-gray-300 hover:text-white font-medium text-lg text-left w-full bg-transparent border-0 p-0 cursor-pointer">Pricing</button>
+                <button type="button" @click="showPricingToast = true; mobileMenuOpen = false; setTimeout(() => showPricingToast = false, 4000)" class="block text-gray-300 hover:text-white font-medium text-lg text-left w-full bg-transparent border-0 p-0 cursor-pointer">Pricing</button>
                 <div class="pt-4 border-t border-white/10 flex flex-col gap-3">
                     @auth
                         <div class="flex items-center gap-3 px-2 mb-2">
@@ -198,6 +198,36 @@
             </div>
         </div>
     </nav>
+
+    <!-- Global Info Toast -->
+    <template x-teleport="body">
+        <div x-show="showPricingToast" 
+             x-transition:enter="transition ease-out duration-300 transform" 
+             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:translate-x-10" 
+             x-transition:enter-end="opacity-100 translate-y-0 sm:translate-x-0" 
+             x-transition:leave="transition ease-in duration-200" 
+             x-transition:leave-start="opacity-100 translate-x-0" 
+             x-transition:leave-end="opacity-0 translate-x-10" 
+             class="fixed top-24 right-6 z-[100] rounded-2xl p-4 shadow-[0_8px_30px_rgb(0,0,0,0.5)] border w-full max-w-sm flex items-start space-x-3 bg-[#13111C] border-violet-800/60 transition-all duration-300 backdrop-blur-md" style="display: none;">
+            
+            <div class="flex-shrink-0 mt-0.5">
+                <div class="w-8 h-8 rounded-full bg-violet-900/40 border border-violet-500/30 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </div>
+            </div>
+            
+            <div class="flex-1 w-0 pt-1.5">
+                <p class="text-sm font-bold text-white tracking-wide">Coming Soon!</p>
+                <p class="mt-1 text-sm text-gray-400 font-medium">Pricing plans will be implemented in a future update. Stay tuned!</p>
+            </div>
+            
+            <div class="ml-4 flex-shrink-0 flex pt-1">
+                <button @click="showPricingToast = false" class="bg-transparent rounded-lg p-1 text-gray-500 hover:text-gray-300 hover:bg-gray-800 transition-colors focus:outline-none">
+                    <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                </button>
+            </div>
+        </div>
+    </template>
 
     <!-- Hero Section -->
     <div id="vanta-hero-bg" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-violet-950">

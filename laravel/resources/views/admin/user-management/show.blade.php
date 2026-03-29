@@ -38,7 +38,8 @@
                 </form>
 
                 <!-- Alpine Delete Modal -->
-                <div x-cloak x-show="openDeleteModal" class="relative z-[100]" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <template x-teleport="body">
+                    <div x-cloak x-show="openDeleteModal" class="relative z-[100]" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                     <div x-show="openDeleteModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-900/75 dark:bg-black/80 backdrop-blur-sm transition-opacity"></div>
                     <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
                         <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
@@ -79,7 +80,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </template>
             </div>
         </div>
     </div>
