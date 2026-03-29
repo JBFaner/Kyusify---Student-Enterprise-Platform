@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Product;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -59,10 +60,8 @@ class ProductController extends Controller
         $data['status'] = 'pending';
         
         if ($request->hasFile('image')) {
-            $uploaded = cloudinary()->upload($request->file('image')->getRealPath(), [
-                'folder' => 'kyusify/products',
-            ]);
-            $data['image_path'] = $uploaded->getSecurePath();
+            $path = $request->file('image')->store('kyusify/products', 'cloudinary');
+            $data['image_path'] = Storage::disk('cloudinary')->url($path);
         }
 
         $product = auth()->user()->enterprise->products()->create($data);
@@ -124,16 +123,13 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             if ($product->image_path && str_starts_with($product->image_path, 'http')) {
-                // Extract public_id from Cloudinary URL and delete the old image
                 $publicId = $this->getCloudinaryPublicId($product->image_path);
                 if ($publicId) {
-                    cloudinary()->destroy($publicId);
+                    Storage::disk('cloudinary')->delete($publicId);
                 }
             }
-            $uploaded = cloudinary()->upload($request->file('image')->getRealPath(), [
-                'folder' => 'kyusify/products',
-            ]);
-            $data['image_path'] = $uploaded->getSecurePath();
+            $path = $request->file('image')->store('kyusify/products', 'cloudinary');
+            $data['image_path'] = Storage::disk('cloudinary')->url($path);
         }
 
         $product->update($data);
@@ -150,7 +146,7 @@ class ProductController extends Controller
         if ($product->image_path && str_starts_with($product->image_path, 'http')) {
             $publicId = $this->getCloudinaryPublicId($product->image_path);
             if ($publicId) {
-                cloudinary()->destroy($publicId);
+                Storage::disk('cloudinary')->delete($publicId);
             }
         }
 
