@@ -39,7 +39,7 @@
             <div class="hidden sm:block">
                 @if($product->image_path)
                     <div class="h-16 w-16 rounded-xl overflow-hidden bg-gray-100 dark:bg-[#13111C] border border-gray-200 dark:border-gray-800/60 shadow-sm">
-                        <img src="{{ Storage::url($product->image_path) }}" alt="{{ $product->name }}" class="h-full w-full object-cover">
+                        <img src="{{ \App\Helpers\ImageHelper::url($product->image_path) }}" alt="{{ $product->name }}" class="h-full w-full object-cover">
                     </div>
                 @endif
             </div>
@@ -132,7 +132,7 @@
                     
                     @if($product->image_path)
                         <div class="mb-4 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 relative group aspect-video sm:aspect-auto">
-                            <img src="{{ Storage::url($product->image_path) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                            <img src="{{ \App\Helpers\ImageHelper::url($product->image_path) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                 <span class="text-white text-sm font-semibold tracking-wide flex items-center">
                                     <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

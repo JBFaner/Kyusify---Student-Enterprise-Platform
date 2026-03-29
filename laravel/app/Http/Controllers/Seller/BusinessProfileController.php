@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use App\Helpers\NotificationHelper;
 
 class BusinessProfileController extends Controller
@@ -47,18 +46,25 @@ class BusinessProfileController extends Controller
         ]);
 
         if ($request->hasFile('logo')) {
-            if ($enterprise->logo_path) {
-                Storage::disk('public')->delete($enterprise->logo_path);
+            if ($enterprise->logo_path && str_starts_with($enterprise->logo_path, 'http')) {
+                cloudinary()->destroy($this->getCloudinaryPublicId($enterprise->logo_path));
             }
-            $validated['logo_path'] = $request->file('logo')->store('enterprises/logos', 'public');
+            $uploaded = cloudinary()->upload($request->file('logo')->getRealPath(), [
+                'folder' => 'kyusify/logos',
+            ]);
+            $validated['logo_path'] = $uploaded->getSecurePath();
         }
 
         if ($request->hasFile('document')) {
-            if ($enterprise->document_path) {
-                Storage::disk('public')->delete($enterprise->document_path);
+            if ($enterprise->document_path && str_starts_with($enterprise->document_path, 'http')) {
+                cloudinary()->destroy($this->getCloudinaryPublicId($enterprise->document_path));
             }
-            $validated['document_path'] = $request->file('document')->store('enterprises/documents', 'public');
-            
+            $uploaded = cloudinary()->uploadFile($request->file('document')->getRealPath(), [
+                'folder'        => 'kyusify/documents',
+                'resource_type' => 'auto', // handles PDFs as well as images
+            ]);
+            $validated['document_path'] = $uploaded->getSecurePath();
+
             // Notify admins that a new verification document was uploaded
             NotificationHelper::notifyAdmins(
                 'document_upload',
@@ -70,10 +76,13 @@ class BusinessProfileController extends Controller
         }
 
         if ($request->hasFile('store_branding')) {
-            if ($enterprise->store_branding) {
-                Storage::disk('public')->delete($enterprise->store_branding);
+            if ($enterprise->store_branding && str_starts_with($enterprise->store_branding, 'http')) {
+                cloudinary()->destroy($this->getCloudinaryPublicId($enterprise->store_branding));
             }
-            $validated['store_branding'] = $request->file('store_branding')->store('enterprises/branding', 'public');
+            $uploaded = cloudinary()->upload($request->file('store_branding')->getRealPath(), [
+                'folder' => 'kyusify/branding',
+            ]);
+            $validated['store_branding'] = $uploaded->getSecurePath();
         }
 
         // Remove file helper keys before updating database
@@ -83,5 +92,16 @@ class BusinessProfileController extends Controller
         $enterprise->update($validated);
 
         return redirect()->route('seller.profile.index')->with('success', 'Store profile updated successfully.');
+    }
+
+    /**
+     * Extract the Cloudinary public_id from a secure URL.
+     */
+    private function getCloudinaryPublicId(string $url): ?string
+    {
+        if (preg_match('/\/upload\/(?:v\d+\/)?(.+?)(?:\.[a-z]{2,4})?$/', $url, $matches)) {
+            return $matches[1];
+        }
+        return null;
     }
 }

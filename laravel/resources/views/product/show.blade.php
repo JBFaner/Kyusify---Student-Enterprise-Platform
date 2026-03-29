@@ -221,7 +221,7 @@
                     <div class="rounded-3xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm bg-gray-50 dark:bg-[#0B0A0F]">
                         <div class="aspect-w-4 aspect-h-3 w-full">
                             @if($product->image_path)
-                                <img src="{{ Storage::url($product->image_path) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                                <img src="{{ \App\Helpers\ImageHelper::url($product->image_path) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
                             @else
                                 <div class="w-full h-full flex items-center justify-center text-gray-400 min-h-[300px]">
                                     <svg class="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -253,7 +253,7 @@
                         <a href="{{ route('store.show', $product->enterprise->id) }}" class="flex items-center gap-3 inline-flex hover:opacity-80 transition-opacity w-max">
                             <div class="w-8 h-8 rounded-full border border-gray-200 dark:border-gray-700 overflow-hidden bg-white">
                                 @if($product->enterprise->logo_path)
-                                    <img src="{{ Storage::url($product->enterprise->logo_path) }}" class="w-full h-full object-cover">
+                                    <img src="{{ \App\Helpers\ImageHelper::url($product->enterprise->logo_path) }}" class="w-full h-full object-cover">
                                 @endif
                             </div>
                             <span class="font-bold text-gray-700 dark:text-gray-300 hover:underline">{{ $product->enterprise->name }}</span>
