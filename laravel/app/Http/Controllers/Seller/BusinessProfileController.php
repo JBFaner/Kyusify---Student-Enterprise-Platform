@@ -59,7 +59,7 @@ class BusinessProfileController extends Controller
             if ($enterprise->document_path && str_starts_with($enterprise->document_path, 'http')) {
                 cloudinary()->destroy($this->getCloudinaryPublicId($enterprise->document_path));
             }
-            $uploaded = cloudinary()->uploadFile($request->file('document')->getRealPath(), [
+            $uploaded = cloudinary()->upload($request->file('document')->getRealPath(), [
                 'folder'        => 'kyusify/documents',
                 'resource_type' => 'auto', // handles PDFs as well as images
             ]);
