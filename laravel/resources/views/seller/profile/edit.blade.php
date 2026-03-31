@@ -1,3 +1,4 @@
+<x-seller-layout>
     <x-slot name="header">
         Store Profile
     </x-slot>

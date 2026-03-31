@@ -126,4 +126,24 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
     }
+
+    /**
+     * Reset seller onboarding completion state.
+     */
+    public function resetOnboarding(User $user)
+    {
+        if ($user->role !== 'seller' || !$user->enterprise) {
+            return redirect()
+                ->route('admin.users.show', $user)
+                ->with('error', 'Onboarding reset is only available for seller accounts with an enterprise profile.');
+        }
+
+        $user->enterprise->update([
+            'onboarding_tour_completed' => false,
+        ]);
+
+        return redirect()
+            ->route('admin.users.show', $user)
+            ->with('success', 'Seller onboarding tour has been reset.');
+    }
 }

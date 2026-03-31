@@ -223,12 +223,240 @@
         }
 
         .shepherd-modal-overlay-container {
-            background-color: rgba(7, 8, 15, 0.78) !important;
+            background-color: rgba(7, 8, 15, 0.62) !important;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .shepherd-element.kyusify-seller-tour {
+            filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.15));
+            animation: kyusify-tour-fade-scale 0.3s ease;
+            transform-origin: center center;
+            border-radius: 18px;
+            overflow: visible;
+            background: transparent !important;
         }
 
         .shepherd-element.kyusify-seller-tour .shepherd-content {
-            border-radius: 12px;
-            border: 1px solid #e5e7eb;
+            border-radius: inherit;
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            background: linear-gradient(180deg, #ffffff 0%, #f7f3ff 100%);
+            overflow: hidden;
+            padding: 0.5rem;
+            background-clip: padding-box;
+        }
+
+        .shepherd-element.kyusify-seller-tour .shepherd-arrow,
+        .shepherd-element.kyusify-seller-tour .shepherd-arrow:before {
+            z-index: 2;
+        }
+
+        .shepherd-element.kyusify-seller-tour .shepherd-arrow:before {
+            background: #f7f3ff;
+            border: 1px solid rgba(139, 92, 246, 0.25);
+        }
+
+        .dark .shepherd-element.kyusify-seller-tour .shepherd-arrow:before {
+            background: #120d22;
+            border: 1px solid rgba(167, 139, 250, 0.35);
+        }
+
+        .dark .shepherd-element.kyusify-seller-tour .shepherd-content {
+            background: linear-gradient(180deg, #1b1332 0%, #120d22 100%);
+            border-color: rgba(167, 139, 250, 0.35);
+        }
+
+        .shepherd-element.kyusify-seller-tour .shepherd-header {
+            background: transparent;
+            padding: 1.15rem 1.15rem 0.35rem;
+        }
+
+        .shepherd-element.kyusify-seller-tour .shepherd-title {
+            color: #4c1d95;
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+        }
+
+        .dark .shepherd-element.kyusify-seller-tour .shepherd-title {
+            color: #ddd6fe;
+        }
+
+        .shepherd-element.kyusify-seller-tour .shepherd-text {
+            color: #5b21b6;
+            font-size: 0.94rem;
+            line-height: 1.62;
+            padding: 0.45rem 1.15rem 0.3rem;
+        }
+
+        .dark .shepherd-element.kyusify-seller-tour .shepherd-text {
+            color: #c4b5fd;
+        }
+
+        .shepherd-element.kyusify-seller-tour .shepherd-footer {
+            padding: 1rem 1.15rem 1.15rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.7rem;
+        }
+
+        .kyusify-tour-btn {
+            border-radius: 0.7rem !important;
+            padding: 10px 18px !important;
+            border: 1px solid transparent !important;
+            font-weight: 500 !important;
+            font-size: 0.86rem !important;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .kyusify-tour-btn-primary {
+            background: linear-gradient(90deg, #7c3aed 0%, #8b5cf6 100%) !important;
+            color: #fff !important;
+            box-shadow: 0 10px 20px rgba(124, 58, 237, 0.35);
+        }
+
+        .kyusify-tour-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 24px rgba(124, 58, 237, 0.4);
+        }
+
+        .kyusify-tour-btn-ghost {
+            background: rgba(255, 255, 255, 0.82) !important;
+            color: #5b21b6 !important;
+            border-color: rgba(139, 92, 246, 0.3) !important;
+        }
+
+        .kyusify-tour-btn-ghost:hover {
+            background: rgba(245, 243, 255, 0.95) !important;
+            border-color: rgba(124, 58, 237, 0.45) !important;
+        }
+
+        .dark .kyusify-tour-btn-ghost {
+            background: rgba(30, 27, 75, 0.6) !important;
+            color: #ddd6fe !important;
+            border-color: rgba(167, 139, 250, 0.35) !important;
+        }
+
+        .kyusify-tour-welcome {
+            text-align: center;
+            padding: 0.2rem 0.2rem 0.35rem;
+        }
+
+        .kyusify-tour-check-wrap {
+            width: 76px;
+            height: 76px;
+            border-radius: 999px;
+            margin: 0 auto 0.7rem;
+            position: relative;
+            display: grid;
+            place-items: center;
+            background: radial-gradient(circle at 30% 30%, #ede9fe, #c4b5fd);
+        }
+
+        .kyusify-tour-check-ring {
+            position: absolute;
+            inset: -8px;
+            border-radius: 999px;
+            border: 2px solid rgba(124, 58, 237, 0.35);
+            animation: kyusify-pulse 1.4s ease-in-out infinite;
+        }
+
+        .kyusify-tour-check-icon {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #6d28d9;
+            animation: kyusify-pop 0.45s ease-out forwards;
+        }
+
+        .kyusify-tour-welcome-title {
+            margin: 0;
+            font-weight: 800;
+            color: #4c1d95;
+        }
+
+        .kyusify-tour-welcome-subtitle {
+            margin: 0.4rem 0 0;
+            font-size: 0.86rem;
+            color: #6d28d9;
+        }
+
+        .kyusify-tour-progress {
+            display: inline-block;
+            margin-bottom: 0.75rem;
+            padding: 0.25rem 0.55rem;
+            border-radius: 999px;
+            background: rgba(124, 58, 237, 0.12);
+            color: #6d28d9;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .kyusify-tour-checklist {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .kyusify-tour-checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            color: #4c1d95;
+            font-weight: 500;
+        }
+
+        .kyusify-tour-checklist-icon {
+            width: 1.2rem;
+            height: 1.2rem;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(124, 58, 237, 0.14);
+            color: #7c3aed;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .dark .kyusify-tour-checklist-item {
+            color: #ddd6fe;
+        }
+
+        .dark .kyusify-tour-progress {
+            background: rgba(124, 58, 237, 0.25);
+            color: #ddd6fe;
+        }
+
+        .dark .kyusify-tour-checklist-icon {
+            background: rgba(167, 139, 250, 0.25);
+            color: #ddd6fe;
+        }
+
+        .shepherd-element.kyusify-tour-final {
+            max-width: 560px;
+            width: calc(100vw - 2rem);
+        }
+
+        .shepherd-element.kyusify-tour-final .shepherd-footer {
+            flex-wrap: nowrap;
+        }
+
+        @keyframes kyusify-tour-fade-scale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes kyusify-pulse {
+            0% { transform: scale(0.9); opacity: 0.35; }
+            70% { transform: scale(1.1); opacity: 0.1; }
+            100% { transform: scale(1.13); opacity: 0; }
+        }
+
+        @keyframes kyusify-pop {
+            0% { transform: scale(0.6); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
     </style>
 <<<<<<< Updated upstream
@@ -262,6 +490,7 @@
     @endphp
     <script>
         window.sellerOnboardingConfig = {
+            userId: @json(auth()->id()),
             enabled: @json($tourEligible),
             serverCompleted: @json((bool) ($sellerEnterprise?->onboarding_tour_completed ?? false)),
             completeUrl: @json(route('seller.onboarding.complete')),

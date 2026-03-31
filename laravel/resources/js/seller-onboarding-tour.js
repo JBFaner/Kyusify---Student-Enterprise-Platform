@@ -8,6 +8,7 @@ const STORAGE_KEYS = {
 };
 
 const STEP_KEYS = {
+    INTRO: 'intro-welcome',
     DASHBOARD_CARDS: 'dashboard-cards',
     DASHBOARD_CHARTS: 'dashboard-charts',
     PROFILE_SECTION: 'profile-section',
@@ -25,18 +26,25 @@ function currentPath() {
     return window.location.pathname;
 }
 
+function storageKey(config, key) {
+    const userId = config?.userId;
+    return userId ? `${key}_${userId}` : key;
+}
+
 function setProgress(stepKey) {
-    localStorage.setItem(STORAGE_KEYS.active, '1');
-    localStorage.setItem(STORAGE_KEYS.step, stepKey);
+    const config = getConfig();
+    localStorage.setItem(storageKey(config, STORAGE_KEYS.active), '1');
+    localStorage.setItem(storageKey(config, STORAGE_KEYS.step), stepKey);
 }
 
 function resetProgress() {
-    localStorage.removeItem(STORAGE_KEYS.active);
-    localStorage.removeItem(STORAGE_KEYS.step);
+    const config = getConfig();
+    localStorage.removeItem(storageKey(config, STORAGE_KEYS.active));
+    localStorage.removeItem(storageKey(config, STORAGE_KEYS.step));
 }
 
 async function completeOnboarding(config) {
-    localStorage.setItem(STORAGE_KEYS.completed, '1');
+    localStorage.setItem(storageKey(config, STORAGE_KEYS.completed), '1');
     resetProgress();
 
     if (!config?.completeUrl) {
@@ -72,7 +80,7 @@ function stepButtons({ back = null, next = null, tour, config }) {
     const buttons = [
         {
             text: 'Skip',
-            classes: 'shepherd-button-secondary',
+            classes: 'shepherd-button-secondary kyusify-tour-btn kyusify-tour-btn-ghost',
             action: async () => {
                 await completeOnboarding(config);
                 tour.cancel();
@@ -83,7 +91,7 @@ function stepButtons({ back = null, next = null, tour, config }) {
     if (back) {
         buttons.push({
             text: 'Back',
-            classes: 'shepherd-button-secondary',
+            classes: 'shepherd-button-secondary kyusify-tour-btn kyusify-tour-btn-ghost',
             action: back,
         });
     }
@@ -91,6 +99,7 @@ function stepButtons({ back = null, next = null, tour, config }) {
     if (next) {
         buttons.push({
             text: 'Next',
+            classes: 'kyusify-tour-btn kyusify-tour-btn-primary',
             action: next,
         });
     }
@@ -110,6 +119,41 @@ function makeTour(config) {
 }
 
 function addDashboardSteps(tour, config) {
+    tour.addStep({
+        id: STEP_KEYS.INTRO,
+        title: 'Welcome to Kyusify Seller Portal',
+        text: `
+            <div class="kyusify-tour-welcome">
+                <div class="kyusify-tour-check-wrap">
+                    <span class="kyusify-tour-check-ring"></span>
+                    <span class="kyusify-tour-check-icon">✓</span>
+                </div>
+                <p class="kyusify-tour-welcome-title">Account Created Successfully</p>
+                <p class="kyusify-tour-welcome-subtitle">
+                    Your seller account is ready. Let us walk you through your dashboard, profile setup, and student verification.
+                </p>
+            </div>
+        `,
+        buttons: [
+            {
+                text: 'Skip',
+                classes: 'shepherd-button-secondary kyusify-tour-btn kyusify-tour-btn-ghost',
+                action: async () => {
+                    await completeOnboarding(config);
+                    tour.cancel();
+                },
+            },
+            {
+                text: "Let's Get Started",
+                classes: 'kyusify-tour-btn kyusify-tour-btn-primary',
+                action: () => {
+                    setProgress(STEP_KEYS.DASHBOARD_CARDS);
+                    tour.next();
+                },
+            },
+        ],
+    });
+
     tour.addStep({
         id: STEP_KEYS.DASHBOARD_CARDS,
         title: 'Dashboard Summary Cards',
@@ -205,15 +249,16 @@ function addFinalStep(tour, config) {
     tour.addStep({
         id: STEP_KEYS.FINAL_CHECKLIST,
         title: 'You Are Almost Ready',
+        classes: 'kyusify-seller-tour kyusify-tour-final',
         text: `
-            <ul style="margin-left: 1rem; list-style: disc;">
-                <li>Complete your store profile</li>
-                <li>Upload your student ID</li>
-                <li>Wait for admin approval</li>
-                <li>Add your products</li>
-            </ul>
+            <div class="kyusify-tour-progress">Step 7 of 7</div>
+            <div class="kyusify-tour-checklist">
+                <div class="kyusify-tour-checklist-item"><span class="kyusify-tour-checklist-icon">✔</span>Complete your store profile</div>
+                <div class="kyusify-tour-checklist-item"><span class="kyusify-tour-checklist-icon">✔</span>Upload your student ID</div>
+                <div class="kyusify-tour-checklist-item"><span class="kyusify-tour-checklist-icon">✔</span>Wait for admin approval</div>
+                <div class="kyusify-tour-checklist-item"><span class="kyusify-tour-checklist-icon">✔</span>Add your products</div>
+            </div>
         `,
-        attachTo: { element: '[data-tour="dashboard-summary-cards"]', on: 'bottom' },
         buttons: [
             {
                 text: 'Skip',
@@ -225,12 +270,12 @@ function addFinalStep(tour, config) {
             },
             {
                 text: 'Back',
-                classes: 'shepherd-button-secondary',
+                classes: 'shepherd-button-secondary kyusify-tour-btn kyusify-tour-btn-ghost',
                 action: () => goTo(config, STEP_KEYS.SIDEBAR_MODULES, config.editProfileUrl),
             },
             {
                 text: 'Go to Store Profile',
-                classes: 'shepherd-button-secondary',
+                classes: 'shepherd-button-secondary kyusify-tour-btn kyusify-tour-btn-ghost',
                 action: async () => {
                     await completeOnboarding(config);
                     window.location.href = config.profileUrl;
@@ -238,6 +283,7 @@ function addFinalStep(tour, config) {
             },
             {
                 text: 'Finish Tour',
+                classes: 'kyusify-tour-btn kyusify-tour-btn-primary',
                 action: async () => {
                     await completeOnboarding(config);
                     tour.complete();
@@ -253,12 +299,10 @@ function startOnboardingTour() {
         return;
     }
 
-    const alreadyCompleted =
-        config.serverCompleted ||
-        localStorage.getItem(STORAGE_KEYS.completed) === '1';
+    const alreadyCompleted = config.serverCompleted === true;
 
-    const active = localStorage.getItem(STORAGE_KEYS.active) === '1';
-    const requestedStep = localStorage.getItem(STORAGE_KEYS.step);
+    const active = localStorage.getItem(storageKey(config, STORAGE_KEYS.active)) === '1';
+    const requestedStep = localStorage.getItem(storageKey(config, STORAGE_KEYS.step));
 
     if (alreadyCompleted) {
         resetProgress();
@@ -275,7 +319,7 @@ function startOnboardingTour() {
     let startStep = null;
 
     if (path === config.dashboardPath) {
-        startStep = active && requestedStep ? requestedStep : STEP_KEYS.DASHBOARD_CARDS;
+        startStep = active && requestedStep ? requestedStep : STEP_KEYS.INTRO;
     } else if (path === config.profilePath && active) {
         startStep = requestedStep || STEP_KEYS.PROFILE_SECTION;
     } else if (path === config.editProfilePath && active) {

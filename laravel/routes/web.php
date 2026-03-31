@@ -146,6 +146,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
 
+        Route::post('/users/{user}/reset-onboarding', [UserController::class, 'resetOnboarding'])->name('users.reset-onboarding');
         Route::resource('users', UserController::class);
 
         Route::resource('enterprises', EnterpriseController::class);
