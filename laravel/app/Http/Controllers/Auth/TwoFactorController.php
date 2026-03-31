@@ -90,12 +90,12 @@ class TwoFactorController extends Controller
             // Redirect based on role
             $user = Auth::user();
             if ($user->role === 'admin') {
-                return redirect()->intended(route('admin.dashboard'));
+                return redirect()->route('admin.dashboard');
             } elseif ($user->role === 'seller') {
-                return redirect()->intended(route('seller.dashboard'));
+                return redirect()->route('seller.dashboard');
             }
 
-            return redirect()->intended(route('discover'));
+            return redirect()->route('discover');
         }
 
         // Failed verification

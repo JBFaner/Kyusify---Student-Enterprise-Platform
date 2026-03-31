@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Seller;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Helpers\NotificationHelper;
 
 class BusinessProfileController extends Controller
 {
@@ -46,24 +47,36 @@ class BusinessProfileController extends Controller
         ]);
 
         if ($request->hasFile('logo')) {
-            if ($enterprise->logo_path) {
-                Storage::disk('public')->delete($enterprise->logo_path);
+            if ($enterprise->logo_path && str_starts_with($enterprise->logo_path, 'http')) {
+                Storage::disk('cloudinary')->delete($this->getCloudinaryPublicId($enterprise->logo_path));
             }
-            $validated['logo_path'] = $request->file('logo')->store('enterprises/logos', 'public');
+            $path = $request->file('logo')->store('kyusify/logos', 'cloudinary');
+            $validated['logo_path'] = Storage::disk('cloudinary')->url($path);
         }
 
         if ($request->hasFile('document')) {
-            if ($enterprise->document_path) {
-                Storage::disk('public')->delete($enterprise->document_path);
+            if ($enterprise->document_path && str_starts_with($enterprise->document_path, 'http')) {
+                Storage::disk('cloudinary')->delete($this->getCloudinaryPublicId($enterprise->document_path));
             }
-            $validated['document_path'] = $request->file('document')->store('enterprises/documents', 'public');
+            $path = $request->file('document')->store('kyusify/documents', 'cloudinary');
+            $validated['document_path'] = Storage::disk('cloudinary')->url($path);
+
+            // Notify admins that a new verification document was uploaded
+            NotificationHelper::notifyAdmins(
+                'document_upload',
+                'Student Verification Uploaded',
+                "{$enterprise->name} has uploaded a new student verification document.",
+                route('admin.enterprises.show', $enterprise->id),
+                'user'
+            );
         }
 
         if ($request->hasFile('store_branding')) {
-            if ($enterprise->store_branding) {
-                Storage::disk('public')->delete($enterprise->store_branding);
+            if ($enterprise->store_branding && str_starts_with($enterprise->store_branding, 'http')) {
+                Storage::disk('cloudinary')->delete($this->getCloudinaryPublicId($enterprise->store_branding));
             }
-            $validated['store_branding'] = $request->file('store_branding')->store('enterprises/branding', 'public');
+            $path = $request->file('store_branding')->store('kyusify/branding', 'cloudinary');
+            $validated['store_branding'] = Storage::disk('cloudinary')->url($path);
         }
 
         // Remove file helper keys before updating database
@@ -73,5 +86,16 @@ class BusinessProfileController extends Controller
         $enterprise->update($validated);
 
         return redirect()->route('seller.profile.index')->with('success', 'Store profile updated successfully.');
+    }
+
+    /**
+     * Extract the Cloudinary public_id from a secure URL.
+     */
+    private function getCloudinaryPublicId(string $url): ?string
+    {
+        if (preg_match('/\/upload\/(?:v\d+\/)?(.+?)(?:\.[a-z]{2,4})?$/', $url, $matches)) {
+            return $matches[1];
+        }
+        return null;
     }
 }

@@ -55,7 +55,7 @@
                     <div class="flex flex-col items-center">
                         <div class="relative group cursor-pointer w-32 h-32 mb-4">
                             @if($enterprise->logo_path)
-                                <img src="{{ Storage::url($enterprise->logo_path) }}" alt="{{ $enterprise->name }}" class="w-full h-full rounded-full object-cover border-4 border-white dark:border-[#13111C] shadow-lg ring-2 ring-violet-100 dark:ring-violet-900/30">
+                                <img src="{{ \App\Helpers\ImageHelper::url($enterprise->logo_path) }}" alt="{{ $enterprise->name }}" class="w-full h-full rounded-full object-cover border-4 border-white dark:border-[#13111C] shadow-lg ring-2 ring-violet-100 dark:ring-violet-900/30">
                             @else
                                 <div class="w-full h-full rounded-full bg-violet-50 dark:bg-violet-900/20 flex flex-col items-center justify-center border-2 border-dashed border-violet-200 dark:border-violet-800/50 text-violet-500 overflow-hidden group-hover:bg-violet-100 dark:group-hover:bg-violet-900/40 transition-colors">
                                     <svg class="h-8 w-8 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -85,7 +85,7 @@
                     <div class="flex flex-col items-center">
                         <div class="relative group cursor-pointer w-full h-32 mb-4 rounded-xl overflow-hidden">
                             @if($enterprise->store_branding)
-                                <img src="{{ Storage::url($enterprise->store_branding) }}" alt="Store Branding" class="w-full h-full object-cover">
+                                <img src="{{ \App\Helpers\ImageHelper::url($enterprise->store_branding) }}" alt="Store Branding" class="w-full h-full object-cover">
                             @else
                                 <div class="w-full h-full bg-violet-50 dark:bg-violet-900/20 flex flex-col items-center justify-center border-2 border-dashed border-violet-200 dark:border-violet-800/50 text-violet-500 group-hover:bg-violet-100 dark:group-hover:bg-violet-900/40 transition-colors">
                                     <svg class="h-8 w-8 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -248,7 +248,7 @@
                                 <div class="flex-1 text-sm font-semibold truncate">
                                     Document Uploaded ({{ basename($enterprise->document_path) }})
                                 </div>
-                                <a href="{{ Storage::url($enterprise->document_path) }}" target="_blank" class="text-xs font-bold uppercase tracking-wider hover:text-violet-900 dark:hover:text-white transition-colors bg-white/50 dark:bg-black/20 px-3 py-1.5 rounded-lg ml-2 border border-violet-200 dark:border-violet-700/50">View</a>
+                                <a href="{{ \App\Helpers\ImageHelper::url($enterprise->document_path) }}" target="_blank" class="text-xs font-bold uppercase tracking-wider hover:text-violet-900 dark:hover:text-white transition-colors bg-white/50 dark:bg-black/20 px-3 py-1.5 rounded-lg ml-2 border border-violet-200 dark:border-violet-700/50">View</a>
                             </div>
                         @endif
 

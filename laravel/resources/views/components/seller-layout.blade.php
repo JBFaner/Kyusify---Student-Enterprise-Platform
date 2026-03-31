@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    <link rel="icon" href="{{ asset('images/kyusify-logo.ico') }}" type="image/x-icon">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -178,8 +179,8 @@
     </div>
 
     <!-- Toast Notification System -->
-    @if (session()->has('success') || session()->has('error'))
-        <div x-data="{ show: true, type: '{{ session()->has('success') ? 'success' : 'error' }}', message: '{{ session('success') ?? session('error') }}' }"
+    @if (session()->has('success') || session()->has('error') || $errors->any())
+        <div x-data="{ show: true, type: '{{ session()->has('success') ? 'success' : 'error' }}', message: '{{ session('success') ?? (session('error') ?? $errors->first()) }}' }"
              x-show="show"
              x-init="setTimeout(() => show = false, 5000)"
              x-transition:enter="transition ease-out duration-300 transform"

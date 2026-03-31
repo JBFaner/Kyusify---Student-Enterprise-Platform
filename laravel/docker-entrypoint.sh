@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-# Generate app key if not set
-php artisan key:generate --no-interaction --force
 
 # Run migrations
 php artisan migrate --force --no-interaction
@@ -14,6 +12,9 @@ php artisan db:seed --class=AdminSeeder --force --no-interaction
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
+
+# Create storage symlink for uploaded files
+php artisan storage:link --force
 
 # Start Apache
 exec apache2-foreground

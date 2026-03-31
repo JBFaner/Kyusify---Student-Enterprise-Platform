@@ -104,32 +104,35 @@ Route::middleware(['auth'])->prefix('seller')->name('seller.')->group(function (
     Route::put('/profile', [BusinessProfileController::class, 'update'])->name('profile.update');
     Route::post('/onboarding/complete', [OnboardingController::class, 'complete'])->name('onboarding.complete');
 
-    // Product Management
-    Route::resource('products', App\Http\Controllers\Seller\ProductController::class);
+    // Routes requiring approved store status
+    Route::middleware(['seller.approved'])->group(function () {
+        // Product Management
+        Route::resource('products', App\Http\Controllers\Seller\ProductController::class);
 
-    // Order Management
-    Route::resource('orders', App\Http\Controllers\Seller\OrderController::class)->only(['index', 'show', 'update']);
+        // Order Management
+        Route::resource('orders', App\Http\Controllers\Seller\OrderController::class)->only(['index', 'show', 'update']);
 
-    // Feedback & Ratings
-    Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
-    Route::post('/feedback/{review}/reply', [FeedbackController::class, 'reply'])->name('feedback.reply');
-    Route::post('/feedback/{review}/report', [FeedbackController::class, 'report'])->name('feedback.report');
+        // Feedback & Ratings
+        Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
+        Route::post('/feedback/{review}/reply', [FeedbackController::class, 'reply'])->name('feedback.reply');
+        Route::post('/feedback/{review}/report', [FeedbackController::class, 'report'])->name('feedback.report');
 
-    // Inquiries
-    Route::get('/inquiries', [\App\Http\Controllers\Seller\InquiryController::class, 'index'])->name('inquiries.index');
-    Route::get('/inquiries/{id}/messages', [\App\Http\Controllers\Seller\InquiryController::class, 'messages'])->name('inquiries.messages');
-    Route::post('/inquiries/{id}/reply', [\App\Http\Controllers\Seller\InquiryController::class, 'reply'])->name('inquiries.reply');
-    Route::patch('/inquiries/{id}/close', [\App\Http\Controllers\Seller\InquiryController::class, 'close'])->name('inquiries.close');
+        // Inquiries
+        Route::get('/inquiries', [\App\Http\Controllers\Seller\InquiryController::class, 'index'])->name('inquiries.index');
+        Route::get('/inquiries/{id}/messages', [\App\Http\Controllers\Seller\InquiryController::class, 'messages'])->name('inquiries.messages');
+        Route::post('/inquiries/{id}/reply', [\App\Http\Controllers\Seller\InquiryController::class, 'reply'])->name('inquiries.reply');
+        Route::patch('/inquiries/{id}/close', [\App\Http\Controllers\Seller\InquiryController::class, 'close'])->name('inquiries.close');
 
-    // Quick Replies
-    Route::get('/quick-replies', [\App\Http\Controllers\Seller\QuickReplyController::class, 'index'])->name('quick-replies.index');
-    Route::post('/quick-replies', [\App\Http\Controllers\Seller\QuickReplyController::class, 'store'])->name('quick-replies.store');
-    Route::put('/quick-replies/{id}', [\App\Http\Controllers\Seller\QuickReplyController::class, 'update'])->name('quick-replies.update');
-    Route::delete('/quick-replies/{id}', [\App\Http\Controllers\Seller\QuickReplyController::class, 'destroy'])->name('quick-replies.destroy');
-    Route::post('/quick-replies/reorder', [\App\Http\Controllers\Seller\QuickReplyController::class, 'reorder'])->name('quick-replies.reorder');
+        // Quick Replies
+        Route::get('/quick-replies', [\App\Http\Controllers\Seller\QuickReplyController::class, 'index'])->name('quick-replies.index');
+        Route::post('/quick-replies', [\App\Http\Controllers\Seller\QuickReplyController::class, 'store'])->name('quick-replies.store');
+        Route::put('/quick-replies/{id}', [\App\Http\Controllers\Seller\QuickReplyController::class, 'update'])->name('quick-replies.update');
+        Route::delete('/quick-replies/{id}', [\App\Http\Controllers\Seller\QuickReplyController::class, 'destroy'])->name('quick-replies.destroy');
+        Route::post('/quick-replies/reorder', [\App\Http\Controllers\Seller\QuickReplyController::class, 'reorder'])->name('quick-replies.reorder');
 
-    // Sales Reports
-    Route::get('/reports', [\App\Http\Controllers\Seller\SellerSalesReportsController::class, 'index'])->name('reports.index');
+        // Sales Reports
+        Route::get('/reports', [\App\Http\Controllers\Seller\SellerSalesReportsController::class, 'index'])->name('reports.index');
+    });
 });
 
 // Admin Routes
@@ -143,6 +146,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Admin Protected Routes
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::post('/logout', [\App\Http\Controllers\Auth\AdminAuthController::class, 'logout'])->name('logout');
+        Route::get('/logout', [\App\Http\Controllers\Auth\AdminAuthController::class, 'logout']);
 
         Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
 

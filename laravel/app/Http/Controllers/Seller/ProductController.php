@@ -60,7 +60,8 @@ class ProductController extends Controller
         $data['status'] = 'pending';
         
         if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('products', 'public');
+            $path = $request->file('image')->store('kyusify/products', 'cloudinary');
+            $data['image_path'] = Storage::disk('cloudinary')->url($path);
         }
 
         $product = auth()->user()->enterprise->products()->create($data);
@@ -121,10 +122,14 @@ class ProductController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            if ($product->image_path) {
-                Storage::disk('public')->delete($product->image_path);
+            if ($product->image_path && str_starts_with($product->image_path, 'http')) {
+                $publicId = $this->getCloudinaryPublicId($product->image_path);
+                if ($publicId) {
+                    Storage::disk('cloudinary')->delete($publicId);
+                }
             }
-            $data['image_path'] = $request->file('image')->store('products', 'public');
+            $path = $request->file('image')->store('kyusify/products', 'cloudinary');
+            $data['image_path'] = Storage::disk('cloudinary')->url($path);
         }
 
         $product->update($data);
@@ -138,12 +143,29 @@ class ProductController extends Controller
             abort(403);
         }
 
-        if ($product->image_path) {
-            Storage::disk('public')->delete($product->image_path);
+        if ($product->image_path && str_starts_with($product->image_path, 'http')) {
+            $publicId = $this->getCloudinaryPublicId($product->image_path);
+            if ($publicId) {
+                Storage::disk('cloudinary')->delete($publicId);
+            }
         }
 
         $product->delete();
 
         return redirect()->route('seller.products.index')->with('success', 'Product deleted successfully.');
+    }
+
+    /**
+     * Extract the Cloudinary public_id from a secure URL.
+     * e.g. https://res.cloudinary.com/demo/image/upload/v123/kyusify/products/abc.jpg
+     *      => kyusify/products/abc
+     */
+    private function getCloudinaryPublicId(string $url): ?string
+    {
+        // Match everything after /upload/vXXXXXXXX/ (or /upload/) up to (but not including) the extension
+        if (preg_match('/\/upload\/(?:v\d+\/)?(.+?)(?:\.[a-z]{2,4})?$/', $url, $matches)) {
+            return $matches[1];
+        }
+        return null;
     }
 }

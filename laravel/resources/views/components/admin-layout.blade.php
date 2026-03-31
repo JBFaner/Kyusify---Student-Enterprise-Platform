@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    <link rel="icon" href="{{ asset('images/kyusify-logo.ico') }}" type="image/x-icon">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -187,8 +188,8 @@
     </div>
 
     <!-- Toast Notification System -->
-    @if (session()->has('success') || session()->has('error'))
-        <div x-data="{ show: true, type: '{{ session()->has('success') ? 'success' : 'error' }}', message: '{{ session('success') ?? session('error') }}' }"
+    @if (session()->has('success') || session()->has('error') || $errors->any())
+        <div x-data="{ show: true, type: '{{ session()->has('success') ? 'success' : 'error' }}', message: '{{ session('success') ?? (session('error') ?? $errors->first()) }}' }"
              x-show="show"
              x-init="setTimeout(() => show = false, 5000)"
              x-transition:enter="transition ease-out duration-300 transform"
@@ -232,7 +233,23 @@
         }
     </style>
 
-    <!-- Modals Stack -->
+    {{-- Global fallback for old images wiped from local storage before Cloudinary migration --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('img').forEach(function (img) {
+                img.addEventListener('error', function () {
+                    if (!this.dataset.fallback) {
+                        this.dataset.fallback = '1';
+                        this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f0ff'/%3E%3Ctext x='50' y='54' text-anchor='middle' font-size='28' fill='%237c3aed'%3E📦%3C/text%3E%3C/svg%3E";
+                        this.style.objectFit = 'contain';
+                        this.style.padding = '4px';
+                    }
+                });
+            });
+        });
+    </script>
+
+    {{-- Modals Stack --}}
     @stack('modals')
 </body>
 </html>

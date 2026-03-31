@@ -84,7 +84,7 @@
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Promotional Banner Image</label>
                         @if(isset($settings['homepage_banner_image']) && $settings['homepage_banner_image'])
                             <div class="mb-3 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 max-w-sm relative group">
-                                <img src="{{ Storage::url($settings['homepage_banner_image']) }}" alt="Current Banner" class="w-full h-auto object-cover">
+                                <img src="{{ \App\Helpers\ImageHelper::url($settings['homepage_banner_image']) }}" alt="Current Banner" class="w-full h-auto object-cover">
                                 <button type="button" onclick="if(confirm('Delete banner image?')) { document.getElementById('delete-banner-form').submit(); }" class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-red-600 text-white rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
@@ -178,7 +178,7 @@
                         
                         <div class="rounded-2xl overflow-hidden relative h-48 bg-gray-900 shadow-xl border border-gray-800">
                             @if(isset($settings['homepage_banner_image']) && $settings['homepage_banner_image'])
-                                <img id="mock_banner_img" src="{{ Storage::url($settings['homepage_banner_image']) }}" alt="Promo" class="absolute inset-0 w-full h-full object-cover">
+                                <img id="mock_banner_img" src="{{ \App\Helpers\ImageHelper::url($settings['homepage_banner_image']) }}" alt="Promo" class="absolute inset-0 w-full h-full object-cover">
                             @else
                                 <div id="mock_banner_placeholder" class="absolute inset-0 flex items-center justify-center text-gray-600">
                                     <span>[ Image Placeholder ]</span>

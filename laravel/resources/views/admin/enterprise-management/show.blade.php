@@ -55,7 +55,7 @@
                 
                 <div class="w-24 h-24 rounded-2xl border-4 border-white dark:border-[#0B0A0F] shadow-lg overflow-hidden relative z-10 mt-6 bg-white flex items-center justify-center">
                     @if($enterprise->logo_path)
-                        <img src="{{ Storage::url($enterprise->logo_path) }}" alt="{{ $enterprise->name }}" class="w-full h-full object-cover">
+                        <img src="{{ \App\Helpers\ImageHelper::url($enterprise->logo_path) }}" alt="{{ $enterprise->name }}" class="w-full h-full object-cover">
                     @else
                         <span class="text-3xl font-bold text-violet-600">{{ substr($enterprise->name, 0, 1) }}</span>
                     @endif
@@ -123,7 +123,7 @@
         <div class="lg:col-span-2 space-y-6">
             @if($enterprise->store_branding)
             <div class="border border-gray-100 dark:border-gray-800 rounded-2xl bg-white dark:bg-[#0B0A0F] shadow-sm overflow-hidden h-48 sm:h-64 relative">
-                <img src="{{ Storage::url($enterprise->store_branding) }}" alt="Store Branding" class="w-full h-full object-cover">
+                <img src="{{ \App\Helpers\ImageHelper::url($enterprise->store_branding) }}" alt="Store Branding" class="w-full h-full object-cover">
                 <div class="absolute inset-x-0 bottom-0 py-2 px-4 bg-gradient-to-t from-black/60 to-transparent">
                     <span class="text-white text-xs font-semibold tracking-wider uppercase drop-shadow-md">Store Branding Banner</span>
                 </div>
@@ -161,7 +161,7 @@
                                         </div>
                                     </div>
                                     <div class="flex space-x-2 shrink-0">
-                                        <a href="{{ Storage::url($enterprise->document_path) }}" target="_blank" class="text-xs font-bold uppercase tracking-wider text-violet-700 hover:text-violet-900 dark:text-violet-300 dark:hover:text-white transition-colors bg-white/60 dark:bg-black/40 hover:bg-white dark:hover:bg-black/60 px-4 py-2 rounded-lg border border-violet-200 dark:border-violet-700/50 flex items-center shadow-sm">
+                                        <a href="{{ \App\Helpers\ImageHelper::url($enterprise->document_path) }}" target="_blank" class="text-xs font-bold uppercase tracking-wider text-violet-700 hover:text-violet-900 dark:text-violet-300 dark:hover:text-white transition-colors bg-white/60 dark:bg-black/40 hover:bg-white dark:hover:bg-black/60 px-4 py-2 rounded-lg border border-violet-200 dark:border-violet-700/50 flex items-center shadow-sm">
                                             View
                                         </a>
                                         <form action="{{ route('admin.enterprises.update', $enterprise) }}" method="POST" class="inline">

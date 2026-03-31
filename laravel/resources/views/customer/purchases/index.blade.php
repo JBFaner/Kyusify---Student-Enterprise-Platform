@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth bg-gray-50 dark:bg-[#13111C]">
 <head>
+    <link rel="icon" href="{{ asset('images/kyusify-logo.ico') }}" type="image/x-icon">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -101,7 +102,7 @@
                         <div class="flex items-center gap-4 px-6 py-4">
                             <div class="w-14 h-14 bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden shrink-0 border border-gray-200 dark:border-gray-700">
                                 @if($item->product && $item->product->image_path)
-                                    <img src="{{ Storage::url($item->product->image_path) }}" alt="{{ $item->product->name }}" class="w-full h-full object-cover">
+                                    <img src="{{ \App\Helpers\ImageHelper::url($item->product->image_path) }}" alt="{{ $item->product->name }}" class="w-full h-full object-cover">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center text-gray-400">
                                         <i class="fa-solid fa-image"></i>

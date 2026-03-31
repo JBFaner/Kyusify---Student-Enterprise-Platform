@@ -60,7 +60,7 @@
                 <div class="flex flex-col items-center">
                     <div class="w-32 h-32 mb-4">
                         @if($enterprise->logo_path)
-                            <img src="{{ Storage::url($enterprise->logo_path) }}" alt="{{ $enterprise->name }}" class="w-full h-full rounded-full object-cover border-4 border-white dark:border-[#13111C] shadow-lg ring-2 ring-violet-100 dark:ring-violet-900/30">
+                            <img src="{{ \App\Helpers\ImageHelper::url($enterprise->logo_path) }}" alt="{{ $enterprise->name }}" class="w-full h-full rounded-full object-cover border-4 border-white dark:border-[#13111C] shadow-lg ring-2 ring-violet-100 dark:ring-violet-900/30">
                         @else
                             <div class="w-full h-full rounded-full bg-violet-50 dark:bg-violet-900/20 flex flex-col items-center justify-center border-2 border-dashed border-violet-200 dark:border-violet-800/50 text-violet-500">
                                 <span class="text-3xl font-bold uppercase tracking-wider">{{ substr($enterprise->name, 0, 1) }}</span>
@@ -171,7 +171,7 @@
                                     Document Uploaded ({{ basename($enterprise->document_path) }})
                                 </div>
                             </div>
-                            <a href="{{ Storage::url($enterprise->document_path) }}" target="_blank" class="text-xs font-bold uppercase tracking-wider text-violet-700 hover:text-violet-900 dark:text-violet-300 dark:hover:text-white transition-colors bg-white/60 dark:bg-black/40 hover:bg-white dark:hover:bg-black/60 px-4 py-2 rounded-lg border border-violet-200 dark:border-violet-700/50 flex items-center shadow-sm">
+                            <a href="{{ \App\Helpers\ImageHelper::url($enterprise->document_path) }}" target="_blank" class="text-xs font-bold uppercase tracking-wider text-violet-700 hover:text-violet-900 dark:text-violet-300 dark:hover:text-white transition-colors bg-white/60 dark:bg-black/40 hover:bg-white dark:hover:bg-black/60 px-4 py-2 rounded-lg border border-violet-200 dark:border-violet-700/50 flex items-center shadow-sm">
                                 View
                             </a>
                         </div>
