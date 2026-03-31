@@ -104,15 +104,17 @@
 
                     <a href="{{ route('seller.register') }}" class="btn-gumroad-violet px-6 py-2.5">Start Selling</a>
 
-                    <a href="{{ route('cart.index') }}" class="text-gray-300 hover:text-violet-400 font-medium transition-colors flex items-center gap-1.5 relative">
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-                        Bag
-                        @auth
-                            @if(auth()->user()->cartItems()->count() > 0)
-                                <span class="absolute top-0 -right-1.5 w-2 h-2 bg-violet-500 rounded-full"></span>
-                            @endif
-                        @endauth
-                    </a>
+                    @unless(request()->routeIs('landing'))
+                        <a href="{{ route('cart.index') }}" class="text-gray-300 hover:text-violet-400 font-medium transition-colors flex items-center gap-1.5 relative">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                            Bag
+                            @auth
+                                @if(auth()->user()->cartItems()->count() > 0)
+                                    <span class="absolute top-0 -right-1.5 w-2 h-2 bg-violet-500 rounded-full"></span>
+                                @endif
+                            @endauth
+                        </a>
+                    @endunless
 
                     @auth
                         <!-- Profile Dropdown -->
@@ -179,7 +181,9 @@
                             </div>
                             <span class="text-white font-medium">{{ auth()->user()->name }}</span>
                         </div>
-                        <a href="{{ route('cart.index') }}" class="block text-gray-300 hover:text-white font-medium py-2 px-2 flex-1">Bag</a>
+                        @unless(request()->routeIs('landing'))
+                            <a href="{{ route('cart.index') }}" class="block text-gray-300 hover:text-white font-medium py-2 px-2 flex-1">Bag</a>
+                        @endunless
                         @if(auth()->user()->role === 'seller')
                             <a href="{{ route('seller.dashboard') }}" class="block text-gray-300 hover:text-white font-medium py-2 px-2">Seller Dashboard</a>
                         @endif
