@@ -212,7 +212,7 @@
                 </div>
 
                 <!-- Verification Document Card -->
-                <div class="bg-white dark:bg-[#13111C] p-6 sm:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] border border-gray-100 dark:border-gray-800/60">
+                <div data-tour="student-verification-fields" class="bg-white dark:bg-[#13111C] p-6 sm:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] border border-gray-100 dark:border-gray-800/60">
                     <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Student Verification <span class="text-red-500">*</span></h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 border-b border-gray-100 dark:border-gray-800 pb-4">Because Kyusify is exclusively for the Quezon City University community, we need to verify your student status. Please upload a clear photo or scan of your QCU Student ID or current study load.</p>
                     

@@ -17,6 +17,12 @@ class Enterprise extends Model
         'contact_email',
         'contact_phone',
         'document_path',
+        'onboarding_tour_completed',
+    ];
+
+    protected $casts = [
+        'is_student_verified' => 'boolean',
+        'onboarding_tour_completed' => 'boolean',
     ];
 
     public function user()

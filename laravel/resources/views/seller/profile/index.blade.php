@@ -118,7 +118,7 @@
         <!-- Right Column: Profile Display -->
         <div class="lg:col-span-2 space-y-6">
             <!-- Basic Info Card -->
-            <div class="bg-white dark:bg-[#13111C] p-6 sm:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] border border-gray-100 dark:border-gray-800/60">
+            <div data-tour="profile-section" class="bg-white dark:bg-[#13111C] p-6 sm:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] border border-gray-100 dark:border-gray-800/60">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">Store Details</h3>
                 
                 <div class="space-y-6">
@@ -157,7 +157,7 @@
             </div>
 
             <!-- Verification Document Card -->
-            <div class="bg-white dark:bg-[#13111C] p-6 sm:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] border border-gray-100 dark:border-gray-800/60">
+            <div data-tour="student-id-document" class="bg-white dark:bg-[#13111C] p-6 sm:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] border border-gray-100 dark:border-gray-800/60">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Student Identity Document</h3>
                 
                 <div class="mt-4">

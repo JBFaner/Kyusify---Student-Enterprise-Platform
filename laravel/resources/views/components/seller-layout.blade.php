@@ -30,7 +30,7 @@
 <body class="font-sans antialiased bg-gray-50 dark:bg-[#0B0A0F] text-gray-900 dark:text-gray-100 transition-colors duration-300" x-data="{ sidebarOpen: true }">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar Navigation -->
-        <aside :class="sidebarOpen ? 'w-64' : 'w-[80px]'" class="flex-shrink-0 bg-violet-950 border-r border-violet-900 transition-all duration-300 ease-in-out z-20 flex flex-col shadow-2xl">
+        <aside data-tour="seller-sidebar" :class="sidebarOpen ? 'w-64' : 'w-[80px]'" class="flex-shrink-0 bg-violet-950 border-r border-violet-900 transition-all duration-300 ease-in-out z-20 flex flex-col shadow-2xl">
             <!-- Sidebar Header -->
             <div class="h-20 flex items-center justify-between px-5 border-b border-violet-900/50 transition-all duration-300">
                 <div class="flex items-center space-x-3 overflow-hidden" x-show="sidebarOpen" x-transition:enter="transition ease-out duration-300 delay-100" x-transition:enter-start="opacity-0 translate-x-[-20px]" x-transition:enter-end="opacity-100 translate-x-0">
@@ -221,6 +221,59 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        .shepherd-modal-overlay-container {
+            background-color: rgba(7, 8, 15, 0.78) !important;
+        }
+
+        .shepherd-element.kyusify-seller-tour .shepherd-content {
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
     </style>
+<<<<<<< Updated upstream
+=======
+
+    {{-- Global fallback for old images wiped from local storage before Cloudinary migration --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('img').forEach(function (img) {
+                img.addEventListener('error', function () {
+                    // Only replace if not already a placeholder (prevent infinite loop)
+                    if (!this.dataset.fallback) {
+                        this.dataset.fallback = '1';
+                        this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f0ff'/%3E%3Ctext x='50' y='54' text-anchor='middle' font-size='28' fill='%237c3aed'%3E📦%3C/text%3E%3C/svg%3E";
+                        this.style.objectFit = 'contain';
+                        this.style.padding = '4px';
+                    }
+                });
+            });
+        });
+    </script>
+
+    @php
+        $sellerEnterprise = auth()->user()?->enterprise;
+        $tourEligible = auth()->check()
+            && auth()->user()->role === 'seller'
+            && $sellerEnterprise
+            && $sellerEnterprise->status === 'pending'
+            && !$sellerEnterprise->is_student_verified
+            && !$sellerEnterprise->onboarding_tour_completed;
+    @endphp
+    <script>
+        window.sellerOnboardingConfig = {
+            enabled: @json($tourEligible),
+            serverCompleted: @json((bool) ($sellerEnterprise?->onboarding_tour_completed ?? false)),
+            completeUrl: @json(route('seller.onboarding.complete')),
+            dashboardUrl: @json(route('seller.dashboard')),
+            profileUrl: @json(route('seller.profile.index')),
+            editProfileUrl: @json(route('seller.profile.edit')),
+            dashboardPath: @json(parse_url(route('seller.dashboard'), PHP_URL_PATH)),
+            profilePath: @json(parse_url(route('seller.profile.index'), PHP_URL_PATH)),
+            editProfilePath: @json(parse_url(route('seller.profile.edit'), PHP_URL_PATH)),
+        };
+    </script>
+
+>>>>>>> Stashed changes
 </body>
 </html>

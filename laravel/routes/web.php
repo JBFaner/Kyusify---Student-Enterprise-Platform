@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\SellerAuthController;
 use App\Http\Controllers\Auth\CustomerAuthController;
 use App\Http\Controllers\Seller\BusinessProfileController;
 use App\Http\Controllers\Seller\FeedbackController;
+use App\Http\Controllers\Seller\OnboardingController;
 use App\Http\Controllers\PublicStoreController;
 use App\Http\Controllers\PublicProductController;
 
@@ -101,6 +102,7 @@ Route::middleware(['auth'])->prefix('seller')->name('seller.')->group(function (
     Route::get('/profile', [BusinessProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/edit', [BusinessProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [BusinessProfileController::class, 'update'])->name('profile.update');
+    Route::post('/onboarding/complete', [OnboardingController::class, 'complete'])->name('onboarding.complete');
 
     // Product Management
     Route::resource('products', App\Http\Controllers\Seller\ProductController::class);
