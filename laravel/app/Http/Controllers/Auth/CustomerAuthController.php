@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\TwoFactorCodeMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
 
 class CustomerAuthController extends Controller
@@ -32,9 +35,17 @@ class CustomerAuthController extends Controller
             'status' => 'active', 
         ]);
 
-        Auth::login($user);
+        $code = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+        Cache::put('2fa_code_' . $user->id, $code, now()->addMinutes(10));
 
-        return redirect()->route('discover')->with('success', 'Registration successful! Welcome to Kyusify.');
+        session([
+            'auth_2fa_user_id' => $user->id,
+            'auth_2fa_email' => $user->email,
+        ]);
+
+        Mail::to($user->email)->send(new TwoFactorCodeMail($code));
+
+        return redirect()->route('2fa.verify')->with('success', 'Registration successful. Please verify the code sent to your email.');
     }
 
     public function showLoginForm()
