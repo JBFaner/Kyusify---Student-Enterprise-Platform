@@ -1,4 +1,5 @@
 <x-admin-layout>
+    <div x-data="{ showDeleteModal: false }">
     <x-slot name="header">
         User Management - Profile
     </x-slot>
@@ -17,6 +18,18 @@
         </div>
         
         <div class="flex space-x-3">
+            @if($user->role === 'seller' && $user->enterprise)
+                <form action="{{ route('admin.users.reset-onboarding', $user) }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="px-4 py-2 bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-900/30 text-amber-700 dark:text-amber-400 rounded-xl hover:bg-amber-100 dark:hover:bg-amber-900/30 hover:border-amber-300 dark:hover:border-amber-800 text-sm font-medium transition-all duration-200 shadow-sm flex items-center shrink-0">
+                        <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m14.836 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-14.837-2M15 15h-6" />
+                        </svg>
+                        Reset Onboarding
+                    </button>
+                </form>
+            @endif
+
             <a href="{{ route('admin.users.edit', $user) }}" class="px-4 py-2 bg-white dark:bg-[#13111C] border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-violet-600 dark:hover:text-violet-400 hover:border-violet-200 dark:hover:border-violet-800 text-sm font-medium transition-all duration-200 shadow-sm flex items-center shrink-0">
                 <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -24,64 +37,57 @@
                 Edit User
             </a>
             
-            <div x-data="{ openDeleteModal: false }" class="inline">
-                <button @click="openDeleteModal = true" type="button" class="px-4 py-2 bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-900/30 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 hover:border-red-300 dark:hover:border-red-800 text-sm font-medium transition-all duration-200 shadow-sm flex items-center shrink-0">
+            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline">
+                @csrf
+                @method('DELETE')
+                <button type="button" @click="showDeleteModal = true" class="px-4 py-2 bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-900/30 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 hover:border-red-300 dark:hover:border-red-800 text-sm font-medium transition-all duration-200 shadow-sm flex items-center shrink-0">
                     <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
                     Delete Account
                 </button>
 
-                <form id="delete-user-form-{{ $user->id }}" action="{{ route('admin.users.destroy', $user) }}" method="POST" class="hidden">
-                    @csrf
-                    @method('DELETE')
-                </form>
-
-                <!-- Alpine Delete Modal -->
                 <template x-teleport="body">
-                    <div x-cloak x-show="openDeleteModal" class="relative z-[100]" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                    <div x-show="openDeleteModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-900/75 dark:bg-black/80 backdrop-blur-sm transition-opacity"></div>
-                    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-                        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                            <div x-show="openDeleteModal" @click.away="openDeleteModal = false" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="relative transform overflow-hidden rounded-3xl bg-white dark:bg-[#13111C] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-gray-100 dark:border-gray-800">
-                                <div class="bg-white dark:bg-[#13111C] px-4 pb-4 pt-5 sm:p-8 sm:pb-6">
-                                    <div class="sm:flex sm:items-start">
-                                        <div class="mx-auto flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 sm:mx-0 sm:h-12 sm:w-12 border border-red-200 dark:border-red-800/50">
-                                            <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                            </svg>
-                                        </div>
-                                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                                            <h3 class="text-xl font-bold leading-6 text-gray-900 dark:text-white" id="modal-title">Delete User Account</h3>
-                                            <div class="mt-3">
-                                                <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                                                    Are you sure you want to delete <strong class="text-gray-700 dark:text-gray-300">{{ $user->name }}</strong>? This action will permanently completely remove their data from Kyusify and cannot be undone.
-                                                </p>
-                                                @if($user->role === 'admin')
-                                                    <div class="mt-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800/50 rounded-xl p-3">
-                                                        <div class="flex">
-                                                            <svg class="h-5 w-5 text-yellow-500 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                                            <p class="text-xs text-yellow-800 dark:text-yellow-400 font-semibold leading-relaxed">Administrator Target: Proceeding will trigger a mandatory 2FA email verification step.</p>
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
+                    <div
+                        x-show="showDeleteModal"
+                        x-transition.opacity
+                        class="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+                        style="display: none;"
+                    >
+                        <div class="absolute inset-0 bg-black/55 backdrop-blur-[4px]" @click="showDeleteModal = false"></div>
+
+                        <div
+                            @click.stop
+                            class="relative w-full max-w-md rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#13111C] shadow-2xl"
+                        >
+                            <div class="p-6">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4c-.77-1.33-2.69-1.33-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Delete this user account?</h3>
+                                        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                            This action cannot be undone. All related seller data for this account may also be removed.
+                                        </p>
                                     </div>
                                 </div>
-                                <div class="bg-gray-50 dark:bg-[#0B0A0F] px-4 py-4 sm:flex sm:flex-row-reverse sm:px-8 border-t border-gray-100 dark:border-gray-800">
-                                    <button type="button" onclick="document.getElementById('delete-user-form-{{ $user->id }}').submit();" class="inline-flex w-full justify-center rounded-xl bg-red-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-red-500/30 hover:bg-red-500 sm:ml-3 sm:w-auto transition-all transform hover:-translate-y-0.5">
-                                        Yes, Delete User
-                                    </button>
-                                    <button type="button" @click="openDeleteModal = false" class="mt-3 inline-flex w-full justify-center rounded-xl bg-white dark:bg-[#13111C] border border-gray-200 dark:border-gray-700 px-5 py-2.5 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 sm:mt-0 sm:w-auto transition-all shadow-sm">
+
+                                <div class="mt-6 flex justify-end gap-3">
+                                    <button type="button" @click="showDeleteModal = false" class="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 text-sm font-medium">
                                         Cancel
+                                    </button>
+                                    <button type="submit" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-semibold shadow-sm">
+                                        Delete Account
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </template>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -181,5 +187,6 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </x-admin-layout>

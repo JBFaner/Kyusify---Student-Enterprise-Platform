@@ -29,7 +29,7 @@
     @endif
 
     {{-- ── Stat Cards ─────────────────────────────────────────── --}}
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-7">
+    <div data-tour="dashboard-summary-cards" class="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-7">
         @php
         $cards = [
             ['icon'=>'fa-cubes',        'bg'=>'bg-blue-50 dark:bg-blue-900/20',     'color'=>'text-blue-500',    'badge'=>'+12%',    'badge_color'=>'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400', 'value'=>$listedProducts,              'label'=>'Listed Products'],
@@ -54,7 +54,7 @@
     </div>
 
     {{-- ── Charts Row ─────────────────────────────────────────── --}}
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-7">
+    <div data-tour="dashboard-charts" class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-7">
 
         {{-- Orders Over Time Area Chart --}}
         <div class="lg:col-span-2 bg-white dark:bg-[#13111C] rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6">

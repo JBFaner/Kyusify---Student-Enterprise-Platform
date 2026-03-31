@@ -229,43 +229,22 @@ class UserController extends Controller
     }
 
     /**
-     * Show the verification form to finalize an Admin deletion
+     * Reset seller onboarding completion state.
      */
-    public function showVerifyDelete(User $user)
+    public function resetOnboarding(User $user)
     {
-        // Only allow access if a delete session exists
-        if (!session()->has('admin_delete_data_' . $user->id)) {
-            return redirect()->route('admin.users.index')->with('error', 'No pending deletion found for this user.');
+        if ($user->role !== 'seller' || !$user->enterprise) {
+            return redirect()
+                ->route('admin.users.show', $user)
+                ->with('error', 'Onboarding reset is only available for seller accounts with an enterprise profile.');
         }
 
-        return view('admin.user-management.verify-delete', compact('user'));
-    }
-
-    /**
-     * Confirm the verification code and apply the Admin deletion
-     */
-    public function confirmDelete(Request $request, User $user)
-    {
-        $request->validate([
-            'code' => ['required', 'string', 'size:6'],
+        $user->enterprise->update([
+            'onboarding_tour_completed' => false,
         ]);
 
-        $cachedCode = Cache::get('admin_delete_2fa_' . $user->id);
-
-        if (!$cachedCode || $cachedCode !== $request->code) {
-            return back()->withErrors(['code' => 'The verification code is invalid or has expired. Please request a new one by initiating the deletion again.']);
-        }
-        
-        if (!session('admin_delete_data_' . $user->id)) {
-            return redirect()->route('admin.users.index')->with('error', 'Session expired. Please start the deletion again.');
-        }
-
-        $user->delete();
-
-        // Clear verification data
-        Cache::forget('admin_delete_2fa_' . $user->id);
-        session()->forget('admin_delete_data_' . $user->id);
-
-        return redirect()->route('admin.users.index')->with('success', 'Admin account successfully deleted.');
+        return redirect()
+            ->route('admin.users.show', $user)
+            ->with('success', 'Seller onboarding tour has been reset.');
     }
 }
