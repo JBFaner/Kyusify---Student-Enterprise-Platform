@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Mail\TwoFactorCodeMail;
 use App\Models\User;
+use App\Services\BrevoVerificationMailer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password;
 
 class CustomerAuthController extends Controller
@@ -27,25 +27,30 @@ class CustomerAuthController extends Controller
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role' => 'customer',
-            'status' => 'active', 
-        ]);
+        try {
+            return DB::transaction(function () use ($validated) {
+                $user = User::create([
+                    'name' => $validated['name'],
+                    'email' => $validated['email'],
+                    'password' => Hash::make($validated['password']),
+                    'role' => 'customer',
+                    'status' => 'active',
+                ]);
 
-        $code = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
-        Cache::put('2fa_code_' . $user->id, $code, now()->addMinutes(10));
+                $code = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+                app(BrevoVerificationMailer::class)->sendVerificationCode($user->email, $code);
 
-        session([
-            'auth_2fa_user_id' => $user->id,
-            'auth_2fa_email' => $user->email,
-        ]);
+                Cache::put('2fa_code_' . $user->id, $code, now()->addMinutes(10));
+                session(['auth_2fa_user_id' => $user->id, 'auth_2fa_email' => $user->email]);
 
-        Mail::to($user->email)->send(new TwoFactorCodeMail($code));
-
-        return redirect()->route('2fa.verify')->with('success', 'Registration successful. Please verify the code sent to your email.');
+                return redirect()->route('2fa.verify')->with('success', 'Registration successful. Please verify the code sent to your email.');
+            });
+        } catch (\Throwable $e) {
+            report($e);
+            return back()->withInput()->withErrors([
+                'email' => 'Registration failed while sending verification code. Please try again.',
+            ]);
+        }
     }
 
     public function showLoginForm()

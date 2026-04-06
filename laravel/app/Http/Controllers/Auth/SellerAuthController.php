@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Mail\TwoFactorCodeMail;
 use App\Models\User;
 use App\Models\Enterprise;
+use App\Services\BrevoVerificationMailer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password;
 
 class SellerAuthController extends Controller
@@ -33,40 +33,45 @@ class SellerAuthController extends Controller
             'business_name' => 'required|string|max:255',
         ]);
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role' => 'seller',
-            'status' => 'active', // or 'pending' if you want admin approval first
-        ]);
+        try {
+            return DB::transaction(function () use ($validated) {
+                $user = User::create([
+                    'name' => $validated['name'],
+                    'email' => $validated['email'],
+                    'password' => Hash::make($validated['password']),
+                    'role' => 'seller',
+                    'status' => 'active',
+                ]);
 
-        Enterprise::create([
-            'user_id' => $user->id,
-            'name' => $validated['business_name'],
-            'status' => 'pending', // Enterprise needs admin approval
-            'is_student_verified' => false,
-        ]);
+                Enterprise::create([
+                    'user_id' => $user->id,
+                    'name' => $validated['business_name'],
+                    'status' => 'pending',
+                    'is_student_verified' => false,
+                ]);
 
-        \App\Helpers\NotificationHelper::notifyAdmins(
-            'new_seller',
-            'New Seller Registered',
-            "{$validated['name']} registered enterprise \"{$validated['business_name']}\" and is awaiting verification.",
-            route('admin.enterprises.index'),
-            'bell'
-        );
+                \App\Helpers\NotificationHelper::notifyAdmins(
+                    'new_seller',
+                    'New Seller Registered',
+                    "{$validated['name']} registered enterprise \"{$validated['business_name']}\" and is awaiting verification.",
+                    route('admin.enterprises.index'),
+                    'bell'
+                );
 
-        $code = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
-        Cache::put('2fa_code_' . $user->id, $code, now()->addMinutes(10));
+                $code = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+                app(BrevoVerificationMailer::class)->sendVerificationCode($user->email, $code);
 
-        session([
-            'auth_2fa_user_id' => $user->id,
-            'auth_2fa_email' => $user->email,
-        ]);
+                Cache::put('2fa_code_' . $user->id, $code, now()->addMinutes(10));
+                session(['auth_2fa_user_id' => $user->id, 'auth_2fa_email' => $user->email]);
 
-        Mail::to($user->email)->send(new TwoFactorCodeMail($code));
-
-        return redirect()->route('2fa.verify')->with('success', 'Registration successful. Please verify the code sent to your email.');
+                return redirect()->route('2fa.verify')->with('success', 'Registration successful. Please verify the code sent to your email.');
+            });
+        } catch (\Throwable $e) {
+            report($e);
+            return back()->withInput()->withErrors([
+                'email' => 'Registration failed while sending verification code. Please try again.',
+            ]);
+        }
     }
 
     public function showLoginForm()
@@ -90,19 +95,20 @@ class SellerAuthController extends Controller
                 ]);
             }
 
-            // Generate 2FA code
             $code = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
-            
-            // Store in Cache
+
+            try {
+                app(BrevoVerificationMailer::class)->sendVerificationCode($user->email, $code);
+            } catch (\Throwable $e) {
+                report($e);
+                return back()->withErrors([
+                    'email' => 'Unable to send verification code right now. Please try again in a moment.',
+                ]);
+            }
+
             \Illuminate\Support\Facades\Cache::put('2fa_code_' . $user->id, $code, now()->addMinutes(10));
-            
-            // Store User ID in session
-            session(['auth_2fa_user_id' => $user->id]);
-            session(['auth_2fa_email' => $user->email]);
-            
-            // Send Email
-            \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\TwoFactorCodeMail($code));
-            
+            session(['auth_2fa_user_id' => $user->id, 'auth_2fa_email' => $user->email]);
+
             return redirect()->route('2fa.verify');
         }
 

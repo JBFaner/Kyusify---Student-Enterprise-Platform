@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Mail\TwoFactorCodeMail;
 use App\Models\User;
+use App\Services\BrevoVerificationMailer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Mail;
 
 class TwoFactorController extends Controller
 {
@@ -55,9 +54,16 @@ class TwoFactorController extends Controller
 
         // Generate fresh code
         $code = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
-        Cache::put('2fa_code_' . $user->id, $code, now()->addMinutes(10));
+        try {
+            app(BrevoVerificationMailer::class)->sendVerificationCode($user->email, $code);
+        } catch (\Throwable $e) {
+            report($e);
+            return back()->withErrors([
+                'code' => 'Unable to resend verification code right now. Please try again later.',
+            ]);
+        }
 
-        Mail::to($user->email)->send(new TwoFactorCodeMail($code));
+        Cache::put('2fa_code_' . $user->id, $code, now()->addMinutes(10));
 
         return back()->with('resent', 'A new verification code has been sent to your email.');
     }

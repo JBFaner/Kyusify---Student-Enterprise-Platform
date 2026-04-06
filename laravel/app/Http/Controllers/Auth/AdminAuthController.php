@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Services\BrevoVerificationMailer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
 
 class AdminAuthController extends Controller
 {
@@ -22,26 +25,27 @@ class AdminAuthController extends Controller
 
         $user = \App\Models\User::where('email', $credentials['email'])->first();
 
-        if ($user && \Illuminate\Support\Facades\Hash::check($credentials['password'], $user->password)) {
+        if ($user && Hash::check($credentials['password'], $user->password)) {
             if ($user->role !== 'admin') {
                 return back()->withErrors([
                     'email' => 'You do not have administration access.',
                 ]);
             }
 
-            // Generate 2FA code
             $code = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
-            
-            // Store in Cache
-            \Illuminate\Support\Facades\Cache::put('2fa_code_' . $user->id, $code, now()->addMinutes(10));
-            
-            // Store User ID in session
-            session(['auth_2fa_user_id' => $user->id]);
-            session(['auth_2fa_email' => $user->email]);
-            
-            // Send Email
-            \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\TwoFactorCodeMail($code));
-            
+
+            try {
+                app(BrevoVerificationMailer::class)->sendVerificationCode($user->email, $code);
+            } catch (\Throwable $e) {
+                report($e);
+                return back()->withErrors([
+                    'email' => 'Unable to send verification code right now. Please try again in a moment.',
+                ]);
+            }
+
+            Cache::put('2fa_code_' . $user->id, $code, now()->addMinutes(10));
+            session(['auth_2fa_user_id' => $user->id, 'auth_2fa_email' => $user->email]);
+
             return redirect()->route('2fa.verify');
         }
         return back()->withErrors([
