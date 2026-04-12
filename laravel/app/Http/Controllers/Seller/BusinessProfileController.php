@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
+use App\Models\Enterprise;
+use App\Helpers\NotificationHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Helpers\NotificationHelper;
 
 class BusinessProfileController extends Controller
 {
     public function index()
     {
         $enterprise = auth()->user()->enterprise;
-        
+
         if (!$enterprise) {
-            // Provide a base template object if they literally haven't been created yet,
-            // but the registration flow creates it.
-            abort(404, 'Business profile not found.');
+            return redirect()->route('seller.profile.edit')
+                ->with('info', 'Create your store profile to get started.');
         }
 
         return view('seller.profile.index', compact('enterprise'));
@@ -25,12 +25,51 @@ class BusinessProfileController extends Controller
     public function edit()
     {
         $enterprise = auth()->user()->enterprise;
-        
+
         if (!$enterprise) {
-            abort(404, 'Business profile not found.');
+            return view('seller.profile.setup-enterprise');
         }
 
         return view('seller.profile.edit', compact('enterprise'));
+    }
+
+    /**
+     * Create an enterprise for sellers who have the seller role but no store record yet
+     * (e.g. legacy accounts or admin-created users).
+     */
+    public function storeEnterprise(Request $request)
+    {
+        $user = $request->user();
+
+        if ($user->role !== 'seller') {
+            abort(403);
+        }
+
+        if ($user->enterprise) {
+            return redirect()->route('seller.profile.edit');
+        }
+
+        $validated = $request->validate([
+            'business_name' => 'required|string|max:255',
+        ]);
+
+        $enterprise = Enterprise::create([
+            'user_id' => $user->id,
+            'name' => $validated['business_name'],
+            'status' => 'pending',
+            'is_student_verified' => false,
+        ]);
+
+        NotificationHelper::notifyAdmins(
+            'new_seller',
+            'New Seller Registered',
+            "{$user->name} created enterprise \"{$enterprise->name}\" and is awaiting verification.",
+            route('admin.enterprises.index'),
+            'bell'
+        );
+
+        return redirect()->route('seller.profile.edit')
+            ->with('success', 'Store created. Complete your profile details below.');
     }
 
     public function update(Request $request)

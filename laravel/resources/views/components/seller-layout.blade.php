@@ -460,8 +460,6 @@
             100% { transform: scale(1); opacity: 1; }
         }
     </style>
-<<<<<<< Updated upstream
-=======
 
     {{-- Global fallback for old images wiped from local storage before Cloudinary migration --}}
     <script>
@@ -504,6 +502,5 @@
         };
     </script>
 
->>>>>>> Stashed changes
 </body>
 </html>

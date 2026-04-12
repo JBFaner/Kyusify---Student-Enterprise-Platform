@@ -101,6 +101,7 @@ Route::middleware(['auth'])->prefix('seller')->name('seller.')->group(function (
     // Business Profile Management
     Route::get('/profile', [BusinessProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/edit', [BusinessProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/enterprise', [BusinessProfileController::class, 'storeEnterprise'])->name('profile.enterprise.store');
     Route::put('/profile', [BusinessProfileController::class, 'update'])->name('profile.update');
     Route::post('/onboarding/complete', [OnboardingController::class, 'complete'])->name('onboarding.complete');
 
