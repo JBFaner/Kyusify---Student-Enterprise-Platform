@@ -151,6 +151,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
 
+        Route::get('/users/{user}/verify-update', [UserController::class, 'showVerifyUpdate'])->name('users.verify-update');
+        Route::post('/users/{user}/confirm-update', [UserController::class, 'confirmUpdate'])->name('users.confirm-update');
+        Route::get('/users/{user}/verify-delete', [UserController::class, 'showVerifyDelete'])->name('users.verify-delete');
+        Route::post('/users/{user}/confirm-delete', [UserController::class, 'confirmDelete'])->name('users.confirm-delete');
         Route::post('/users/{user}/reset-onboarding', [UserController::class, 'resetOnboarding'])->name('users.reset-onboarding');
         Route::resource('users', UserController::class);
 

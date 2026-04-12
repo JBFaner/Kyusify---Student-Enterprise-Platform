@@ -220,12 +220,70 @@ class UserController extends Controller
 
             Mail::to($user->email)->send(new AdminDeleteVerificationMail($code, auth()->user()->name));
 
-            return redirect()->route('admin.users.verify-delete', $user->id)
+            return redirect()->route('admin.users.verify-delete', $user)
                 ->with('info', 'A verification code has been sent to ' . $user->email . '. Entering the code is required to authorize the deletion of this account.');
         }
 
         $user->delete();
         return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
+    }
+
+    /**
+     * Show email verification step before deleting an administrator account.
+     */
+    public function showVerifyDelete(User $user)
+    {
+        if ($user->id === auth()->id()) {
+            return redirect()->route('admin.users.index')->with('error', 'You cannot delete your own account.');
+        }
+
+        if ($user->role !== 'admin') {
+            return redirect()->route('admin.users.show', $user)
+                ->with('error', 'Email verification for deletion only applies to administrator accounts.');
+        }
+
+        if (! session()->has('admin_delete_data_' . $user->id)) {
+            return redirect()->route('admin.users.show', $user)
+                ->with('error', 'No pending deletion. Open the profile and choose Delete Account again.');
+        }
+
+        return view('admin.user-management.verify-delete', compact('user'));
+    }
+
+    /**
+     * Confirm code and permanently delete an administrator account.
+     */
+    public function confirmDelete(Request $request, User $user)
+    {
+        if ($user->id === auth()->id()) {
+            return redirect()->route('admin.users.index')->with('error', 'You cannot delete your own account.');
+        }
+
+        if ($user->role !== 'admin') {
+            return redirect()->route('admin.users.show', $user)->with('error', 'Invalid deletion request.');
+        }
+
+        if (! session()->has('admin_delete_data_' . $user->id)) {
+            return redirect()->route('admin.users.show', $user)
+                ->with('error', 'No pending deletion. Please start again from the user profile.');
+        }
+
+        $request->validate([
+            'code' => ['required', 'string', 'size:6'],
+        ]);
+
+        $cachedCode = Cache::get('admin_delete_2fa_' . $user->id);
+
+        if (! $cachedCode || $cachedCode !== $request->code) {
+            return back()->withErrors(['code' => 'The verification code is invalid or has expired. Request a new code from the user profile.']);
+        }
+
+        Cache::forget('admin_delete_2fa_' . $user->id);
+        session()->forget('admin_delete_data_' . $user->id);
+
+        $user->delete();
+
+        return redirect()->route('admin.users.index')->with('success', 'Administrator account deleted successfully.');
     }
 
     /**

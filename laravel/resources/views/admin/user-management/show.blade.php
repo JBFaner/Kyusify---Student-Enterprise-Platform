@@ -37,7 +37,8 @@
                 Edit User
             </a>
             
-            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline">
+            {{-- form id + submit button form=... : teleported modal buttons are outside <form> in the DOM --}}
+            <form id="admin-delete-user-form" action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline">
                 @csrf
                 @method('DELETE')
                 <button type="button" @click="showDeleteModal = true" class="px-4 py-2 bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-900/30 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 hover:border-red-300 dark:hover:border-red-800 text-sm font-medium transition-all duration-200 shadow-sm flex items-center shrink-0">
@@ -79,7 +80,7 @@
                                     <button type="button" @click="showDeleteModal = false" class="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 text-sm font-medium">
                                         Cancel
                                     </button>
-                                    <button type="submit" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-semibold shadow-sm">
+                                    <button type="submit" form="admin-delete-user-form" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-semibold shadow-sm">
                                         Delete Account
                                     </button>
                                 </div>
