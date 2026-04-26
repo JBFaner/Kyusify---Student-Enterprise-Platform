@@ -107,7 +107,7 @@
                         <!-- Facebook -->
                         <div class="space-y-2">
                             <label for="social_facebook" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                                <i class="fa-brands fa-facebook text-blue-500 mr-1"></i> Facebook Profile Link *
+                                <i class="fa-brands fa-facebook text-blue-500 mr-1"></i> Facebook Profile Link
                             </label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500">
@@ -118,7 +118,6 @@
                                     id="social_facebook"
                                     name="social_facebook"
                                     value="{{ old('social_facebook') }}"
-                                    required
                                     placeholder="https://facebook.com/yourname"
                                     class="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-[#13111C] border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-shadow @error('social_facebook') border-red-500 @enderror"
                                 >
@@ -131,7 +130,7 @@
                         <!-- Messenger -->
                         <div class="space-y-2">
                             <label for="social_messenger" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                                <i class="fa-brands fa-facebook-messenger text-violet-500 mr-1"></i> Messenger Link *
+                                <i class="fa-brands fa-facebook-messenger text-violet-500 mr-1"></i> Messenger Link
                             </label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-violet-500">
@@ -142,7 +141,6 @@
                                     id="social_messenger"
                                     name="social_messenger"
                                     value="{{ old('social_messenger') }}"
-                                    required
                                     placeholder="https://m.me/yourname"
                                     class="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-[#13111C] border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-shadow @error('social_messenger') border-red-500 @enderror"
                                 >

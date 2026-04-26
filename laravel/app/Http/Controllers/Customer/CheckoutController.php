@@ -47,12 +47,12 @@ class CheckoutController extends Controller
             'shipping_name'    => 'required|string|max:255',
             'shipping_address' => 'required|string',
             'contact_number'   => 'required|string|max:50',
-            'social_facebook'  => 'required|url|max:500',
-            'social_messenger' => 'required|url|max:500',
+            'social_facebook'  => 'required_without:social_messenger|nullable|url|max:500',
+            'social_messenger' => 'required_without:social_facebook|nullable|url|max:500',
         ], [
-            'social_facebook.required'  => 'Please enter your Facebook profile link.',
+            'social_facebook.required_without'  => 'Please provide either a Facebook profile link or a Messenger link.',
             'social_facebook.url'       => 'Facebook must be a valid URL (e.g. https://facebook.com/yourname).',
-            'social_messenger.required' => 'Please enter your Messenger link.',
+            'social_messenger.required_without' => 'Please provide either a Facebook profile link or a Messenger link.',
             'social_messenger.url'      => 'Messenger must be a valid URL (e.g. https://m.me/yourname).',
         ]);
 
